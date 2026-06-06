@@ -1,0 +1,11 @@
+{
+  "generated_at": "2025-01-01T00:00:00Z",
+  "total_runs": 0,
+  "posted": 0,
+  "failed": 0,
+  "dry_runs": 0,
+  "success_rate": 0,
+  "topic_counts": {},
+  "recent_runs": [],
+  "current_run": { "status": "never_run", "topic": "" }
+}

@@ -1,0 +1,126 @@
+name: 🚀 Post Daily Educational Reels
+
+on:
+  schedule:
+    # Runs at 3:30 AM UTC = 9:00 AM IST (space)
+    - cron: "30 3 * * *"
+    # Runs at 7:30 AM UTC = 1:00 PM IST (history)
+    - cron: "30 7 * * *"
+    # Runs at 12:30 PM UTC = 6:00 PM IST (geography/science)
+    - cron: "30 12 * * *"
+
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "Topic to post (space/history/geography/science)"
+        required: false
+        default: "space"
+      dry_run:
+        description: "Dry run - generate video but don't post"
+        required: false
+        default: "false"
+        type: boolean
+
+jobs:
+  post-reel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # ── 1. Checkout code ───────────────────────────────────────────────────
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Python setup ────────────────────────────────────────────────────
+      - name: 🐍 Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # ── 3. System dependencies (ffmpeg for video rendering) ────────────────
+      - name: 🔧 Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation
+          fc-cache -fv
+
+      # ── 4. Python dependencies ─────────────────────────────────────────────
+      - name: 📦 Install Python dependencies
+        run: pip install -r requirements.txt
+
+      # ── 5. Restore output cache (logs, used-facts, music cache) ───────────
+      - name: 💾 Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            output/music
+            output/logs
+            output/used_facts.json
+          key: reels-cache-${{ github.run_number }}
+          restore-keys: |
+            reels-cache-
+
+      # ── 6. Determine which topic to post ──────────────────────────────────
+      - name: 🎯 Determine topic for this run
+        id: topic
+        run: python src/pick_topic.py
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          INPUT_TOPIC: ${{ github.event.inputs.topic }}
+          CRON_HOUR: ${{ github.run_attempt }}
+
+      # ── 7. Run the pipeline ────────────────────────────────────────────────
+      - name: 🎬 Generate & post reel
+        run: |
+          python src/main.py run "${{ steps.topic.outputs.topic }}" \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+          INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          FREESOUND_API_KEY: ${{ secrets.FREESOUND_API_KEY }}
+          IG_SESSION_DATA: ${{ secrets.IG_SESSION_DATA }}
+
+      # ── 8. Save session back to secrets (via output file) ─────────────────
+      - name: 💾 Save Instagram session
+        if: always()
+        run: |
+          if [ -f output/ig_session.json ]; then
+            echo "Session file exists, size: $(wc -c < output/ig_session.json) bytes"
+          fi
+
+      # ── 9. Upload video + log as artifact ─────────────────────────────────
+      - name: 📤 Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reel-${{ steps.topic.outputs.topic }}-${{ github.run_number }}
+          path: |
+            output/videos/*.mp4
+            output/logs/run_*.json
+          retention-days: 7
+
+      # ── 10. Update dashboard data ─────────────────────────────────────────
+      - name: 📊 Update dashboard stats
+        if: always()
+        run: python src/update_dashboard.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUN_STATUS: ${{ job.status }}
+          TOPIC: ${{ steps.topic.outputs.topic }}
+
+      # ── 11. Commit updated stats to repo ──────────────────────────────────
+      - name: 💾 Commit dashboard data
+        if: always()
+        run: |
+          git config user.name "Reels Bot"
+          git config user.email "bot@reels.local"
+          git add dashboard/data.json output/used_facts.json || true
+          git diff --cached --quiet || git commit -m "📊 Update stats [skip ci]"
+          git push || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

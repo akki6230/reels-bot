@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reels Bot — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0a0b0f;
+    --surface:   #111318;
+    --surface2:  #1a1d26;
+    --border:    rgba(255,255,255,0.07);
+    --border2:   rgba(255,255,255,0.12);
+    --text:      #e8eaf0;
+    --muted:     #7a7f94;
+    --accent:    #4f8ef7;
+    --accent-dim:#1e2d4a;
+    --green:     #34d399;
+    --green-dim: #0d2b1f;
+    --amber:     #fbbf24;
+    --amber-dim: #2d2008;
+    --red:       #f87171;
+    --red-dim:   #2b1010;
+    --purple:    #a78bfa;
+    --purple-dim:#1e1535;
+    --radius:    12px;
+    --radius-sm: 8px;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Layout ─────────────────────────────────────────────── */
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+  header {
+    padding: 40px 0 32px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 36px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  header p {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--green-dim);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+    white-space: nowrap;
+  }
+
+  .live-badge .dot {
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* ── Metrics grid ───────────────────────────────────────── */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .metric {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+
+  .metric:hover { border-color: var(--border2); }
+
+  .metric::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--bar-color, var(--accent));
+    opacity: 0.7;
+  }
+
+  .metric-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .metric-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .metric-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 28px;
+    opacity: 0.15;
+  }
+
+  /* ── Two column ─────────────────────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── Cards ──────────────────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+  }
+
+  .card-body { padding: 20px; }
+
+  /* ── Activity log ───────────────────────────────────────── */
+  .log-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .log-item:last-child { border-bottom: none; }
+
+  .log-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .log-dot.posted  { background: var(--green); }
+  .log-dot.failed  { background: var(--red); }
+  .log-dot.dry     { background: var(--accent); }
+  .log-dot.started { background: var(--amber); }
+
+  .log-body { flex: 1; min-width: 0; }
+
+  .log-hook {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .log-meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .log-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    padding-top: 3px;
+    min-width: 80px;
+    text-align: right;
+  }
+
+  /* ── Topic bars ─────────────────────────────────────────── */
+  .topic-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topic-row:last-child { border-bottom: none; }
+
+  .topic-emoji { font-size: 18px; width: 28px; text-align: center; }
+
+  .topic-name {
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 120px;
+  }
+
+  .topic-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .topic-bar {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 1s ease;
+  }
+
+  .topic-count {
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 28px;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── Status badge ───────────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge.posted  { background: var(--green-dim);  color: var(--green); }
+  .badge.failed  { background: var(--red-dim);    color: var(--red); }
+  .badge.dry     { background: var(--accent-dim); color: var(--accent); }
+  .badge.started { background: var(--amber-dim);  color: var(--amber); }
+
+  /* ── Timeline chart ─────────────────────────────────────── */
+  .chart-wrap { position: relative; height: 120px; }
+
+  canvas { width: 100% !important; height: 120px !important; }
+
+  /* ── Loading / error states ─────────────────────────────── */
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin-bottom: 12px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Footer ─────────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  #last-updated { font-family: 'JetBrains Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <header>
+    <div>
+      <h1>🎬 Reels<span>Bot</span> Dashboard</h1>
+      <p id="repo-link">Educational Instagram Reels · Auto-posted daily via GitHub Actions</p>
+    </div>
+    <div class="live-badge">
+      <span class="dot"></span>
+      Automated
+    </div>
+  </header>
+
+  <!-- Metrics -->
+  <div class="metrics" id="metrics">
+    <div class="loading"><div class="spinner"></div><br>Loading stats…</div>
+  </div>
+
+  <!-- Charts + Topics -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Posts by Topic</span>
+      </div>
+      <div class="card-body" id="topics-chart">
+        <div class="loading" style="padding:20px">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Daily Activity (last 14 days)</span>
+      </div>
+      <div class="card-body" style="padding:16px">
+        <div class="chart-wrap">
+          <canvas id="timeline-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity log -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Recent Runs</span>
+      <span id="last-updated" style="font-size:11px;color:var(--muted)">—</span>
+    </div>
+    <div class="card-body" id="log-feed">
+      <div class="loading" style="padding:20px">—</div>
+    </div>
+  </div>
+
+  <footer>
+    <span>Powered by <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a> + <a href="https://anthropic.com" target="_blank">Claude AI</a></span>
+    <span>Data auto-updates on every run · <a href="data.json" target="_blank">raw JSON</a></span>
+  </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const TOPIC_META = {
+  space:     { emoji: "🚀", label: "Space & Universe", color: "#4f8ef7" },
+  history:   { emoji: "📜", label: "World History",    color: "#fbbf24" },
+  geography: { emoji: "🌍", label: "Geography",        color: "#34d399" },
+  science:   { emoji: "🔬", label: "Science Facts",    color: "#a78bfa" },
+};
+
+function relTime(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1)  return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+
+function fmt(iso) {
+  const d = new Date(iso);
+  return d.toLocaleString("en-IN", { dateStyle: "short", timeStyle: "short" });
+}
+
+function renderMetrics(data) {
+  const el = document.getElementById("metrics");
+  el.innerHTML = `
+    <div class="metric" style="--bar-color:#34d399">
+      <div class="metric-label">Total Posted</div>
+      <div class="metric-value">${data.posted}</div>
+      <div class="metric-sub">${data.total_runs} total runs</div>
+      <div class="metric-icon">📤</div>
+    </div>
+    <div class="metric" style="--bar-color:#4f8ef7">
+      <div class="metric-label">Success Rate</div>
+      <div class="metric-value">${data.success_rate}<span style="font-size:18px;color:var(--muted)">%</span></div>
+      <div class="metric-sub">${data.failed} failed</div>
+      <div class="metric-icon">✅</div>
+    </div>
+    <div class="metric" style="--bar-color:#a78bfa">
+      <div class="metric-label">Active Topics</div>
+      <div class="metric-value">${Object.keys(data.topic_counts).length}</div>
+      <div class="metric-sub">Daily scheduled</div>
+      <div class="metric-icon">📚</div>
+    </div>
+    <div class="metric" style="--bar-color:#fbbf24">
+      <div class="metric-label">Dry Runs</div>
+      <div class="metric-value">${data.dry_runs}</div>
+      <div class="metric-sub">Test runs (not posted)</div>
+      <div class="metric-icon">🧪</div>
+    </div>
+  `;
+}
+
+function renderTopics(data) {
+  const counts = data.topic_counts;
+  const max    = Math.max(...Object.values(counts), 1);
+  const el     = document.getElementById("topics-chart");
+  el.innerHTML = Object.entries(TOPIC_META).map(([key, meta]) => {
+    const count = counts[key] || 0;
+    const pct   = Math.round((count / max) * 100);
+    return `
+      <div class="topic-row">
+        <span class="topic-emoji">${meta.emoji}</span>
+        <span class="topic-name">${meta.label}</span>
+        <div class="topic-bar-wrap">
+          <div class="topic-bar" style="width:${pct}%;background:${meta.color}"></div>
+        </div>
+        <span class="topic-count">${count}</span>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderLog(data) {
+  const el = document.getElementById("log-feed");
+  if (!data.recent_runs?.length) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:13px">No runs yet.</p>';
+    return;
+  }
+  el.innerHTML = data.recent_runs.map(run => {
+    const meta   = TOPIC_META[run.topic] || { emoji: "🤖", label: run.topic };
+    const status = run.status || "unknown";
+    const dotCls = status === "posted" ? "posted"
+                 : status === "failed" ? "failed"
+                 : status.startsWith("dry") ? "dry" : "started";
+    return `
+      <div class="log-item">
+        <div class="log-dot ${dotCls}"></div>
+        <div class="log-body">
+          <div class="log-hook">${run.hook || "(no hook)"}</div>
+          <div class="log-meta">
+            <span>${meta.emoji} ${meta.label}</span>
+            <span class="badge ${dotCls}">${status.replace("_ok","")}</span>
+            ${run.media_id ? `<span style="font-family:'JetBrains Mono',monospace;font-size:11px">id: ${run.media_id.slice(0,12)}…</span>` : ""}
+            ${run.error    ? `<span style="color:var(--red);font-size:11px">${run.error.slice(0,60)}</span>` : ""}
+          </div>
+        </div>
+        <div class="log-time" title="${fmt(run.timestamp)}">${relTime(run.timestamp)}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderTimeline(data) {
+  const ctx = document.getElementById("timeline-canvas").getContext("2d");
+
+  // Build last 14 days bucketed counts
+  const days = {};
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    days[d.toISOString().slice(0, 10)] = 0;
+  }
+
+  (data.recent_runs || []).forEach(run => {
+    const day = run.timestamp.slice(0, 10);
+    if (days[day] !== undefined && run.status === "posted") days[day]++;
+  });
+
+  const labels = Object.keys(days).map(d => {
+    const dt = new Date(d);
+    return dt.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+  });
+  const values = Object.values(days);
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: "rgba(79,142,247,0.5)",
+        borderColor:     "#4f8ef7",
+        borderWidth: 1.5,
+        borderRadius: 4,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          ticks: { color: "#7a7f94", font: { size: 10 } },
+          grid:  { color: "rgba(255,255,255,0.04)" },
+        },
+        y: {
+          ticks: { color: "#7a7f94", font: { size: 10 }, stepSize: 1 },
+          grid:  { color: "rgba(255,255,255,0.06)" },
+          min: 0,
+        },
+      },
+    },
+  });
+}
+
+async function loadData() {
+  try {
+    const r = await fetch(`data.json?t=${Date.now()}`);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+
+    renderMetrics(data);
+    renderTopics(data);
+    renderLog(data);
+    renderTimeline(data);
+
+    document.getElementById("last-updated").textContent =
+      "Updated " + relTime(data.generated_at);
+  } catch (e) {
+    console.error(e);
+    document.getElementById("metrics").innerHTML =
+      `<div class="loading" style="color:var(--red)">
+        ⚠️ Could not load data.json<br>
+        <small style="color:var(--muted)">Push a run first, or check GitHub Pages is enabled.</small>
+      </div>`;
+  }
+}
+
+loadData();
+setInterval(loadData, 60 * 1000);   // refresh every minute
+</script>
+</body>
+</html>
