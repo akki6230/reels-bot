@@ -1,6 +1,7 @@
 """
 src/fact_gen.py — Generates educational facts via Claude API.
 Tracks previously used categories to ensure variety across runs.
+Images fetched from Pexels (free, no attribution required).
 """
 
 import os
@@ -20,7 +21,15 @@ USED_FACTS_FILE   = ROOT / "output" / "used_facts.json"
 IMAGES_DIR        = ROOT / "output" / "images"
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
-UNSPLASH_KEY      = os.environ.get("UNSPLASH_ACCESS_KEY", "")
+PEXELS_API_KEY    = os.environ.get("PEXELS_API_KEY", "")
+
+# Fallback keywords if primary search returns nothing
+FALLBACK_KEYWORDS = {
+    "space":     ["galaxy", "stars", "night sky", "cosmos", "nebula", "milky way", "universe"],
+    "history":   ["ancient ruins", "castle", "museum", "old architecture", "historical", "monument"],
+    "geography": ["mountain", "ocean", "forest", "landscape", "waterfall", "desert", "nature"],
+    "science":   ["laboratory", "microscope", "dna", "technology", "research", "chemistry", "biology"],
+}
 
 SYSTEM_PROMPT = """\
 You are an expert educational content writer for Instagram Reels.
@@ -97,7 +106,7 @@ class FactGenerator:
             base_prompt += f"\n\nIMPORTANT — avoid these recently used categories: {avoid_str}"
 
         message = self.client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-haiku-4-5-20251001",
             max_tokens=700,
             system=SYSTEM_PROMPT,
             messages=[{"role": "user", "content": base_prompt}],
@@ -112,29 +121,61 @@ class FactGenerator:
         return data
 
     def fetch_image(self, keywords: list[str], topic_key: str) -> Path:
-        """Fetch a portrait image from Unsplash, or create a gradient fallback."""
-        keyword = random.choice(keywords)
-        slug    = keyword.replace(" ", "_")
-        out     = IMAGES_DIR / f"{topic_key}_{slug}_{random.randint(1000,9999)}.jpg"
+        """Fetch a portrait image from Pexels (free, no attribution needed),
+        falling back to gradient if no key or no results."""
+        IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
-        if UNSPLASH_KEY:
-            try:
-                resp = requests.get(
-                    "https://api.unsplash.com/photos/random",
-                    params={"query": keyword, "orientation": "portrait", "content_filter": "high"},
-                    headers={"Authorization": f"Client-ID {UNSPLASH_KEY}"},
-                    timeout=15,
-                )
-                resp.raise_for_status()
-                url      = resp.json()["urls"]["regular"]   # ~1080px
-                img_data = requests.get(url, timeout=30).content
-                out.write_bytes(img_data)
-                log.info(f"Unsplash image saved: {out.name}")
-                return out
-            except Exception as e:
-                log.warning(f"Unsplash failed ({e}), using gradient fallback")
+        if PEXELS_API_KEY:
+            # Try each keyword until we get a result
+            all_keywords = keywords + FALLBACK_KEYWORDS.get(topic_key, [])
+            random.shuffle(all_keywords)
 
+            for keyword in all_keywords:
+                slug = keyword.replace(" ", "_")
+                out  = IMAGES_DIR / f"{topic_key}_{slug}_{random.randint(1000,9999)}.jpg"
+                result = self._fetch_pexels(keyword, out)
+                if result:
+                    return result
+
+            log.warning("All Pexels keywords exhausted, using gradient fallback")
+
+        # Gradient fallback (no API key or all searches failed)
+        slug = keywords[0].replace(" ", "_")
+        out  = IMAGES_DIR / f"{topic_key}_{slug}_gradient.jpg"
         return self._gradient_image(topic_key, out)
+
+    def _fetch_pexels(self, keyword: str, out: Path) -> Path | None:
+        """Fetch one portrait photo from Pexels. Returns path or None."""
+        try:
+            resp = requests.get(
+                "https://api.pexels.com/v1/search",
+                params={
+                    "query":       keyword,
+                    "orientation": "portrait",
+                    "size":        "large",      # min 1920px on longest side
+                    "per_page":    15,
+                    "page":        random.randint(1, 3),  # vary results
+                },
+                headers={"Authorization": PEXELS_API_KEY},
+                timeout=15,
+            )
+            resp.raise_for_status()
+            photos = resp.json().get("photos", [])
+
+            if not photos:
+                log.debug(f"Pexels: no results for '{keyword}'")
+                return None
+
+            photo    = random.choice(photos)
+            img_url  = photo["src"]["large2x"]   # 1880px wide — great quality
+            img_data = requests.get(img_url, timeout=30).content
+            out.write_bytes(img_data)
+            log.info(f"Pexels image saved: {out.name} (photo by {photo['photographer']})")
+            return out
+
+        except Exception as e:
+            log.warning(f"Pexels fetch failed for '{keyword}': {e}")
+            return None
 
     # ── Private ────────────────────────────────────────────────────────────────
 

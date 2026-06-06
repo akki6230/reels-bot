@@ -48,10 +48,13 @@ cd reels-bot
 - Just your username and password — no Meta API needed
 - Tip: create a fresh account like `@daily.space.facts`
 
-### C) Unsplash — FREE, recommended
-1. Go to https://unsplash.com/developers
-2. Register → New Application → Copy "Access Key"
-- Free tier: 50 requests/hour (plenty for 3 reels/day)
+### C) Pexels — FREE, no attribution required ✅
+1. Go to https://www.pexels.com/api/
+2. Click "Get Started" → Create free account
+3. Go to https://www.pexels.com/api/new/ → Create app
+4. Copy your API Key
+- Free tier: 200 requests/hour, 20,000/month (way more than enough)
+- **No attribution required** — images are free to use in any project
 
 ### D) Freesound — FREE, recommended
 1. Go to https://freesound.org/apiv2/apply/
@@ -71,7 +74,7 @@ Add these secrets:
 | `ANTHROPIC_API_KEY`   | Your Claude API key            |
 | `INSTAGRAM_USERNAME`  | Your Instagram username        |
 | `INSTAGRAM_PASSWORD`  | Your Instagram password        |
-| `UNSPLASH_ACCESS_KEY` | Your Unsplash access key       |
+| `PEXELS_API_KEY`      | Your Pexels API key            |
 | `FREESOUND_API_KEY`   | Your Freesound API key         |
 
 > **Note:** `IG_SESSION_DATA` will be auto-populated after the first run.
