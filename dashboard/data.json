@@ -4,8 +4,10 @@
   "posted": 0,
   "failed": 0,
   "dry_runs": 0,
+  "en_posted": 0,
+  "hi_posted": 0,
   "success_rate": 0,
   "topic_counts": {},
   "recent_runs": [],
-  "current_run": { "status": "never_run", "topic": "" }
+  "current_run": {"status": "never_run", "topic": "", "lang": ""}
 }

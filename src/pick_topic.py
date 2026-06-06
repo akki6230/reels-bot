@@ -1,77 +1,63 @@
 """
-src/pick_topic.py
-Determines which topic to post based on:
-  - Manual trigger input (workflow_dispatch)
-  - UTC hour of the GitHub Actions cron run
-Outputs a GitHub Actions step output: topic=<name>
+src/pick_topic.py — Determines which topic + language to post.
+Outputs two GitHub Actions step outputs: topic=<name> lang=<en|hi>
 """
 
 import os
-import sys
 from datetime import datetime, timezone
 
-# Map UTC hours → topics (matches the cron schedule in the workflow)
-#   3:30 UTC  = 9:00 AM IST  → space
-#   7:30 UTC  = 1:00 PM IST  → history
-#  12:30 UTC  = 6:00 PM IST  → geography or science (alternating days)
-HOUR_TOPIC_MAP = {
-    3: "space",
-    7: "history",
-    12: "geography",   # overridden by day-of-week below
+# Map UTC hour → (topic, lang)  matching cron schedule
+# IST = UTC + 5:30, so hour_IST = UTC_hour + 5 (approx, ignoring :30)
+HOUR_MAP = {
+    1:  ("space",     "en"),   # 7:00 AM IST
+    2:  ("space",     "hi"),   # 8:00 AM IST
+    3:  ("history",   "en"),   # 9:00 AM IST
+    4:  ("history",   "hi"),   # 10:00 AM IST
+    5:  ("geography", "en"),   # 11:00 AM IST
+    6:  ("geography", "hi"),   # 12:00 PM IST
+    7:  ("science",   "en"),   # 1:00 PM IST
+    8:  ("science",   "hi"),   # 2:00 PM IST
+    9:  ("sports",    "en"),   # 3:00 PM IST
+    10: ("sports",    "hi"),   # 4:00 PM IST
+    11: ("worldnews", "en"),   # 5:00 PM IST
+    15: ("worldnews", "hi"),   # 9:00 PM IST
 }
 
-DAY_EVENING_TOPIC = {
-    0: "geography",   # Monday
-    1: "science",     # Tuesday
-    2: "geography",   # Wednesday
-    3: "science",     # Thursday
-    4: "geography",   # Friday
-    5: "science",     # Saturday
-    6: "science",     # Sunday
-}
-
-VALID_TOPICS = ["space", "history", "geography", "science"]
+VALID_TOPICS = ["space", "history", "geography", "science", "sports", "worldnews"]
+VALID_LANGS  = ["en", "hi"]
 
 
 def set_output(name: str, value: str):
-    """Write a GitHub Actions step output."""
     github_output = os.environ.get("GITHUB_OUTPUT")
     if github_output:
         with open(github_output, "a") as f:
             f.write(f"{name}={value}\n")
-    else:
-        # Local dev fallback
-        print(f"::set-output name={name}::{value}")
-    print(f"[pick_topic] Selected topic: {value}")
+    print(f"[pick_topic] {name}={value}")
 
 
 def main():
-    event = os.environ.get("GITHUB_EVENT_NAME", "schedule")
-    now_utc = datetime.now(timezone.utc)
-    utc_hour = now_utc.hour
-    weekday = now_utc.weekday()   # 0=Monday
+    event     = os.environ.get("GITHUB_EVENT_NAME", "schedule")
+    now_utc   = datetime.now(timezone.utc)
+    utc_hour  = now_utc.hour
 
-    # Manual trigger → use the provided input
+    # Manual trigger
     if event == "workflow_dispatch":
         topic = os.environ.get("INPUT_TOPIC", "space").strip().lower()
-        if topic not in VALID_TOPICS:
-            print(f"[pick_topic] Unknown topic '{topic}', defaulting to 'space'")
-            topic = "space"
+        lang  = os.environ.get("INPUT_LANG", "en").strip().lower()
+        topic = topic if topic in VALID_TOPICS else "space"
+        lang  = lang  if lang  in VALID_LANGS  else "en"
         set_output("topic", topic)
+        set_output("lang",  lang)
         return
 
-    # Scheduled run → derive from UTC hour
-    topic = HOUR_TOPIC_MAP.get(utc_hour)
-    if topic is None:
-        # Fallback: guess from closest hour
-        closest = min(HOUR_TOPIC_MAP.keys(), key=lambda h: abs(h - utc_hour))
-        topic = HOUR_TOPIC_MAP[closest]
+    # Scheduled — map UTC hour to topic+lang
+    pair = HOUR_MAP.get(utc_hour)
+    if pair is None:
+        closest = min(HOUR_MAP.keys(), key=lambda h: abs(h - utc_hour))
+        pair    = HOUR_MAP[closest]
 
-    # Evening slot (12 UTC): alternate geography/science by weekday
-    if utc_hour == 12:
-        topic = DAY_EVENING_TOPIC.get(weekday, "geography")
-
-    set_output("topic", topic)
+    set_output("topic", pair[0])
+    set_output("lang",  pair[1])
 
 
 if __name__ == "__main__":

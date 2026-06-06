@@ -1,53 +1,79 @@
 """
-src/video.py — Renders 1080×1920 Instagram Reels with:
-  - Ken Burns zoom effect on background image
-  - Animated text (hook fades in, body fades in after)
-  - Branded bottom bar
-  - Background music mixed in
+src/video.py — Renders 1080×1920 Reels with full Hindi (Devanagari) support.
+Downloads Noto Sans Devanagari font on first run for proper Hindi rendering.
 """
 
+import math
 import logging
-import textwrap
+import struct
+import wave
 from pathlib import Path
 from datetime import datetime
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
-from moviepy.editor import VideoClip, AudioFileClip, CompositeVideoClip
+import requests
+from PIL import Image, ImageDraw, ImageFont
+from moviepy.editor import VideoClip, AudioFileClip
 from moviepy.video.fx.all import fadein, fadeout
 
-from config import REEL_WIDTH, REEL_HEIGHT, REEL_DURATION, REEL_FPS, MUSIC_VOLUME
+from config import REEL_WIDTH, REEL_HEIGHT, REEL_DURATION, REEL_FPS, MUSIC_VOLUME, LANGUAGES
 
 log = logging.getLogger(__name__)
 
-W, H = REEL_WIDTH, REEL_HEIGHT
-PAD  = 72   # horizontal padding
+W, H    = REEL_WIDTH, REEL_HEIGHT
+PAD     = 72
+ROOT    = Path(__file__).parent.parent
+FONTS_DIR = ROOT / "fonts"
+FONTS_DIR.mkdir(exist_ok=True)
 
+# ── Font management ────────────────────────────────────────────────────────────
 
-# ── Font loading ───────────────────────────────────────────────────────────────
+FONT_CACHE: dict[str, ImageFont.FreeTypeFont] = {}
 
-def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
+def _download_font(url: str, dest: Path):
+    if dest.exists():
+        return
+    log.info(f"Downloading font: {dest.name}")
+    try:
+        r = requests.get(url, timeout=30)
+        r.raise_for_status()
+        dest.write_bytes(r.content)
+        log.info(f"Font saved: {dest.name}")
+    except Exception as e:
+        log.warning(f"Font download failed: {e}")
+
+def _get_font(size: int, bold: bool = False, lang: str = "en") -> ImageFont.FreeTypeFont:
+    cache_key = f"{lang}_{size}_{bold}"
+    if cache_key in FONT_CACHE:
+        return FONT_CACHE[cache_key]
+
     candidates = []
-    fonts_dir = Path(__file__).parent.parent / "fonts"
-    if bold:
-        candidates = [
-            fonts_dir / "Poppins-Bold.ttf",
-            fonts_dir / "Poppins-SemiBold.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-        ]
-    else:
-        candidates = [
-            fonts_dir / "Poppins-Regular.ttf",
-            fonts_dir / "Poppins-Medium.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        ]
+
+    if lang == "hi":
+        # Download Noto Sans Devanagari if needed
+        lang_cfg = LANGUAGES["hi"]
+        bold_path = FONTS_DIR / "NotoSansDevanagari-Bold.ttf"
+        reg_path  = FONTS_DIR / "NotoSansDevanagari-Regular.ttf"
+        _download_font(lang_cfg["font_url"],     bold_path)
+        _download_font(lang_cfg["font_url_reg"], reg_path)
+        candidates = [bold_path if bold else reg_path]
+
+    # English / fallback fonts
+    candidates += [
+        FONTS_DIR / ("Poppins-Bold.ttf" if bold else "Poppins-Regular.ttf"),
+        Path("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf" if bold
+             else "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"),
+        Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold
+             else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
+    ]
+
     for p in candidates:
         if Path(p).exists():
-            return ImageFont.truetype(str(p), size)
-    return ImageFont.load_default()
+            font = ImageFont.truetype(str(p), size)
+            FONT_CACHE[cache_key] = font
+            return font
 
+    return ImageFont.load_default()
 
 # ── Text helpers ───────────────────────────────────────────────────────────────
 
@@ -65,96 +91,86 @@ def _wrap(text: str, font: ImageFont.FreeTypeFont, max_w: int) -> list[str]:
         lines.append(cur)
     return lines
 
-
-def _draw_text_shadow(draw, x, y, text, font, color, alpha, shadow_offset=3):
-    r, g, b = color
-    a = alpha
-    draw.text((x + shadow_offset, y + shadow_offset), text,
-              font=font, fill=(0, 0, 0, a // 3))
-    draw.text((x, y), text, font=font, fill=(r, g, b, a))
-
+def _draw_shadowed(draw, x, y, text, font, color, alpha, shadow=3):
+    draw.text((x + shadow, y + shadow), text, font=font, fill=(0, 0, 0, alpha // 3))
+    draw.text((x, y), text, font=font, fill=(*color, alpha))
 
 # ── Frame renderer ─────────────────────────────────────────────────────────────
 
-def _make_frame_array(
-    bg: Image.Image,
-    hook: str,
-    body: str,
-    topic: dict,
-    t: float,        # current time in seconds
-    total: float,    # total duration
-) -> np.ndarray:
-    progress = t / total   # 0.0 → 1.0
+def _make_frame(bg: Image.Image, hook: str, body: str, topic: dict,
+                lang: str, follow_text: str, t: float, total: float) -> np.ndarray:
+    progress = t / total
 
-    # Ken Burns: zoom from 1.00 to 1.08 over the clip
-    scale   = 1.0 + 0.08 * progress
-    new_w   = int(W * scale)
-    new_h   = int(H * scale)
-    zoomed  = bg.resize((new_w, new_h), Image.LANCZOS)
-    left    = (new_w - W) // 2
-    top     = (new_h - H) // 2
-    frame   = zoomed.crop((left, top, left + W, top + H))
+    # Ken Burns zoom
+    scale  = 1.0 + 0.08 * progress
+    nw, nh = int(W * scale), int(H * scale)
+    zoomed = bg.resize((nw, nh), Image.LANCZOS)
+    left   = (nw - W) // 2
+    top    = (nh - H) // 2
+    frame  = zoomed.crop((left, top, left + W, top + H)).convert("RGBA")
 
-    # Dark overlay (slightly heavier at center for readability)
-    overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    ov_draw = ImageDraw.Draw(overlay)
-    ov_draw.rectangle([0, 0, W, H], fill=(0, 0, 0, 150))
-    frame   = frame.convert("RGBA")
-    frame   = Image.alpha_composite(frame, overlay)
+    # Dark overlay
+    ov = Image.new("RGBA", (W, H), (0, 0, 0, 155))
+    frame = Image.alpha_composite(frame, ov)
+    draw  = ImageDraw.Draw(frame)
 
-    draw   = ImageDraw.Draw(frame)
     accent = topic["color_scheme"]["accent"]
     txt_c  = topic["color_scheme"]["text"]
 
-    # ── Topic label (top) ──────────────────────────────────────────────────
-    label_font = _font(38, bold=True)
-    label      = f"{topic['emoji']}  {topic['name'].upper()}"
+    # ── Language badge (top-left) ──────────────────────────────────────────
+    badge_font = _get_font(30, bold=True, lang="en")
+    lang_label = "हिंदी" if lang == "hi" else "ENG"
+    badge_a    = min(220, int(progress * 220 * 4))
+    draw.rounded_rectangle([PAD - 10, 48, PAD + 80, 84],
+                            radius=8, fill=(*accent, badge_a // 2))
+    draw.text((PAD, 55), lang_label, font=badge_font,
+              fill=(*accent, badge_a))
+
+    # ── Topic label ────────────────────────────────────────────────────────
+    label_font = _get_font(36, bold=True, lang=lang)
+    topic_name = topic.get("name_hi", topic["name"]) if lang == "hi" else topic["name"]
+    label      = f"{topic['emoji']}  {topic_name}"
     label_a    = min(255, int(progress * 255 * 5))
-    draw.text((PAD, 88), label, font=label_font, fill=(*accent, label_a))
-    # Thin accent line
-    line_a = min(200, int(progress * 255 * 4))
-    draw.rectangle([PAD, 148, W - PAD, 152], fill=(*accent, line_a))
+    draw.text((PAD, 100), label, font=label_font, fill=(*accent, label_a))
+    draw.rectangle([PAD, 155, W - PAD, 159], fill=(*accent, label_a // 2))
 
-    # ── Hook text (animates in first 30% of clip) ──────────────────────────
-    hook_font  = _font(82, bold=True)
-    hook_lines = _wrap(hook.upper(), hook_font, W - PAD * 2)
+    # ── Hook ───────────────────────────────────────────────────────────────
+    hook_font  = _get_font(72, bold=True, lang=lang)
+    hook_lines = _wrap(hook.upper() if lang == "en" else hook, hook_font, W - PAD * 2)
     hook_alpha = min(255, int(progress * 255 / 0.35))
-
-    total_hook_h = len(hook_lines) * 100
-    hook_y       = H // 2 - total_hook_h // 2 - 60
+    hook_h     = len(hook_lines) * 88
+    hook_y     = H // 2 - hook_h // 2 - 70
 
     for line in hook_lines:
         bbox = hook_font.getbbox(line)
         x    = (W - bbox[2]) // 2
-        _draw_text_shadow(draw, x, hook_y, line, hook_font, txt_c, hook_alpha)
-        hook_y += 100
+        _draw_shadowed(draw, x, hook_y, line, hook_font, txt_c, hook_alpha)
+        hook_y += 88
 
-    # ── Body text (fades in after 40% of clip) ─────────────────────────────
+    # ── Body ───────────────────────────────────────────────────────────────
     body_start = 0.40
     body_alpha = 0
     if progress > body_start:
         body_alpha = min(255, int((progress - body_start) * 255 / 0.30))
 
     if body_alpha > 0:
-        body_font  = _font(44)
+        body_font  = _get_font(40, lang=lang)
         body_lines = _wrap(body, body_font, W - PAD * 2)
-        body_y     = H // 2 + 120
-
+        body_y     = H // 2 + 110
         for line in body_lines:
             bbox = body_font.getbbox(line)
             x    = (W - bbox[2]) // 2
-            _draw_text_shadow(draw, x, body_y, line, body_font, txt_c, body_alpha)
-            body_y += 60
+            _draw_shadowed(draw, x, body_y, line, body_font, txt_c, body_alpha)
+            body_y += 56
 
-    # ── Bottom brand bar ───────────────────────────────────────────────────
-    bar_alpha = min(200, int(progress * 255 * 3))
-    draw.rectangle([0, H - 130, W, H], fill=(0, 0, 0, bar_alpha // 2))
-    wm_font = _font(30)
-    wm_text = f"Follow for daily {topic['name']} facts  ✨"
-    bbox    = wm_font.getbbox(wm_text)
+    # ── Bottom bar ─────────────────────────────────────────────────────────
+    bar_a = min(200, int(progress * 200 * 3))
+    draw.rectangle([0, H - 140, W, H], fill=(0, 0, 0, bar_a // 2))
+    wm_font = _get_font(28, lang=lang)
+    bbox    = wm_font.getbbox(follow_text)
     wx      = (W - bbox[2]) // 2
-    draw.text((wx, H - 90), wm_text, font=wm_font,
-              fill=(*accent, min(220, bar_alpha)))
+    draw.text((wx, H - 100), follow_text, font=wm_font,
+              fill=(*accent, min(220, bar_a)))
 
     return np.array(frame.convert("RGB"))
 
@@ -162,57 +178,40 @@ def _make_frame_array(
 # ── VideoCreator ───────────────────────────────────────────────────────────────
 
 class VideoCreator:
-    def create_reel(
-        self,
-        image_path: Path,
-        music_path: Path,
-        fact_data: dict,
-        topic: dict,
-        output_dir: Path,
-    ) -> Path:
-        log.info("🎬 Loading background image…")
-        bg_img = Image.open(image_path).convert("RGB")
+    def create_reel(self, image_path: Path, music_path: Path, fact_data: dict,
+                    topic: dict, lang: str, output_dir: Path) -> Path:
 
-        hook = fact_data["hook"]
-        body = fact_data["body"]
-
-        log.info("🎞  Rendering frames (MoviePy)…")
+        log.info(f"🎬 Rendering [{lang.upper()}] reel…")
+        bg_img      = Image.open(image_path).convert("RGB")
+        hook        = fact_data["hook"]
+        body        = fact_data["body"]
+        follow_text = LANGUAGES[lang]["follow_text"]
 
         def make_frame(t):
-            return _make_frame_array(bg_img, hook, body, topic, t, REEL_DURATION)
+            return _make_frame(bg_img, hook, body, topic, lang, follow_text, t, REEL_DURATION)
 
-        clip = VideoClip(make_frame, duration=REEL_DURATION)
-        clip = clip.set_fps(REEL_FPS)
+        clip = VideoClip(make_frame, duration=REEL_DURATION).set_fps(REEL_FPS)
         clip = fadein(clip, 0.5)
         clip = fadeout(clip, 0.8)
 
-        # Audio
-        log.info("🎵 Mixing audio…")
-        audio = (
-            AudioFileClip(str(music_path))
-            .subclip(0, REEL_DURATION)
-            .audio_fadeout(2.5)
-            .volumex(MUSIC_VOLUME)
-        )
+        audio = (AudioFileClip(str(music_path))
+                 .subclip(0, REEL_DURATION)
+                 .audio_fadeout(2.5)
+                 .volumex(MUSIC_VOLUME))
         clip  = clip.set_audio(audio)
 
-        # Output path
         ts       = datetime.now().strftime("%Y%m%d_%H%M%S")
-        cat_slug = fact_data.get("fact_category", topic["name"]).replace(" ", "_").lower()
-        out_path = output_dir / f"reel_{cat_slug}_{ts}.mp4"
+        cat_slug = fact_data.get("fact_category", topic["name"])[:20].replace(" ", "_").lower()
+        out_path = output_dir / f"reel_{cat_slug}_{lang}_{ts}.mp4"
 
-        log.info(f"💾 Writing video → {out_path}")
+        log.info(f"💾 Writing → {out_path.name}")
         clip.write_videofile(
             str(out_path),
-            codec="libx264",
-            audio_codec="aac",
-            fps=REEL_FPS,
-            preset="fast",
-            bitrate="4000k",
-            audio_bitrate="192k",
+            codec="libx264", audio_codec="aac",
+            fps=REEL_FPS, preset="fast",
+            bitrate="4000k", audio_bitrate="192k",
             ffmpeg_params=["-vf", f"scale={W}:{H}"],
             logger=None,
         )
-
-        log.info(f"✅ Video complete: {out_path.stat().st_size / 1e6:.1f} MB")
+        log.info(f"✅ [{lang.upper()}] {out_path.stat().st_size / 1e6:.1f} MB")
         return out_path
