@@ -1,13 +1,14 @@
 {
-  "generated_at": "2026-06-07T08:41:34.758661+00:00",
-  "total_runs": 11,
-  "posted": 8,
+  "generated_at": "2026-06-07T09:54:11.303853+00:00",
+  "total_runs": 12,
+  "posted": 9,
   "failed": 0,
   "dry_runs": 3,
-  "en_posted": 3,
+  "en_posted": 4,
   "hi_posted": 5,
-  "success_rate": 72.7,
+  "success_rate": 75.0,
   "topic_counts": {
+    "sports": 1,
     "science": 5,
     "history": 2,
     "geography": 1
@@ -22,6 +23,17 @@
       "hook": "NASA JUST MADE SUPERSONIC FLIGHT QUIET",
       "category": "Space & Technology",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_space_&_technology_en_20260607_022242.mp4"
+    },
+    {
+      "timestamp": "2026-06-07T09:48:16.592303+00:00",
+      "topic": "sports",
+      "lang": "en",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "AMERICA'S HOCKEY CURSE FINALLY BROKEN AFTER 46 YEARS",
+      "category": "Sports News",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_sports_news_en_20260607_094854.mp4",
+      "media_id": "3914174766116831272_24336816956"
     },
     {
       "timestamp": "2026-06-07T06:14:41.128392+00:00",
@@ -134,7 +146,7 @@
   ],
   "current_run": {
     "status": "success",
-    "topic": "science",
-    "lang": "hi"
+    "topic": "sports",
+    "lang": "en"
   }
 }
