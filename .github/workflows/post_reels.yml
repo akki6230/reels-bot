@@ -2,8 +2,6 @@ name: 🚀 Post Daily Educational Reels
 
 on:
   schedule:
-    # IST = UTC+5:30 — posting every hour from 7AM to 9PM IST
-    # Format: minute hour * * *  (UTC)
     - cron: "30 1 * * *"   # 7:00 AM IST  — Space EN
     - cron: "30 2 * * *"   # 8:00 AM IST  — Space HI
     - cron: "30 3 * * *"   # 9:00 AM IST  — History EN
@@ -33,6 +31,12 @@ on:
         default: "false"
         type: boolean
 
+# ── CRITICAL: allows git push back to repo ────────────────────────────────────
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   post-reel:
     runs-on: ubuntu-latest
@@ -41,6 +45,9 @@ jobs:
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0   # full history so push works cleanly
 
       - name: 🐍 Set up Python 3.11
         uses: actions/setup-python@v5
@@ -110,19 +117,20 @@ jobs:
         if: always()
         run: python src/update_dashboard.py
         env:
-          GITHUB_TOKEN:       ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY:  ${{ github.repository }}
-          RUN_STATUS:         ${{ job.status }}
-          TOPIC:              ${{ steps.topic.outputs.topic }}
-          LANG:               ${{ steps.topic.outputs.lang }}
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUN_STATUS:        ${{ job.status }}
+          TOPIC:             ${{ steps.topic.outputs.topic }}
+          LANG:              ${{ steps.topic.outputs.lang }}
 
       - name: 💾 Commit dashboard data
         if: always()
         run: |
           git config user.name "Reels Bot"
           git config user.email "bot@reels.local"
+          git pull --rebase origin main || true
           git add dashboard/data.json output/used_facts.json || true
           git diff --cached --quiet || git commit -m "📊 Stats update [skip ci]"
-          git push || true
+          git push origin main || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
