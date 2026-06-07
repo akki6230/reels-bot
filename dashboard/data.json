@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-07T08:14:53.216874+00:00",
-  "total_runs": 10,
-  "posted": 7,
+  "generated_at": "2026-06-07T08:41:34.758661+00:00",
+  "total_runs": 11,
+  "posted": 8,
   "failed": 0,
   "dry_runs": 3,
   "en_posted": 3,
-  "hi_posted": 4,
-  "success_rate": 70.0,
+  "hi_posted": 5,
+  "success_rate": 72.7,
   "topic_counts": {
-    "science": 4,
+    "science": 5,
     "history": 2,
     "geography": 1
   },
@@ -32,6 +32,17 @@
       "hook": "\u0938\u0942\u0930\u091c \u0939\u0930 \u0938\u0947\u0915\u0902\u0921 4 \u0932\u093e\u0916 \u091f\u0928 \u091c\u0932\u0924\u093e \u0939\u0948",
       "category": "\u0924\u093e\u0930\u0947",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u0924\u093e\u0930\u0947_hi_20260607_061514.mp4"
+    },
+    {
+      "timestamp": "2026-06-07T08:34:53.399401+00:00",
+      "topic": "science",
+      "lang": "hi",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "\u0906\u092a\u0915\u0940 \u0906\u0902\u0916\u0947\u0902 \u0939\u0930 \u0938\u0947\u0915\u0902\u0921 4 \u0932\u093e\u0916 \u092c\u093e\u0930 \u091d\u092a\u0915\u0924\u0940 \u0939\u0948\u0902",
+      "category": "\u0924\u0902\u0924\u094d\u0930\u093f\u0915\u093e \u0935\u093f\u091c\u094d\u091e\u093e\u0928",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u0924\u0902\u0924\u094d\u0930\u093f\u0915\u093e_\u0935\u093f\u091c\u094d\u091e\u093e\u0928_hi_20260607_083503.mp4",
+      "media_id": "3914138247805069452_24336816956"
     },
     {
       "timestamp": "2026-06-07T08:08:10.533588+00:00",
