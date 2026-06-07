@@ -392,29 +392,131 @@ class FactGenerator:
     # ── Image sources ──────────────────────────────────────────────────────────
 
     def _fetch_pollinations(self, topic_key: str) -> Path | None:
-        """Fetch AI-generated illustrated image from Pollinations.ai (free, no key)."""
+        """
+        Fetch AI-generated image from Pollinations.ai.
+        Free tier supports up to 512x512 — we fetch at 512x912 then upscale with PIL.
+        Falls back to alternative free sources if Pollinations is unavailable.
+        """
+        # Try Pollinations at free-tier resolution first
+        result = self._try_pollinations_free(topic_key)
+        if result:
+            return result
+
+        # Fallback 1: Lexica.art (free AI art search)
+        result = self._try_lexica(topic_key)
+        if result:
+            return result
+
+        # Fallback 2: Picsum (beautiful random photos, always free)
+        result = self._try_picsum(topic_key)
+        if result:
+            return result
+
+        return None
+
+    def _try_pollinations_free(self, topic_key: str) -> Path | None:
+        """Pollinations.ai at free resolution (512 wide max), then upscale."""
         try:
             styles = POLLINATIONS_STYLES.get(topic_key, ["digital illustration art"])
             style  = random.choice(styles)
             prompt = urllib.parse.quote(
-                f"{style}, high quality, detailed, vibrant colors, "
-                f"9:16 aspect ratio, vertical format"
+                f"{style}, high quality, detailed, vibrant colors, vertical portrait"
             )
-            # Pollinations.ai free image generation
-            url  = f"https://image.pollinations.ai/prompt/{prompt}?width=1080&height=1920&nologo=true&seed={random.randint(1,9999)}"
+            # Free tier: max ~512px wide
+            seed = random.randint(1, 99999)
+            url  = (
+                f"https://image.pollinations.ai/prompt/{prompt}"
+                f"?width=512&height=912&nologo=true&seed={seed}&model=flux"
+            )
             resp = requests.get(url, timeout=45)
             resp.raise_for_status()
 
             if len(resp.content) < 5000:
                 return None
 
-            slug = style.replace(" ", "_")[:30]
-            out  = IMAGES_DIR / f"{topic_key}_pollinations_{slug}_{random.randint(1000,9999)}.jpg"
-            out.write_bytes(resp.content)
-            log.info(f"Pollinations image: {out.name} ({len(resp.content)//1024}KB)")
+            # Save small image then upscale to 1080x1920 with PIL
+            from PIL import Image as PILImage
+            import io
+            img  = PILImage.open(io.BytesIO(resp.content)).convert("RGB")
+            img  = img.resize((1080, 1920), PILImage.LANCZOS)
+
+            slug = style.replace(" ", "_")[:25]
+            out  = IMAGES_DIR / f"{topic_key}_pollinations_{slug}_{seed}.jpg"
+            img.save(out, "JPEG", quality=92)
+            log.info(f"Pollinations (upscaled): {out.name}")
             return out
         except Exception as e:
-            log.warning(f"Pollinations failed: {e}")
+            log.warning(f"Pollinations free tier failed: {e}")
+            return None
+
+    def _try_lexica(self, topic_key: str) -> Path | None:
+        """Search Lexica.art for free AI-generated images."""
+        try:
+            queries = {
+                "space":     "cosmic space galaxy digital art",
+                "history":   "ancient civilization historical art",
+                "geography": "nature landscape earth aerial",
+                "science":   "science laboratory futuristic",
+                "sports":    "sports action dynamic",
+                "worldnews": "world globe news concept",
+            }
+            query = urllib.parse.quote(
+                queries.get(topic_key, "abstract colorful art")
+            )
+            resp = requests.get(
+                f"https://lexica.art/api/v1/search?q={query}",
+                timeout=15,
+                headers={"User-Agent": "Mozilla/5.0"}
+            )
+            resp.raise_for_status()
+            images = resp.json().get("images", [])
+            if not images:
+                return None
+
+            # Pick a random image from results
+            img_data = random.choice(images[:10])
+            img_url  = img_data.get("src", "")
+            if not img_url:
+                return None
+
+            from PIL import Image as PILImage
+            import io
+            img_resp = requests.get(img_url, timeout=30,
+                                    headers={"User-Agent": "Mozilla/5.0"})
+            img_resp.raise_for_status()
+            img = PILImage.open(io.BytesIO(img_resp.content)).convert("RGB")
+            img = img.resize((1080, 1920), PILImage.LANCZOS)
+
+            out = IMAGES_DIR / f"{topic_key}_lexica_{random.randint(1000,9999)}.jpg"
+            img.save(out, "JPEG", quality=92)
+            log.info(f"Lexica image: {out.name}")
+            return out
+        except Exception as e:
+            log.warning(f"Lexica failed: {e}")
+            return None
+
+    def _try_picsum(self, topic_key: str) -> Path | None:
+        """
+        Fetch a beautiful random photo from Picsum.photos.
+        100% free, no API key, no attribution required.
+        Great quality landscape/nature/architecture photos.
+        """
+        try:
+            seed = random.randint(1, 1000)
+            # Picsum gives different image per seed
+            url  = f"https://picsum.photos/seed/{seed}/1080/1920"
+            resp = requests.get(url, timeout=20)
+            resp.raise_for_status()
+
+            if len(resp.content) < 10000:
+                return None
+
+            out = IMAGES_DIR / f"{topic_key}_picsum_{seed}.jpg"
+            out.write_bytes(resp.content)
+            log.info(f"Picsum image: {out.name} ({len(resp.content)//1024}KB)")
+            return out
+        except Exception as e:
+            log.warning(f"Picsum failed: {e}")
             return None
 
     def _fetch_pexels_image(self, keywords: list, topic_key: str) -> Path | None:
