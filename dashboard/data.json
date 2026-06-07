@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-07T10:20:13.102905+00:00",
-  "total_runs": 13,
+  "generated_at": "2026-06-07T10:41:53.213595+00:00",
+  "total_runs": 14,
   "posted": 10,
   "failed": 0,
-  "dry_runs": 3,
+  "dry_runs": 4,
   "en_posted": 4,
   "hi_posted": 6,
-  "success_rate": 76.9,
+  "success_rate": 71.4,
   "topic_counts": {
     "sports": 2,
     "science": 5,
@@ -55,6 +55,16 @@
       "hook": "\u0938\u0942\u0930\u091c \u0939\u0930 \u0938\u0947\u0915\u0902\u0921 4 \u0932\u093e\u0916 \u091f\u0928 \u091c\u0932\u0924\u093e \u0939\u0948",
       "category": "\u0924\u093e\u0930\u0947",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u0924\u093e\u0930\u0947_hi_20260607_061514.mp4"
+    },
+    {
+      "timestamp": "2026-06-07T10:37:14.854310+00:00",
+      "topic": "space",
+      "lang": "en",
+      "status": "dry_run_ok",
+      "dry_run": true,
+      "hook": "NEUTRON STARS ARE ACTUALLY INSANELY DENSE",
+      "category": "Stars",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_stars_en_20260607_103722.mp4"
     },
     {
       "timestamp": "2026-06-07T08:34:53.399401+00:00",
@@ -157,7 +167,7 @@
   ],
   "current_run": {
     "status": "success",
-    "topic": "sports",
-    "lang": "hi"
+    "topic": "space",
+    "lang": "en"
   }
 }
