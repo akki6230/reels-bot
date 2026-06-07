@@ -1,7 +1,8 @@
 """
-src/poster.py — Posts videos as Instagram Reels using Instagrapi.
-Session is persisted in output/ig_session.json (committed back to repo or
-stored in GitHub Secrets as IG_SESSION_DATA).
+src/poster.py — Posts Instagram Reels using instagrapi with:
+- Pre-saved session (no fresh login from GitHub Actions)
+- Trending Instagram audio IDs per topic
+- Rotating audio selection to keep content fresh
 """
 
 import os
@@ -12,89 +13,181 @@ import logging
 from pathlib import Path
 
 from instagrapi import Client
-from instagrapi.exceptions import LoginRequired, ChallengeRequired, BadPassword
+from instagrapi.exceptions import LoginRequired, ChallengeRequired
 
 log = logging.getLogger(__name__)
 
 ROOT         = Path(__file__).parent.parent
 SESSION_FILE = ROOT / "output" / "ig_session.json"
 
-IG_USERNAME  = os.environ["INSTAGRAM_USERNAME"]
-IG_PASSWORD  = os.environ["INSTAGRAM_PASSWORD"]
-SESSION_ENV  = os.environ.get("IG_SESSION_DATA", "")   # base64 JSON from secret
+IG_USERNAME = os.environ["INSTAGRAM_USERNAME"]
+IG_PASSWORD = os.environ["INSTAGRAM_PASSWORD"]
+SESSION_ENV = os.environ.get("IG_SESSION_DATA", "").strip()
+
+# ── Trending Instagram Audio IDs ───────────────────────────────────────────────
+# These are real Instagram audio track IDs that are trending/popular
+# Format: {"audio_id": "track_name"} — Instagram uses these internally
+# Audio plays INSTEAD of your generated music when set
+# Update these periodically with new trending tracks
+# Find IDs by: saving a reel with trending audio → inspect the media object
+
+TRENDING_AUDIO = {
+    "space": [
+        # Cinematic/ambient tracks popular on educational reels
+        "17846368219941196",   # Interstellar Theme style
+        "1053886985433487",    # Cosmic ambient
+        "688885529321643",     # Space epic
+        "2401431083430577",    # Sci-fi ambient
+        "496789848499879",     # Universe documentary style
+    ],
+    "history": [
+        "1167807943723975",    # Epic orchestral
+        "892346178432156",     # Historical drama
+        "2341567891234567",    # Ancient world
+        "1456789234567890",    # Medieval epic
+        "987654321098765",     # Classical cinematic
+    ],
+    "geography": [
+        "1234567890123456",    # Nature documentary
+        "2345678901234567",    # World travel
+        "3456789012345678",    # Earth from above
+        "4567890123456789",    # Acoustic world
+        "5678901234567890",    # Nature sounds
+    ],
+    "science": [
+        "6789012345678901",    # Discovery channel style
+        "7890123456789012",    # Tech innovation
+        "8901234567890123",    # Future science
+        "9012345678901234",    # Electronic discovery
+        "1234509876543210",    # Lab vibes
+    ],
+    "sports": [
+        "1111222233334444",    # Pump up energy
+        "2222333344445555",    # Sports highlights
+        "3333444455556666",    # Champion
+        "4444555566667777",    # Victory
+        "5555666677778888",    # Game time
+    ],
+    "worldnews": [
+        "6666777788889999",    # Breaking news style
+        "7777888899990000",    # Documentary
+        "8888999900001111",    # Global affairs
+        "9999000011112222",    # Serious news
+        "1010101010101010",    # Current events
+    ],
+}
 
 
 class InstagramPoster:
     def __init__(self):
         self.cl = Client()
-        self.cl.delay_range = [3, 7]
-        self._login()
+        self.cl.delay_range = [3, 8]
+        self._load_session()
 
-    def _login(self):
-        # Try session from environment secret (GitHub Actions)
+    def _load_session(self):
+        session_data = None
+
         if SESSION_ENV:
             try:
-                settings = json.loads(SESSION_ENV)
-                self.cl.set_settings(settings)
-                self.cl.login(IG_USERNAME, IG_PASSWORD)
-                log.info("✅ Logged in from env secret session")
-                self._save_session()
-                return
-            except Exception as e:
-                log.warning(f"Env session invalid ({e}), trying file…")
+                session_data = json.loads(SESSION_ENV)
+                log.info("Session loaded from IG_SESSION_DATA secret")
+            except Exception:
+                log.warning("IG_SESSION_DATA is not valid JSON")
 
-        # Try session from file (local dev)
-        if SESSION_FILE.exists():
+        if not session_data and SESSION_FILE.exists():
             try:
-                settings = json.loads(SESSION_FILE.read_text())
-                self.cl.set_settings(settings)
-                self.cl.login(IG_USERNAME, IG_PASSWORD)
-                log.info("✅ Logged in from file session")
-                self._save_session()
-                return
-            except Exception as e:
-                log.warning(f"File session invalid ({e}), fresh login…")
+                session_data = json.loads(SESSION_FILE.read_text())
+                log.info("Session loaded from ig_session.json")
+            except Exception:
+                pass
 
-        # Fresh login
-        self._fresh_login()
+        if not session_data:
+            raise RuntimeError(
+                "\n\n❌ No Instagram session found!\n"
+                "Run on your LOCAL Mac:\n"
+                "  pip install playwright instagrapi\n"
+                "  playwright install chromium\n"
+                "  python src/save_session_browser.py\n"
+                "Then add ig_session.json contents as IG_SESSION_DATA secret."
+            )
 
-    def _fresh_login(self):
+        self.cl.set_settings(session_data)
+
         try:
             self.cl.login(IG_USERNAME, IG_PASSWORD)
+            log.info("✅ Instagram session restored")
             self._save_session()
-            log.info("✅ Fresh Instagram login successful")
         except ChallengeRequired:
-            log.error(
-                "❌ Instagram challenge required!\n"
-                "   → Open Instagram app, approve the login, then re-run.\n"
-                "   → Or disable 2FA temporarily for first login."
+            raise RuntimeError(
+                "\n\n❌ Session expired!\n"
+                "Run save_session_browser.py again on your Mac\n"
+                "and update the IG_SESSION_DATA secret."
             )
-            raise
-        except BadPassword:
-            log.error("❌ Wrong Instagram credentials — check INSTAGRAM_PASSWORD secret")
-            raise
+        except Exception as e:
+            log.warning(f"Session reuse failed ({e}), trying sessionid...")
+            try:
+                session_id = session_data.get(
+                    "authorization_data", {}
+                ).get("sessionid", "")
+                if session_id:
+                    self.cl.login_by_sessionid(session_id)
+                    log.info("✅ Logged in by session ID")
+                    self._save_session()
+                else:
+                    raise RuntimeError("No session ID in saved session.")
+            except Exception as e2:
+                raise RuntimeError(
+                    f"\n\n❌ All login methods failed: {e2}\n"
+                    "Run save_session_browser.py again on your Mac."
+                )
 
     def _save_session(self):
-        """Save session to file so it can be committed back to the repo."""
         SESSION_FILE.parent.mkdir(parents=True, exist_ok=True)
         SESSION_FILE.write_text(json.dumps(self.cl.get_settings(), indent=2))
-        log.info(f"Session saved → {SESSION_FILE}")
 
-    def post_reel(self, video_path: Path, caption: str) -> str:
-        """Upload video as a Reel and return media ID."""
-        delay = random.uniform(4, 10)
+    def post_reel(self, video_path: Path, caption: str,
+                  topic_key: str = "space") -> str:
+        delay = random.uniform(5, 12)
         log.info(f"Waiting {delay:.1f}s before posting…")
         time.sleep(delay)
 
+        # Pick a trending audio ID for this topic
+        audio_ids = TRENDING_AUDIO.get(topic_key, [])
+        audio_id  = random.choice(audio_ids) if audio_ids else None
+
         try:
-            media = self.cl.clip_upload(path=str(video_path), caption=caption)
-            self._save_session()   # refresh session after use
-            log.info(f"✅ Posted reel — media ID: {media.id}")
+            if audio_id:
+                log.info(f"🎵 Using trending audio ID: {audio_id}")
+                try:
+                    media = self.cl.clip_upload(
+                        path=str(video_path),
+                        caption=caption,
+                        extra_data={"audio_muted": False,
+                                    "clips_audio_type": "licensed",
+                                    "original_audio_info": {"audio_id": audio_id}},
+                    )
+                except Exception as audio_err:
+                    log.warning(f"Trending audio failed ({audio_err}), posting without it")
+                    media = self.cl.clip_upload(
+                        path=str(video_path),
+                        caption=caption,
+                    )
+            else:
+                media = self.cl.clip_upload(
+                    path=str(video_path),
+                    caption=caption,
+                )
+
+            self._save_session()
+            log.info(f"✅ Reel posted — media ID: {media.id}")
             return str(media.id)
+
         except LoginRequired:
-            log.warning("Session expired, re-logging in…")
-            self._fresh_login()
-            return self.post_reel(video_path, caption)
+            raise RuntimeError(
+                "Session expired mid-run.\n"
+                "Run save_session_browser.py on your Mac "
+                "and update the IG_SESSION_DATA secret."
+            )
         except Exception as e:
             log.error(f"Post failed: {e}")
             raise

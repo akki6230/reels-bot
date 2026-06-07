@@ -33,7 +33,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 sys.path.insert(0, str(ROOT / "src"))
-from config   import TOPICS, LANGUAGES
+from config   import TOPICS, LANGUAGES, get_hashtags
 from fact_gen import FactGenerator
 from video    import VideoCreator
 from music    import MusicManager
@@ -88,9 +88,9 @@ def run_pipeline(topic_key: str, lang: str = "en", dry_run: bool = False) -> dic
             result["status"] = "dry_run_ok"
         else:
             poster   = InstagramPoster()
-            hashtags = topic["hashtags_hi"] if lang == "hi" else topic["hashtags"]
+            hashtags = get_hashtags(topic_key, lang)
             caption  = fact_data["caption"] + "\n\n" + hashtags
-            media_id = poster.post_reel(video_path, caption)
+            media_id = poster.post_reel(video_path, caption, topic_key=topic_key)
             result["media_id"] = str(media_id)
             result["status"]   = "posted"
             log.info(f"{prefix} ✅ Posted! ID: {media_id}")

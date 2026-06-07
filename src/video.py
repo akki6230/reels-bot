@@ -1,9 +1,13 @@
 """
-src/video.py — Renders 1080×1920 Reels with full Hindi (Devanagari) support.
-Downloads Noto Sans Devanagari font on first run for proper Hindi rendering.
+src/video.py — Renders 1080×1920 Reels with:
+- Full Hindi (Devanagari) support
+- 5-6 hashtag tags overlaid on the video itself
+- Ken Burns zoom effect
+- Animated text overlays
 """
 
 import math
+import random
 import logging
 import struct
 import wave
@@ -20,15 +24,34 @@ from config import REEL_WIDTH, REEL_HEIGHT, REEL_DURATION, REEL_FPS, MUSIC_VOLUM
 
 log = logging.getLogger(__name__)
 
-W, H    = REEL_WIDTH, REEL_HEIGHT
-PAD     = 72
-ROOT    = Path(__file__).parent.parent
+W, H      = REEL_WIDTH, REEL_HEIGHT
+PAD       = 72
+ROOT      = Path(__file__).parent.parent
 FONTS_DIR = ROOT / "fonts"
 FONTS_DIR.mkdir(exist_ok=True)
 
+# ── Top 5-6 tags to show ON VIDEO per topic ────────────────────────────────────
+# These appear as a tag strip on the video — short, punchy, high-reach only
+
+VIDEO_TAGS = {
+    "space_en":     ["#space", "#universe", "#NASA", "#spacefacts", "#didyouknow", "#cosmoscapsule"],
+    "space_hi":     ["#अंतरिक्ष", "#ब्रह्मांड", "#विज्ञान", "#तथ्य", "#इसरो", "#cosmoscapsule"],
+    "history_en":   ["#history", "#ancienthistory", "#historyfacts", "#didyouknow", "#civilization", "#cosmoscapsule"],
+    "history_hi":   ["#इतिहास", "#प्राचीनइतिहास", "#तथ्य", "#ज्ञान", "#सभ्यता", "#cosmoscapsule"],
+    "geography_en": ["#geography", "#earthfacts", "#nature", "#travel", "#amazingearth", "#cosmoscapsule"],
+    "geography_hi": ["#भूगोल", "#पृथ्वी", "#प्रकृति", "#यात्रा", "#तथ्य", "#cosmoscapsule"],
+    "science_en":   ["#science", "#sciencefacts", "#physics", "#biology", "#mindblown", "#cosmoscapsule"],
+    "science_hi":   ["#विज्ञान", "#विज्ञानतथ्य", "#भौतिकी", "#जीवविज्ञान", "#तथ्य", "#cosmoscapsule"],
+    "sports_en":    ["#sports", "#cricket", "#IPL", "#football", "#athlete", "#cosmoscapsule"],
+    "sports_hi":    ["#खेल", "#क्रिकेट", "#आईपीएल", "#फुटबॉल", "#खिलाड़ी", "#cosmoscapsule"],
+    "worldnews_en": ["#worldnews", "#breakingnews", "#NASA", "#ISRO", "#geopolitics", "#cosmoscapsule"],
+    "worldnews_hi": ["#विश्वसमाचार", "#ताजाखबर", "#राजनीति", "#नासा", "#इसरो", "#cosmoscapsule"],
+}
+
+
 # ── Font management ────────────────────────────────────────────────────────────
 
-FONT_CACHE: dict[str, ImageFont.FreeTypeFont] = {}
+FONT_CACHE: dict = {}
 
 def _download_font(url: str, dest: Path):
     if dest.exists():
@@ -38,7 +61,6 @@ def _download_font(url: str, dest: Path):
         r = requests.get(url, timeout=30)
         r.raise_for_status()
         dest.write_bytes(r.content)
-        log.info(f"Font saved: {dest.name}")
     except Exception as e:
         log.warning(f"Font download failed: {e}")
 
@@ -48,17 +70,14 @@ def _get_font(size: int, bold: bool = False, lang: str = "en") -> ImageFont.Free
         return FONT_CACHE[cache_key]
 
     candidates = []
-
     if lang == "hi":
-        # Download Noto Sans Devanagari if needed
-        lang_cfg = LANGUAGES["hi"]
+        lang_cfg  = LANGUAGES["hi"]
         bold_path = FONTS_DIR / "NotoSansDevanagari-Bold.ttf"
         reg_path  = FONTS_DIR / "NotoSansDevanagari-Regular.ttf"
         _download_font(lang_cfg["font_url"],     bold_path)
         _download_font(lang_cfg["font_url_reg"], reg_path)
         candidates = [bold_path if bold else reg_path]
 
-    # English / fallback fonts
     candidates += [
         FONTS_DIR / ("Poppins-Bold.ttf" if bold else "Poppins-Regular.ttf"),
         Path("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf" if bold
@@ -75,9 +94,10 @@ def _get_font(size: int, bold: bool = False, lang: str = "en") -> ImageFont.Free
 
     return ImageFont.load_default()
 
+
 # ── Text helpers ───────────────────────────────────────────────────────────────
 
-def _wrap(text: str, font: ImageFont.FreeTypeFont, max_w: int) -> list[str]:
+def _wrap(text: str, font: ImageFont.FreeTypeFont, max_w: int) -> list:
     words, lines, cur = text.split(), [], ""
     for w in words:
         test = (cur + " " + w).strip()
@@ -95,10 +115,12 @@ def _draw_shadowed(draw, x, y, text, font, color, alpha, shadow=3):
     draw.text((x + shadow, y + shadow), text, font=font, fill=(0, 0, 0, alpha // 3))
     draw.text((x, y), text, font=font, fill=(*color, alpha))
 
+
 # ── Frame renderer ─────────────────────────────────────────────────────────────
 
 def _make_frame(bg: Image.Image, hook: str, body: str, topic: dict,
-                lang: str, follow_text: str, t: float, total: float) -> np.ndarray:
+                lang: str, follow_text: str, tags: list,
+                t: float, total: float) -> np.ndarray:
     progress = t / total
 
     # Ken Burns zoom
@@ -110,21 +132,20 @@ def _make_frame(bg: Image.Image, hook: str, body: str, topic: dict,
     frame  = zoomed.crop((left, top, left + W, top + H)).convert("RGBA")
 
     # Dark overlay
-    ov = Image.new("RGBA", (W, H), (0, 0, 0, 155))
+    ov    = Image.new("RGBA", (W, H), (0, 0, 0, 155))
     frame = Image.alpha_composite(frame, ov)
     draw  = ImageDraw.Draw(frame)
 
     accent = topic["color_scheme"]["accent"]
     txt_c  = topic["color_scheme"]["text"]
 
-    # ── Language badge (top-left) ──────────────────────────────────────────
+    # ── Language badge ─────────────────────────────────────────────────────
     badge_font = _get_font(30, bold=True, lang="en")
     lang_label = "हिंदी" if lang == "hi" else "ENG"
     badge_a    = min(220, int(progress * 220 * 4))
     draw.rounded_rectangle([PAD - 10, 48, PAD + 80, 84],
                             radius=8, fill=(*accent, badge_a // 2))
-    draw.text((PAD, 55), lang_label, font=badge_font,
-              fill=(*accent, badge_a))
+    draw.text((PAD, 55), lang_label, font=badge_font, fill=(*accent, badge_a))
 
     # ── Topic label ────────────────────────────────────────────────────────
     label_font = _get_font(36, bold=True, lang=lang)
@@ -163,6 +184,44 @@ def _make_frame(bg: Image.Image, hook: str, body: str, topic: dict,
             _draw_shadowed(draw, x, body_y, line, body_font, txt_c, body_alpha)
             body_y += 56
 
+    # ── Hashtag strip (fades in at 60% of clip) ───────────────────────────
+    tag_start = 0.60
+    tag_alpha = 0
+    if progress > tag_start:
+        tag_alpha = min(200, int((progress - tag_start) * 200 / 0.25))
+
+    if tag_alpha > 0 and tags:
+        tag_font = _get_font(26, bold=False, lang=lang)
+
+        # Draw semi-transparent pill background for tag area
+        tag_bg_y = H - 220
+        draw.rectangle([0, tag_bg_y - 10, W, tag_bg_y + 50],
+                       fill=(0, 0, 0, tag_alpha // 2))
+
+        # Render tags in a single line, centered
+        tag_text = "  ".join(tags[:6])
+        bbox     = tag_font.getbbox(tag_text)
+        tag_w    = bbox[2]
+
+        # If too wide, split into two lines of 3
+        if tag_w > W - PAD * 2:
+            line1 = "  ".join(tags[:3])
+            line2 = "  ".join(tags[3:6])
+            for i, tline in enumerate([line1, line2]):
+                bbox = tag_font.getbbox(tline)
+                tx   = (W - bbox[2]) // 2
+                ty   = tag_bg_y + i * 34
+                draw.text((tx + 1, ty + 1), tline, font=tag_font,
+                          fill=(0, 0, 0, tag_alpha // 2))
+                draw.text((tx, ty), tline, font=tag_font,
+                          fill=(*accent, tag_alpha))
+        else:
+            tx = (W - tag_w) // 2
+            draw.text((tx + 1, tag_bg_y + 1), tag_text, font=tag_font,
+                      fill=(0, 0, 0, tag_alpha // 2))
+            draw.text((tx, tag_bg_y), tag_text, font=tag_font,
+                      fill=(*accent, tag_alpha))
+
     # ── Bottom bar ─────────────────────────────────────────────────────────
     bar_a = min(200, int(progress * 200 * 3))
     draw.rectangle([0, H - 140, W, H], fill=(0, 0, 0, bar_a // 2))
@@ -187,8 +246,16 @@ class VideoCreator:
         body        = fact_data["body"]
         follow_text = LANGUAGES[lang]["follow_text"]
 
+        # Get video tags for this topic+lang
+        topic_key = next((k for k, v in __import__('config').TOPICS.items()
+                         if v.get('name') == topic.get('name') or
+                         v.get('name_hi') == topic.get('name_hi')), "space")
+        tags_key  = f"{topic_key}_{lang}"
+        tags      = VIDEO_TAGS.get(tags_key, ["#cosmoscapsule"])
+
         def make_frame(t):
-            return _make_frame(bg_img, hook, body, topic, lang, follow_text, t, REEL_DURATION)
+            return _make_frame(bg_img, hook, body, topic, lang,
+                               follow_text, tags, t, REEL_DURATION)
 
         clip = VideoClip(make_frame, duration=REEL_DURATION).set_fps(REEL_FPS)
         clip = fadein(clip, 0.5)
