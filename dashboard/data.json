@@ -1,13 +1,129 @@
 {
-  "generated_at": "2025-01-01T00:00:00Z",
-  "total_runs": 0,
-  "posted": 0,
+  "generated_at": "2026-06-07T08:14:53.216874+00:00",
+  "total_runs": 10,
+  "posted": 7,
   "failed": 0,
-  "dry_runs": 0,
-  "en_posted": 0,
-  "hi_posted": 0,
-  "success_rate": 0,
-  "topic_counts": {},
-  "recent_runs": [],
-  "current_run": {"status": "never_run", "topic": "", "lang": ""}
+  "dry_runs": 3,
+  "en_posted": 3,
+  "hi_posted": 4,
+  "success_rate": 70.0,
+  "topic_counts": {
+    "science": 4,
+    "history": 2,
+    "geography": 1
+  },
+  "recent_runs": [
+    {
+      "timestamp": "2026-06-07T02:22:25.751479+00:00",
+      "topic": "worldnews",
+      "lang": "en",
+      "status": "dry_run_ok",
+      "dry_run": true,
+      "hook": "NASA JUST MADE SUPERSONIC FLIGHT QUIET",
+      "category": "Space & Technology",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_space_&_technology_en_20260607_022242.mp4"
+    },
+    {
+      "timestamp": "2026-06-07T06:14:41.128392+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "dry_run_ok",
+      "dry_run": true,
+      "hook": "\u0938\u0942\u0930\u091c \u0939\u0930 \u0938\u0947\u0915\u0902\u0921 4 \u0932\u093e\u0916 \u091f\u0928 \u091c\u0932\u0924\u093e \u0939\u0948",
+      "category": "\u0924\u093e\u0930\u0947",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u0924\u093e\u0930\u0947_hi_20260607_061514.mp4"
+    },
+    {
+      "timestamp": "2026-06-07T08:08:10.533588+00:00",
+      "topic": "science",
+      "lang": "hi",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "\u0906\u092a\u0915\u0940 \u0906\u0902\u0916 \u0939\u0930 \u0938\u0947\u0915\u0902\u0921 4 \u0932\u093e\u0916 \u092c\u093e\u0930 \u091d\u092a\u0915\u0924\u0940 \u0939\u0948",
+      "category": "\u092d\u094c\u0924\u093f\u0915\u0940",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u092d\u094c\u0924\u093f\u0915\u0940_hi_20260607_080818.mp4",
+      "media_id": "3914124802351297808_24336816956"
+    },
+    {
+      "timestamp": "2026-06-06T21:41:19.240199+00:00",
+      "topic": "science",
+      "lang": "hi",
+      "status": "dry_run_ok",
+      "dry_run": true,
+      "hook": "\u0906\u092a\u0915\u093e \u0926\u093f\u092e\u093e\u0917 \u0916\u0941\u0926 \u0915\u094b \u0916\u093e \u0938\u0915\u0924\u093e \u0939\u0948!",
+      "category": "\u092e\u093e\u0928\u0935 \u0936\u0930\u0940\u0930",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u092e\u093e\u0928\u0935_\u0936\u0930\u0940\u0930_hi_20260606_214127.mp4"
+    },
+    {
+      "timestamp": "2026-06-07T07:41:45.747553+00:00",
+      "topic": "science",
+      "lang": "en",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "Your nose can smell over ONE TRILLION scents",
+      "category": "Neuroscience",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_neuroscience_en_20260607_074149.mp4",
+      "media_id": "3914109120788289796_24336816956"
+    },
+    {
+      "timestamp": "2026-06-07T07:39:17.099618+00:00",
+      "topic": "science",
+      "lang": "en",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "Octopuses have nine brains and taste with arms",
+      "category": "Biology",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_biology_en_20260607_073921.mp4",
+      "media_id": "3914107999499676006_24336816956"
+    },
+    {
+      "timestamp": "2026-06-07T06:46:40.671509+00:00",
+      "topic": "science",
+      "lang": "en",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "Your body replaces itself every seven years",
+      "category": "Human Body",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_human_body_en_20260607_064644.mp4",
+      "media_id": "3914081318256816934_24336816956"
+    },
+    {
+      "timestamp": "2026-06-07T08:01:16.964046+00:00",
+      "topic": "history",
+      "lang": "hi",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "\u090f\u0915 \u0930\u093e\u091c\u093e \u0928\u0947 \u0905\u092a\u0928\u0940 \u092a\u0924\u094d\u0928\u0940 \u0915\u094b \u091c\u0940\u0935\u093f\u0924 \u0926\u092b\u0928 \u0915\u093f\u092f\u093e",
+      "category": "\u092a\u094d\u0930\u093e\u091a\u0940\u0928 \u092e\u093f\u0938\u094d\u0930",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u092a\u094d\u0930\u093e\u091a\u0940\u0928_\u092e\u093f\u0938\u094d\u0930_hi_20260607_080126.mp4",
+      "media_id": "3914121276275345493_24336816956"
+    },
+    {
+      "timestamp": "2026-06-07T07:09:16.607494+00:00",
+      "topic": "history",
+      "lang": "hi",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "\u090f\u0915 \u0930\u093e\u091c\u093e \u0928\u0947 \u0916\u0941\u0926 \u0915\u094b \u091c\u093f\u0902\u0926\u093e \u0926\u092b\u0928\u0935\u093e \u0926\u093f\u092f\u093e",
+      "category": "\u0938\u092d\u094d\u092f\u0924\u093e\u090f\u0902",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u0938\u092d\u094d\u092f\u0924\u093e\u090f\u0902_hi_20260607_070925.mp4",
+      "media_id": "3914093302733893842_24336816956"
+    },
+    {
+      "timestamp": "2026-06-07T06:49:27.293980+00:00",
+      "topic": "geography",
+      "lang": "hi",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "\u092e\u093e\u0909\u0902\u091f \u090f\u0935\u0930\u0947\u0938\u094d\u091f \u0939\u0930 \u0938\u093e\u0932 4 \u0938\u0947\u0902\u091f\u0940\u092e\u0940\u091f\u0930 \u090a\u092a\u0930 \u0909\u0920 \u0930\u0939\u093e \u0939\u0948",
+      "category": "\u092a\u0930\u094d\u0935\u0924",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u092a\u0930\u094d\u0935\u0924_hi_20260607_064938.mp4",
+      "media_id": "3914083203143517625_24336816956"
+    }
+  ],
+  "current_run": {
+    "status": "success",
+    "topic": "science",
+    "lang": "hi"
+  }
 }
