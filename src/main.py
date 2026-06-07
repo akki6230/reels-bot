@@ -1,14 +1,14 @@
 """
-src/main.py — Pipeline orchestrator with narration support
-Usage:
-    python src/main.py run space en
-    python src/main.py run sports hi --dry-run
-    python src/main.py run all        ← runs all 12 topic+lang combos
+src/main.py — Pipeline orchestrator with:
+- Fact verification
+- Variable duration (20s for Pexels, 30-45s for others)
+- Random style selection (kinetic/documentary/cartoon)
 """
 
 import os
 import sys
 import json
+import random
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
@@ -45,78 +45,90 @@ from narration   import generate_narration
 from audio_mixer import mix_audio
 from poster      import InstagramPoster
 
+# Reel styles — randomly selected per run
+REEL_STYLES = ["kinetic", "documentary", "cartoon"]
+
 
 def run_pipeline(topic_key: str, lang: str = "en",
                  dry_run: bool = False) -> dict:
     topic  = TOPICS[topic_key]
     result = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "topic":     topic_key,
-        "lang":      lang,
-        "status":    "started",
-        "dry_run":   dry_run,
+        "timestamp":    datetime.now(timezone.utc).isoformat(),
+        "topic":        topic_key,
+        "lang":         lang,
+        "status":       "started",
+        "dry_run":      dry_run,
     }
 
     try:
         prefix = f"{'[DRY RUN] ' if dry_run else ''}[{lang.upper()}]"
         log.info(f"{prefix} ▶ {topic['name']}")
 
-        # 1 — Generate content (fact or news)
+        # 1 — Generate + verify content
         generator = FactGenerator()
         fact_data = generator.generate(topic_key, topic, lang)
         result["hook"]     = fact_data["hook"]
         result["category"] = fact_data.get("fact_category", "")
-        log.info(f"{prefix} ✅ Content: {fact_data['hook'][:60]}")
+        log.info(f"{prefix} ✅ Content verified: {fact_data['hook'][:60]}")
 
-        # 2 — Fetch image
-        image_path = generator.fetch_image(
+        # 2 — Fetch image (random source: Pollinations/Pexels/PIL)
+        image_path, img_source, duration_hint = generator.fetch_image(
             topic["image_keywords"], topic_key
         )
-        log.info(f"{prefix} ✅ Image: {image_path.name}")
+        result["image_source"] = img_source
+        result["duration"]     = duration_hint
+        log.info(f"{prefix} ✅ Image [{img_source}]: {image_path.name}")
+        log.info(f"{prefix} 📐 Duration: {duration_hint}s")
 
-        # 3 — Background music
+        # 3 — Random reel style
+        reel_style = random.choice(REEL_STYLES)
+        result["reel_style"] = reel_style
+        log.info(f"{prefix} 🎨 Style: {reel_style}")
+
+        # 4 — Background music
         music_mgr  = MusicManager()
         music_path = music_mgr.get_track(topic["music_mood"], topic_key)
         log.info(f"{prefix} ✅ Music: {music_path.name}")
 
-        # 4 — Generate narration (TTS)
+        # 5 — Generate narration (TTS)
         log.info(f"{prefix} 🎙 Generating narration...")
         narration_path = generate_narration(
-            hook      = fact_data["hook"],
-            body      = fact_data["body"],
-            lang      = lang,
-            topic_key = topic_key,
-            output_dir= AUDIO_DIR,
+            hook       = fact_data["hook"],
+            body       = fact_data["body"],
+            lang       = lang,
+            topic_key  = topic_key,
+            output_dir = AUDIO_DIR,
         )
 
-        # 5 — Mix narration + music (documentary style)
+        # 6 — Mix narration + music
         if narration_path and narration_path.exists():
-            log.info(f"{prefix} 🎚 Mixing narration + music...")
+            log.info(f"{prefix} 🎚 Mixing audio...")
             final_audio = mix_audio(
-                music_path    = music_path,
-                narration_path= narration_path,
-                output_dir    = AUDIO_DIR,
-                duration      = 20,
+                music_path     = music_path,
+                narration_path = narration_path,
+                output_dir     = AUDIO_DIR,
+                duration       = duration_hint,
             )
-            log.info(f"{prefix} ✅ Audio mixed: {final_audio.name}")
         else:
             log.warning(f"{prefix} ⚠️ No narration — using music only")
             final_audio = music_path
 
-        # 6 — Render video with mixed audio
+        # 7 — Render video
         creator    = VideoCreator()
         video_path = creator.create_reel(
-            image_path = image_path,
-            music_path = final_audio,
-            fact_data  = fact_data,
-            topic      = topic,
-            lang       = lang,
-            output_dir = VIDEOS_DIR,
+            image_path  = image_path,
+            music_path  = final_audio,
+            fact_data   = fact_data,
+            topic       = topic,
+            lang        = lang,
+            output_dir  = VIDEOS_DIR,
+            reel_style  = reel_style,
+            duration    = duration_hint,
         )
         result["video_path"] = str(video_path)
         log.info(f"{prefix} ✅ Video: {video_path.name}")
 
-        # 7 — Post to Instagram
+        # 8 — Post to Instagram
         if dry_run:
             log.info(f"{prefix} 🔵 Skipping post (dry run)")
             result["status"] = "dry_run_ok"
@@ -134,10 +146,7 @@ def run_pipeline(topic_key: str, lang: str = "en",
     except Exception as exc:
         result["status"] = "failed"
         result["error"]  = str(exc)
-        log.error(
-            f"❌ Pipeline failed [{lang}] {topic_key}: {exc}",
-            exc_info=True
-        )
+        log.error(f"❌ Pipeline failed: {exc}", exc_info=True)
         sys.exit(1)
     finally:
         ts       = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -156,8 +165,8 @@ if __name__ == "__main__":
         print("Usage:")
         print("  python src/main.py run <topic> <lang> [--dry-run]")
         print("  python src/main.py run all [--dry-run]")
-        print(f"\nTopics : {', '.join(TOPICS)}")
-        print(f"Langs  : {', '.join(LANGUAGES)}")
+        print(f"\nTopics: {', '.join(TOPICS)}")
+        print(f"Langs:  {', '.join(LANGUAGES)}")
         sys.exit(0)
 
     if len(args) >= 2 and args[1] == "all":
@@ -168,9 +177,6 @@ if __name__ == "__main__":
         topic_key = args[1] if len(args) > 1 else "space"
         lang      = args[2] if len(args) > 2 else "en"
         if topic_key not in TOPICS:
-            print(f"Unknown topic '{topic_key}'. Valid: {', '.join(TOPICS)}")
-            sys.exit(1)
-        if lang not in LANGUAGES:
-            print(f"Unknown lang '{lang}'. Valid: {', '.join(LANGUAGES)}")
+            print(f"Unknown topic: {topic_key}")
             sys.exit(1)
         run_pipeline(topic_key, lang, dry_run=dry_run)

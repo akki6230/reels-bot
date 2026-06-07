@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+
+# Large output files — NOT committed (uploaded as artifacts instead)
+output/videos/
+output/images/
+output/audio/
+output/music/
+output/logs/
+output/ig_session.json
+
+# These ARE committed — persistent data across runs
+!output/used_facts.json
+!dashboard/data.json
+!dashboard/index.html
+!dashboard/privacy.html
+
+# OS
+.DS_Store
+Thumbs.db

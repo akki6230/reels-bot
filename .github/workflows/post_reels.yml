@@ -2,18 +2,11 @@ name: 🚀 Post Daily Educational Reels
 
 on:
   schedule:
-    - cron: "30 1 * * *"   # 7:00 AM IST  — Space EN
-    - cron: "30 2 * * *"   # 8:00 AM IST  — Space HI
-    - cron: "30 3 * * *"   # 9:00 AM IST  — History EN
-    - cron: "30 4 * * *"   # 10:00 AM IST — History HI
-    - cron: "30 5 * * *"   # 11:00 AM IST — Geography EN
-    - cron: "30 6 * * *"   # 12:00 PM IST — Geography HI
-    - cron: "30 7 * * *"   # 1:00 PM IST  — Science EN
-    - cron: "30 8 * * *"   # 2:00 PM IST  — Science HI
-    - cron: "30 9 * * *"   # 3:00 PM IST  — Sports EN
-    - cron: "30 10 * * *"  # 4:00 PM IST  — Sports HI
-    - cron: "30 11 * * *"  # 5:00 PM IST  — World News EN
-    - cron: "30 15 * * *"  # 9:00 PM IST  — World News HI
+    # 3 reels/day — 1 English + 2 Hindi
+    # IST = UTC + 5:30
+    - cron: "30 3 * * *"    # 9:00 AM IST  — Hindi  (morning peak)
+    - cron: "30 7 * * *"    # 1:00 PM IST  — English (afternoon)
+    - cron: "30 13 * * *"   # 7:00 PM IST  — Hindi  (prime time — best slot)
 
   workflow_dispatch:
     inputs:
@@ -24,14 +17,14 @@ on:
       lang:
         description: "Language (en/hi)"
         required: false
-        default: "en"
+        default: "hi"
       dry_run:
         description: "Dry run — generate video but don't post to Instagram"
         required: false
         default: "false"
         type: boolean
 
-# ── CRITICAL: allows git push back to repo ────────────────────────────────────
+# ── Required for git push back to repo ────────────────────────────────────────
 permissions:
   contents: write
   pages: write
@@ -40,14 +33,14 @@ permissions:
 jobs:
   post-reel:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
 
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0   # full history so push works cleanly
+          fetch-depth: 0
 
       - name: 🐍 Set up Python 3.11
         uses: actions/setup-python@v5
@@ -78,8 +71,8 @@ jobs:
             output/logs
             output/used_facts.json
             fonts/
-          key: reels-cache-${{ github.run_number }}
-          restore-keys: reels-cache-
+          key: reels-cache-v3-${{ github.run_number }}
+          restore-keys: reels-cache-v3-
 
       - name: 🎯 Determine topic and language
         id: topic
