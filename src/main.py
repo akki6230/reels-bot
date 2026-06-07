@@ -1,5 +1,5 @@
 """
-src/main.py — Pipeline orchestrator
+src/main.py — Pipeline orchestrator with narration support
 Usage:
     python src/main.py run space en
     python src/main.py run sports hi --dry-run
@@ -18,8 +18,10 @@ OUTPUT_DIR = ROOT / "output"
 VIDEOS_DIR = OUTPUT_DIR / "videos"
 LOGS_DIR   = OUTPUT_DIR / "logs"
 IMAGES_DIR = OUTPUT_DIR / "images"
+AUDIO_DIR  = OUTPUT_DIR / "audio"
 
-for d in [VIDEOS_DIR, LOGS_DIR, IMAGES_DIR, OUTPUT_DIR / "music"]:
+for d in [VIDEOS_DIR, LOGS_DIR, IMAGES_DIR,
+          OUTPUT_DIR / "music", AUDIO_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
@@ -27,20 +29,25 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(LOGS_DIR / f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"),
+        logging.FileHandler(
+            LOGS_DIR / f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+        ),
     ],
 )
 log = logging.getLogger(__name__)
 
 sys.path.insert(0, str(ROOT / "src"))
-from config   import TOPICS, LANGUAGES, get_hashtags
-from fact_gen import FactGenerator
-from video    import VideoCreator
-from music    import MusicManager
-from poster   import InstagramPoster
+from config      import TOPICS, LANGUAGES, get_hashtags
+from fact_gen    import FactGenerator
+from video       import VideoCreator
+from music       import MusicManager
+from narration   import generate_narration
+from audio_mixer import mix_audio
+from poster      import InstagramPoster
 
 
-def run_pipeline(topic_key: str, lang: str = "en", dry_run: bool = False) -> dict:
+def run_pipeline(topic_key: str, lang: str = "en",
+                 dry_run: bool = False) -> dict:
     topic  = TOPICS[topic_key]
     result = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -61,36 +68,65 @@ def run_pipeline(topic_key: str, lang: str = "en", dry_run: bool = False) -> dic
         result["category"] = fact_data.get("fact_category", "")
         log.info(f"{prefix} ✅ Content: {fact_data['hook'][:60]}")
 
-        # 2 — Fetch image (shared between EN + HI for same topic run)
-        image_path = generator.fetch_image(topic["image_keywords"], topic_key)
+        # 2 — Fetch image
+        image_path = generator.fetch_image(
+            topic["image_keywords"], topic_key
+        )
         log.info(f"{prefix} ✅ Image: {image_path.name}")
 
-        # 3 — Music
+        # 3 — Background music
         music_mgr  = MusicManager()
         music_path = music_mgr.get_track(topic["music_mood"], topic_key)
         log.info(f"{prefix} ✅ Music: {music_path.name}")
 
-        # 4 — Render video
+        # 4 — Generate narration (TTS)
+        log.info(f"{prefix} 🎙 Generating narration...")
+        narration_path = generate_narration(
+            hook      = fact_data["hook"],
+            body      = fact_data["body"],
+            lang      = lang,
+            topic_key = topic_key,
+            output_dir= AUDIO_DIR,
+        )
+
+        # 5 — Mix narration + music (documentary style)
+        if narration_path and narration_path.exists():
+            log.info(f"{prefix} 🎚 Mixing narration + music...")
+            final_audio = mix_audio(
+                music_path    = music_path,
+                narration_path= narration_path,
+                output_dir    = AUDIO_DIR,
+                duration      = 20,
+            )
+            log.info(f"{prefix} ✅ Audio mixed: {final_audio.name}")
+        else:
+            log.warning(f"{prefix} ⚠️ No narration — using music only")
+            final_audio = music_path
+
+        # 6 — Render video with mixed audio
         creator    = VideoCreator()
         video_path = creator.create_reel(
-            image_path=image_path,
-            music_path=music_path,
-            fact_data=fact_data,
-            topic=topic,
-            lang=lang,
-            output_dir=VIDEOS_DIR,
+            image_path = image_path,
+            music_path = final_audio,
+            fact_data  = fact_data,
+            topic      = topic,
+            lang       = lang,
+            output_dir = VIDEOS_DIR,
         )
         result["video_path"] = str(video_path)
+        log.info(f"{prefix} ✅ Video: {video_path.name}")
 
-        # 5 — Post to Instagram
+        # 7 — Post to Instagram
         if dry_run:
-            log.info(f"{prefix} 🔵 Skipping Instagram post (dry run)")
+            log.info(f"{prefix} 🔵 Skipping post (dry run)")
             result["status"] = "dry_run_ok"
         else:
             poster   = InstagramPoster()
             hashtags = get_hashtags(topic_key, lang)
             caption  = fact_data["caption"] + "\n\n" + hashtags
-            media_id = poster.post_reel(video_path, caption, topic_key=topic_key)
+            media_id = poster.post_reel(
+                video_path, caption, topic_key=topic_key
+            )
             result["media_id"] = str(media_id)
             result["status"]   = "posted"
             log.info(f"{prefix} ✅ Posted! ID: {media_id}")
@@ -98,7 +134,10 @@ def run_pipeline(topic_key: str, lang: str = "en", dry_run: bool = False) -> dic
     except Exception as exc:
         result["status"] = "failed"
         result["error"]  = str(exc)
-        log.error(f"❌ Pipeline failed [{lang}] {topic_key}: {exc}", exc_info=True)
+        log.error(
+            f"❌ Pipeline failed [{lang}] {topic_key}: {exc}",
+            exc_info=True
+        )
         sys.exit(1)
     finally:
         ts       = datetime.now().strftime("%Y%m%d_%H%M%S")
