@@ -3,11 +3,7 @@ name: 🌐 Deploy Dashboard to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - "dashboard/**"
-  workflow_run:
-    workflows: ["🚀 Post Daily Educational Reels"]
-    types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: read
