@@ -1,81 +1,150 @@
 """
 src/audio_mixer.py — Mixes narration voice with background music.
-Documentary style: voice at 100%, music ducked to 15% during speech,
-fades back to 40% after narration ends.
+Documentary style: voice at 95%, music ducked to 15% during speech.
+Fully compatible with MoviePy 1.0.3 + numpy.
 """
 
 import logging
+import wave
+import struct
 from pathlib import Path
 
+import numpy as np
+
 log = logging.getLogger(__name__)
+
+SAMPLE_RATE = 44100
+
+
+def _load_audio_as_array(clip, duration: int) -> np.ndarray:
+    """
+    Safely load a MoviePy AudioClip as a (N, 2) float32 numpy array.
+    Handles mono, stereo, and edge cases.
+    """
+    n_samples = duration * SAMPLE_RATE
+
+    try:
+        # Generate time array
+        times = np.linspace(0, duration, n_samples, endpoint=False)
+        # Get audio frame by frame
+        arr = clip.get_frame(0)   # probe shape
+
+        # Use make_frame to build full array
+        frames = []
+        chunk  = 1024
+        for start in range(0, n_samples, chunk):
+            end   = min(start + chunk, n_samples)
+            t_arr = times[start:end]
+            chunk_frames = np.array([clip.get_frame(t) for t in t_arr])
+            frames.append(chunk_frames)
+
+        arr = np.vstack(frames)   # (N,) or (N, 2)
+
+    except Exception:
+        # Fallback: use to_soundarray if available
+        try:
+            arr = clip.to_soundarray(fps=SAMPLE_RATE)
+        except Exception as e:
+            log.warning(f"Could not load audio: {e}")
+            return np.zeros((n_samples, 2), dtype=np.float32)
+
+    # Ensure 2D stereo
+    if arr.ndim == 1:
+        arr = np.column_stack([arr, arr])
+    elif arr.shape[1] == 1:
+        arr = np.hstack([arr, arr])
+
+    # Trim or pad to exact duration
+    if len(arr) > n_samples:
+        arr = arr[:n_samples]
+    elif len(arr) < n_samples:
+        pad = np.zeros((n_samples - len(arr), 2), dtype=np.float32)
+        arr = np.vstack([arr, pad])
+
+    return arr.astype(np.float32)
 
 
 def mix_audio(music_path: Path, narration_path: Path,
               output_dir: Path, duration: int = 20) -> Path:
     """
-    Mix background music + narration voice.
-
-    Levels:
-      - Music:     15% volume during narration (ducked)
-      - Narration: 95% volume (clear and prominent)
-      - Music fades back to 40% after narration ends
-
-    Returns path to mixed .wav file.
+    Mix background music + narration.
+    Music ducks to 15% during voice, returns to 40% after.
     """
-    from moviepy.editor import AudioFileClip, CompositeAudioClip
+    from moviepy.editor import AudioFileClip
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    out_path = output_dir / "mixed_audio.wav"
+    out_path = output_dir / f"mixed_audio_{duration}s.wav"
 
     try:
-        # Load music
-        music = (AudioFileClip(str(music_path))
-                 .subclip(0, duration)
-                 .audio_fadeout(2.0))
+        n_samples = duration * SAMPLE_RATE
 
-        # Load narration
-        narration = AudioFileClip(str(narration_path))
-        narr_dur  = min(narration.duration, duration - 1.0)
-        narration = narration.subclip(0, narr_dur)
+        # ── Load music ─────────────────────────────────────────────────────
+        music_clip = (AudioFileClip(str(music_path))
+                      .subclip(0, min(duration, AudioFileClip(str(music_path)).duration))
+                      .audio_fadeout(2.0))
+        music_arr  = _load_audio_as_array(music_clip, duration)
 
-        # Duck music during narration, fade back after
-        def music_volume(t):
-            """Volume curve: 40% → ducks to 15% at 0.5s → back to 40% after narration."""
-            duck_start = 0.5
-            duck_end   = narr_dur + 0.3
-            fade_dur   = 1.5
+        # ── Load narration ─────────────────────────────────────────────────
+        narr_raw   = AudioFileClip(str(narration_path))
+        narr_dur   = min(narr_raw.duration, duration - 0.5)
+        narr_clip  = narr_raw.subclip(0, narr_dur)
+        narr_len   = int(narr_dur * SAMPLE_RATE)
+        narr_clip2 = narr_clip.set_duration(narr_dur)
+        narr_arr   = _load_audio_as_array(narr_clip2, int(narr_dur))
 
-            if t < duck_start:
-                # Fade from 40% to 15%
-                progress = t / duck_start
-                return 0.40 - (0.25 * progress)
-            elif t < duck_end:
-                return 0.15   # ducked under voice
-            elif t < duck_end + fade_dur:
-                # Fade back up from 15% to 40%
-                progress = (t - duck_end) / fade_dur
-                return 0.15 + (0.25 * progress)
-            else:
-                return 0.40   # back to normal
+        # ── Build volume envelope for music ────────────────────────────────
+        vol_env         = np.full(n_samples, 0.40, dtype=np.float32)
+        narr_start_samp = int(0.3  * SAMPLE_RATE)
+        narr_end_samp   = narr_start_samp + narr_len
+        fade_in_samp    = int(0.4  * SAMPLE_RATE)
+        fade_out_samp   = int(1.5  * SAMPLE_RATE)
 
-        music_ducked = music.volumex(music_volume)
+        # Ramp down
+        ramp_end = min(narr_start_samp + fade_in_samp, n_samples)
+        for i in range(ramp_end - narr_start_samp):
+            idx = narr_start_samp + i
+            if idx < n_samples:
+                vol_env[idx] = 0.40 - 0.25 * (i / fade_in_samp)
 
-        # Set narration volume and start time
-        narration_loud = narration.volumex(0.95).set_start(0.3)
+        # Full duck
+        duck_start = ramp_end
+        duck_end   = min(narr_end_samp, n_samples - fade_out_samp)
+        if duck_end > duck_start:
+            vol_env[duck_start:duck_end] = 0.15
 
-        # Composite
-        mixed = CompositeAudioClip([music_ducked, narration_loud])
-        mixed = mixed.subclip(0, duration)
+        # Ramp back up
+        ramp_up_end = min(duck_end + fade_out_samp, n_samples)
+        for i in range(ramp_up_end - duck_end):
+            idx = duck_end + i
+            if idx < n_samples:
+                vol_env[idx] = 0.15 + 0.25 * (i / fade_out_samp)
 
-        # Export
-        mixed.write_audiofile(
-            str(out_path),
-            fps=44100,
-            nbytes=2,
-            codec="pcm_s16le",
-            logger=None,
-        )
-        log.info(f"✅ Mixed audio: {out_path.name}")
+        # Rest at 0.40
+        if ramp_up_end < n_samples:
+            vol_env[ramp_up_end:] = 0.40
+
+        # ── Apply envelope ─────────────────────────────────────────────────
+        music_ducked = music_arr * vol_env.reshape(-1, 1)
+
+        # ── Place narration ────────────────────────────────────────────────
+        narr_full = np.zeros((n_samples, 2), dtype=np.float32)
+        end_idx   = min(narr_start_samp + len(narr_arr), n_samples)
+        copy_len  = end_idx - narr_start_samp
+        narr_full[narr_start_samp:end_idx] = narr_arr[:copy_len] * 0.95
+
+        # ── Mix & clip ─────────────────────────────────────────────────────
+        mixed = np.clip(music_ducked + narr_full, -1.0, 1.0)
+
+        # ── Write WAV ──────────────────────────────────────────────────────
+        pcm = (mixed * 32767).astype(np.int16)
+        with wave.open(str(out_path), "w") as wf:
+            wf.setnchannels(2)
+            wf.setsampwidth(2)
+            wf.setframerate(SAMPLE_RATE)
+            wf.writeframes(pcm.tobytes())
+
+        size_kb = out_path.stat().st_size // 1024
+        log.info(f"✅ Mixed audio: {out_path.name} ({size_kb} KB)")
         return out_path
 
     except Exception as e:
