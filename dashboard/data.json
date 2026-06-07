@@ -1,19 +1,33 @@
 {
-  "generated_at": "2026-06-07T10:41:53.213595+00:00",
-  "total_runs": 14,
-  "posted": 10,
+  "generated_at": "2026-06-07T15:17:17.452737+00:00",
+  "total_runs": 15,
+  "posted": 11,
   "failed": 0,
   "dry_runs": 4,
   "en_posted": 4,
-  "hi_posted": 6,
-  "success_rate": 71.4,
+  "hi_posted": 7,
+  "success_rate": 73.3,
   "topic_counts": {
+    "worldnews": 1,
     "sports": 2,
     "science": 5,
     "history": 2,
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-07T15:17:17.452476+00:00",
+      "topic": "worldnews",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "विश्व में तीन बड़े संकट एक साथ",
+      "category": "World News",
+      "media_id": "3914337396496487752_24336816956",
+      "error": "",
+      "image_source": "pollinations",
+      "reel_style": "cartoon",
+      "duration": 33
+    },
     {
       "timestamp": "2026-06-07T02:22:25.751479+00:00",
       "topic": "worldnews",
@@ -30,7 +44,7 @@
       "lang": "hi",
       "status": "posted",
       "dry_run": false,
-      "hook": "46 \u0938\u093e\u0932 \u092c\u093e\u0926 \u0905\u092e\u0947\u0930\u093f\u0915\u093e \u0915\u093e \u0938\u092a\u0928\u093e \u0938\u091a \u0939\u0941\u0906!",
+      "hook": "46 साल बाद अमेरिका का सपना सच हुआ!",
       "category": "Sports News",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_sports_news_hi_20260607_101357.mp4",
       "media_id": "3914187844124468853_24336816956"
@@ -52,9 +66,9 @@
       "lang": "hi",
       "status": "dry_run_ok",
       "dry_run": true,
-      "hook": "\u0938\u0942\u0930\u091c \u0939\u0930 \u0938\u0947\u0915\u0902\u0921 4 \u0932\u093e\u0916 \u091f\u0928 \u091c\u0932\u0924\u093e \u0939\u0948",
-      "category": "\u0924\u093e\u0930\u0947",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u0924\u093e\u0930\u0947_hi_20260607_061514.mp4"
+      "hook": "सूरज हर सेकंड 4 लाख टन जलता है",
+      "category": "तारे",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_तारे_hi_20260607_061514.mp4"
     },
     {
       "timestamp": "2026-06-07T10:37:14.854310+00:00",
@@ -72,9 +86,9 @@
       "lang": "hi",
       "status": "posted",
       "dry_run": false,
-      "hook": "\u0906\u092a\u0915\u0940 \u0906\u0902\u0916\u0947\u0902 \u0939\u0930 \u0938\u0947\u0915\u0902\u0921 4 \u0932\u093e\u0916 \u092c\u093e\u0930 \u091d\u092a\u0915\u0924\u0940 \u0939\u0948\u0902",
-      "category": "\u0924\u0902\u0924\u094d\u0930\u093f\u0915\u093e \u0935\u093f\u091c\u094d\u091e\u093e\u0928",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u0924\u0902\u0924\u094d\u0930\u093f\u0915\u093e_\u0935\u093f\u091c\u094d\u091e\u093e\u0928_hi_20260607_083503.mp4",
+      "hook": "आपकी आंखें हर सेकंड 4 लाख बार झपकती हैं",
+      "category": "तंत्रिका विज्ञान",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_तंत्रिका_विज्ञान_hi_20260607_083503.mp4",
       "media_id": "3914138247805069452_24336816956"
     },
     {
@@ -83,9 +97,9 @@
       "lang": "hi",
       "status": "posted",
       "dry_run": false,
-      "hook": "\u0906\u092a\u0915\u0940 \u0906\u0902\u0916 \u0939\u0930 \u0938\u0947\u0915\u0902\u0921 4 \u0932\u093e\u0916 \u092c\u093e\u0930 \u091d\u092a\u0915\u0924\u0940 \u0939\u0948",
-      "category": "\u092d\u094c\u0924\u093f\u0915\u0940",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u092d\u094c\u0924\u093f\u0915\u0940_hi_20260607_080818.mp4",
+      "hook": "आपकी आंख हर सेकंड 4 लाख बार झपकती है",
+      "category": "भौतिकी",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_भौतिकी_hi_20260607_080818.mp4",
       "media_id": "3914124802351297808_24336816956"
     },
     {
@@ -94,9 +108,9 @@
       "lang": "hi",
       "status": "dry_run_ok",
       "dry_run": true,
-      "hook": "\u0906\u092a\u0915\u093e \u0926\u093f\u092e\u093e\u0917 \u0916\u0941\u0926 \u0915\u094b \u0916\u093e \u0938\u0915\u0924\u093e \u0939\u0948!",
-      "category": "\u092e\u093e\u0928\u0935 \u0936\u0930\u0940\u0930",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u092e\u093e\u0928\u0935_\u0936\u0930\u0940\u0930_hi_20260606_214127.mp4"
+      "hook": "आपका दिमाग खुद को खा सकता है!",
+      "category": "मानव शरीर",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_मानव_शरीर_hi_20260606_214127.mp4"
     },
     {
       "timestamp": "2026-06-07T07:41:45.747553+00:00",
@@ -137,9 +151,9 @@
       "lang": "hi",
       "status": "posted",
       "dry_run": false,
-      "hook": "\u090f\u0915 \u0930\u093e\u091c\u093e \u0928\u0947 \u0905\u092a\u0928\u0940 \u092a\u0924\u094d\u0928\u0940 \u0915\u094b \u091c\u0940\u0935\u093f\u0924 \u0926\u092b\u0928 \u0915\u093f\u092f\u093e",
-      "category": "\u092a\u094d\u0930\u093e\u091a\u0940\u0928 \u092e\u093f\u0938\u094d\u0930",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u092a\u094d\u0930\u093e\u091a\u0940\u0928_\u092e\u093f\u0938\u094d\u0930_hi_20260607_080126.mp4",
+      "hook": "एक राजा ने अपनी पत्नी को जीवित दफन किया",
+      "category": "प्राचीन मिस्र",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_प्राचीन_मिस्र_hi_20260607_080126.mp4",
       "media_id": "3914121276275345493_24336816956"
     },
     {
@@ -148,9 +162,9 @@
       "lang": "hi",
       "status": "posted",
       "dry_run": false,
-      "hook": "\u090f\u0915 \u0930\u093e\u091c\u093e \u0928\u0947 \u0916\u0941\u0926 \u0915\u094b \u091c\u093f\u0902\u0926\u093e \u0926\u092b\u0928\u0935\u093e \u0926\u093f\u092f\u093e",
-      "category": "\u0938\u092d\u094d\u092f\u0924\u093e\u090f\u0902",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u0938\u092d\u094d\u092f\u0924\u093e\u090f\u0902_hi_20260607_070925.mp4",
+      "hook": "एक राजा ने खुद को जिंदा दफनवा दिया",
+      "category": "सभ्यताएं",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_सभ्यताएं_hi_20260607_070925.mp4",
       "media_id": "3914093302733893842_24336816956"
     },
     {
@@ -159,15 +173,23 @@
       "lang": "hi",
       "status": "posted",
       "dry_run": false,
-      "hook": "\u092e\u093e\u0909\u0902\u091f \u090f\u0935\u0930\u0947\u0938\u094d\u091f \u0939\u0930 \u0938\u093e\u0932 4 \u0938\u0947\u0902\u091f\u0940\u092e\u0940\u091f\u0930 \u090a\u092a\u0930 \u0909\u0920 \u0930\u0939\u093e \u0939\u0948",
-      "category": "\u092a\u0930\u094d\u0935\u0924",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_\u092a\u0930\u094d\u0935\u0924_hi_20260607_064938.mp4",
+      "hook": "माउंट एवरेस्ट हर साल 4 सेंटीमीटर ऊपर उठ रहा है",
+      "category": "पर्वत",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_पर्वत_hi_20260607_064938.mp4",
       "media_id": "3914083203143517625_24336816956"
     }
   ],
   "current_run": {
-    "status": "success",
-    "topic": "space",
-    "lang": "en"
+    "timestamp": "2026-06-07T15:17:17.452476+00:00",
+    "topic": "worldnews",
+    "lang": "hi",
+    "status": "posted",
+    "hook": "विश्व में तीन बड़े संकट एक साथ",
+    "category": "World News",
+    "media_id": "3914337396496487752_24336816956",
+    "error": "",
+    "image_source": "pollinations",
+    "reel_style": "cartoon",
+    "duration": 33
   }
 }
