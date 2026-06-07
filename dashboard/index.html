@@ -81,7 +81,7 @@ footer a{color:var(--accent);text-decoration:none}
 <header>
   <div>
     <h1>🚀 Cosmos<span>Capsule</span> Dashboard</h1>
-    <p>6 topics · English + हिंदी · 12 reels/day · GitHub Actions</p>
+    <p>6 topics · 2 Hindi + 1 English · 3 reels/day · GitHub Actions</p>
   </div>
   <div class="live"><span class="dot"></span>Automated</div>
 </header>
@@ -101,7 +101,7 @@ footer a{color:var(--accent);text-decoration:none}
 
 <div class="card">
   <div class="card-hdr">
-    <span class="card-title">Today's schedule</span>
+    <span class="card-title" id="schedule-title">Today's Schedule (IST)</span>
     <span style="font-size:11px;color:var(--muted)">IST</span>
   </div>
   <div class="card-body">
@@ -134,19 +134,25 @@ const TOPICS={
   worldnews:{emoji:"🌐",name:"World News",         nameHi:"विश्व समाचार",color:"#fb923c"},
 };
 
+// 3 reels/day: 2 Hindi + 1 English
+// Topics rotate by day of week (matching pick_topic.py)
+const DAY_ROTATION = {
+  0: ["space",    "history",   "science"],    // Monday
+  1: ["history",  "geography", "space"],      // Tuesday
+  2: ["geography","science",   "history"],    // Wednesday
+  3: ["science",  "sports",    "geography"],  // Thursday
+  4: ["sports",   "worldnews", "science"],    // Friday
+  5: ["worldnews","space",     "sports"],     // Saturday
+  6: ["space",    "science",   "worldnews"],  // Sunday
+};
+const today     = new Date().getDay(); // 0=Sun, 1=Mon...
+const weekday   = today === 0 ? 6 : today - 1; // convert to Mon=0
+const todayTopics = DAY_ROTATION[weekday] || ["space","history","science"];
+
 const SCHEDULE=[
-  {time:"07:00",topic:"space",    lang:"en"},
-  {time:"08:00",topic:"space",    lang:"hi"},
-  {time:"09:00",topic:"history",  lang:"en"},
-  {time:"10:00",topic:"history",  lang:"hi"},
-  {time:"11:00",topic:"geography",lang:"en"},
-  {time:"12:00",topic:"geography",lang:"hi"},
-  {time:"13:00",topic:"science",  lang:"en"},
-  {time:"14:00",topic:"science",  lang:"hi"},
-  {time:"15:00",topic:"sports",   lang:"en"},
-  {time:"16:00",topic:"sports",   lang:"hi"},
-  {time:"17:00",topic:"worldnews",lang:"en"},
-  {time:"21:00",topic:"worldnews",lang:"hi"},
+  {time:"09:00 AM", topic: todayTopics[0], lang:"hi",  note:"Morning peak"},
+  {time:"01:00 PM", topic: todayTopics[1], lang:"en",  note:"Afternoon"},
+  {time:"07:00 PM", topic: todayTopics[2], lang:"hi",  note:"Prime time ⭐"},
 ];
 
 function relTime(iso){
@@ -199,6 +205,9 @@ function renderTopics(d){
 }
 
 function renderSchedule(){
+  const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const dayName=days[weekday]||"Today";
+  document.getElementById("schedule-title").textContent=`Today's Schedule — ${dayName} (IST)`;
   document.getElementById("schedule-grid").innerHTML=SCHEDULE.map(s=>{
     const m=TOPICS[s.topic];
     const dotColor=m?m.color:"#888";
@@ -208,8 +217,8 @@ function renderSchedule(){
     return`<div class="sched-item">
       <span class="sched-time">${s.time}</span>
       <span class="sched-dot" style="background:${dotColor}"></span>
-      <span>${m?m.emoji:""} ${label}</span>
-      <span class="lang-badge ${s.lang}" style="margin-left:auto">${s.lang.toUpperCase()}</span>
+      <span style="flex:1">${m?m.emoji:""} ${label}<span style="font-size:10px;color:var(--color-text-secondary,#7a7f94);margin-left:6px">${s.note||""}</span></span>
+      <span class="lang-badge ${s.lang}">${s.lang.toUpperCase()}</span>
     </div>`;
   }).join("");
 }
