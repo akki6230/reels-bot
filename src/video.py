@@ -1,20 +1,15 @@
 """
-src/video.py — Premium Netflix/Apple-style Reel renderer
+src/video.py — Ultra-premium Reel renderer
 
-Reach-boosting features:
-  1. Instant hook text (appears in first 0.3s)
-  2. Countdown 3→2→1 reveal before main content
-  3. Animated word-by-word subtitles
-  4. Cinematic letterbox bars (movie feel)
-  5. Progress bar (increases completion rate)
-  6. Optimised first-frame thumbnail
-
-Design: Minimalist dark luxury (Apple/Netflix)
-  - Pure black/near-black backgrounds
-  - Single accent color per topic (no busy gradients)
-  - SF Pro / Liberation tight tracking
-  - Thin hairline dividers
-  - Restrained motion — only what matters moves
+Design philosophy:
+  - Each topic has its own unique visual identity
+  - Rich layered backgrounds with blur, grain, gradient
+  - Elegant typography — large, readable, weighted
+  - Glassmorphism + frosted panels
+  - Animated progress bar
+  - Word-by-word subtitle reveal
+  - NO countdown timer
+  - Cinematic letterbox
 """
 
 import math
@@ -25,84 +20,117 @@ from datetime import datetime
 
 import numpy as np
 import requests
-from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
+from PIL import (Image, ImageDraw, ImageFont,
+                 ImageEnhance, ImageFilter, ImageChops)
 from moviepy.editor import VideoClip, AudioFileClip
 from moviepy.video.fx.all import fadein, fadeout
 
 from config import (REEL_WIDTH, REEL_HEIGHT, REEL_DURATION,
                     REEL_FPS, MUSIC_VOLUME, LANGUAGES)
 
-log      = logging.getLogger(__name__)
-W, H     = REEL_WIDTH, REEL_HEIGHT
-PAD      = 64
-ROOT     = Path(__file__).parent.parent
+log       = logging.getLogger(__name__)
+W, H      = REEL_WIDTH, REEL_HEIGHT
+PAD       = 68
+ROOT      = Path(__file__).parent.parent
 FONTS_DIR = ROOT / "fonts"
 FONTS_DIR.mkdir(exist_ok=True)
 
-# ── Timing constants (seconds) ─────────────────────────────────────────────────
-T_LETTERBOX_IN  = 0.0    # cinematic bars slide in immediately
-T_HOOK_IN       = 0.3    # instant hook line appears
-T_COUNTDOWN     = 2.5    # countdown 3→2→1 starts
-T_CONTENT       = 5.5    # main content (hook card + body) appears
-T_SUBS_START    = 6.5    # animated subtitles begin
-T_TAGS          = 14.0   # hashtag strip fades in
-T_CTA           = 16.0   # follow CTA pulses
+# ── Timing ─────────────────────────────────────────────────────────────────────
+T_BARS_IN      = 0.0
+T_HEADER_IN    = 0.3
+T_HOOK_IN      = 0.8
+T_BODY_IN      = 5.0
+T_SUBS_START   = 5.5
+T_TAGS_IN      = 14.0
+T_CTA_IN       = 15.5
 
-# ── Per-topic luxury themes ────────────────────────────────────────────────────
+# ── Themes ─────────────────────────────────────────────────────────────────────
 THEMES = {
     "space": {
-        "accent":   (100, 180, 255),   # ice blue
-        "accent2":  (160, 120, 255),   # soft violet
-        "bg_tint":  (5,   8,   20),    # near-black blue
-        "text":     (235, 242, 255),
+        "name":      "SPACE & UNIVERSE",
+        "name_hi":   "अंतरिक्ष और ब्रह्मांड",
+        "accent":    (120, 200, 255),
+        "accent2":   (180, 130, 255),
+        "accent3":   (80,  160, 255),
+        "bg_tint":   (4,   8,   22),
+        "text":      (230, 242, 255),
+        "muted":     (140, 170, 210),
+        "gradient":  [(4,8,22), (8,15,40), (12,20,55), (6,12,35)],
         "particles": True,
-        "label_en": "SPACE & UNIVERSE",
-        "label_hi": "अंतरिक्ष और ब्रह्मांड",
+        "p_color":   (180, 220, 255),
+        "bar_style": "line",
+        "style":     "cosmic",
     },
     "history": {
-        "accent":   (210, 170,  80),   # antique gold
-        "accent2":  (180, 130,  60),
-        "bg_tint":  (18,  12,   4),
-        "text":     (255, 245, 220),
+        "name":      "WORLD HISTORY",
+        "name_hi":   "विश्व इतिहास",
+        "accent":    (220, 175, 85),
+        "accent2":   (190, 130, 55),
+        "accent3":   (240, 200, 110),
+        "bg_tint":   (20,  12,  4),
+        "text":      (255, 245, 220),
+        "muted":     (200, 170, 120),
+        "gradient":  [(20,12,4), (35,20,8), (50,30,10), (25,15,5)],
         "particles": False,
-        "label_en": "WORLD HISTORY",
-        "label_hi": "विश्व इतिहास",
+        "bar_style": "line",
+        "style":     "parchment",
     },
     "geography": {
-        "accent":   ( 70, 210, 120),   # emerald
-        "accent2":  ( 40, 170,  90),
-        "bg_tint":  ( 4,  16,   8),
-        "text":     (215, 255, 230),
+        "name":      "GEOGRAPHY",
+        "name_hi":   "भूगोल",
+        "accent":    (75,  215, 125),
+        "accent2":   (45,  175,  90),
+        "accent3":   (100, 235, 150),
+        "bg_tint":   (4,   18,   8),
+        "text":      (215, 255, 230),
+        "muted":     (130, 200, 155),
+        "gradient":  [(4,18,8), (8,30,15), (12,45,22), (6,25,12)],
         "particles": False,
-        "label_en": "GEOGRAPHY",
-        "label_hi": "भूगोल",
+        "bar_style": "line",
+        "style":     "nature",
     },
     "science": {
-        "accent":   (180, 100, 255),   # electric violet
-        "accent2":  (130,  70, 220),
-        "bg_tint":  (12,   4,  22),
-        "text":     (238, 220, 255),
+        "name":      "SCIENCE FACTS",
+        "name_hi":   "विज्ञान तथ्य",
+        "accent":    (185, 105, 255),
+        "accent2":   (130,  70, 220),
+        "accent3":   (210, 140, 255),
+        "bg_tint":   (12,   4,  24),
+        "text":      (238, 220, 255),
+        "muted":     (165, 135, 210),
+        "gradient":  [(12,4,24), (20,8,40), (30,12,55), (15,5,30)],
         "particles": True,
-        "label_en": "SCIENCE FACTS",
-        "label_hi": "विज्ञान तथ्य",
+        "p_color":   (200, 155, 255),
+        "bar_style": "line",
+        "style":     "tech",
     },
     "sports": {
-        "accent":   (255, 200,  40),   # championship gold
-        "accent2":  (255, 150,  20),
-        "bg_tint":  ( 6,  14,   4),
-        "text":     (255, 252, 220),
+        "name":      "SPORTS NEWS",
+        "name_hi":   "खेल समाचार",
+        "accent":    (255, 205,  45),
+        "accent2":   (255, 155,  25),
+        "accent3":   (255, 230,  90),
+        "bg_tint":   (8,   16,   4),
+        "text":      (255, 252, 220),
+        "muted":     (200, 190, 130),
+        "gradient":  [(8,16,4), (15,25,8), (22,38,10), (10,20,5)],
         "particles": False,
-        "label_en": "SPORTS NEWS",
-        "label_hi": "खेल समाचार",
+        "bar_style": "line",
+        "style":     "dynamic",
     },
     "worldnews": {
-        "accent":   (255,  80,  70),   # breaking red
-        "accent2":  (220,  60,  50),
-        "bg_tint":  (20,   4,   4),
-        "text":     (255, 230, 228),
+        "name":      "WORLD NEWS",
+        "name_hi":   "विश्व समाचार",
+        "accent":    (255,  85,  70),
+        "accent2":   (220,  55,  45),
+        "accent3":   (255, 130, 115),
+        "bg_tint":   (22,   4,   4),
+        "text":      (255, 232, 228),
+        "muted":     (210, 155, 148),
+        "gradient":  [(22,4,4), (38,8,8), (55,12,10), (28,5,5)],
         "particles": False,
-        "label_en": "WORLD NEWS",
-        "label_hi": "विश्व समाचार",
+        "bar_style": "line",
+        "style":     "news",
     },
 }
 
@@ -122,12 +150,10 @@ VIDEO_TAGS = {
 }
 
 # ── Font helpers ───────────────────────────────────────────────────────────────
-
 FONT_CACHE: dict = {}
 
 def _dl_font(url: str, dest: Path):
-    if dest.exists():
-        return
+    if dest.exists(): return
     try:
         r = requests.get(url, timeout=30)
         r.raise_for_status()
@@ -137,14 +163,13 @@ def _dl_font(url: str, dest: Path):
 
 def _font(size: int, bold: bool = False, lang: str = "en"):
     key = f"{lang}_{size}_{bold}"
-    if key in FONT_CACHE:
-        return FONT_CACHE[key]
+    if key in FONT_CACHE: return FONT_CACHE[key]
     cands = []
     if lang == "hi":
         lc = LANGUAGES["hi"]
         bp = FONTS_DIR / "NotoSansDevanagari-Bold.ttf"
         rp = FONTS_DIR / "NotoSansDevanagari-Regular.ttf"
-        _dl_font(lc["font_url"],     bp)
+        _dl_font(lc["font_url"], bp)
         _dl_font(lc["font_url_reg"], rp)
         cands = [bp if bold else rp]
     cands += [
@@ -161,384 +186,454 @@ def _font(size: int, bold: bool = False, lang: str = "en"):
             return f
     return ImageFont.load_default()
 
-# ── Drawing primitives ─────────────────────────────────────────────────────────
+# ── Math helpers ───────────────────────────────────────────────────────────────
+def _a(v): return max(0, min(255, int(v)))
+def _ease_out(x): return 1 - (1 - max(0, min(1, x))) ** 3
+def _ease_in_out(x):
+    x = max(0, min(1, x))
+    return 3*x*x - 2*x*x*x
+def _slide(t, start, dur=0.4):
+    if t < start: return 0
+    return _a(_ease_out((t - start) / dur) * 255)
 
-def _wrap(text: str, fnt, max_w: int) -> list:
+# ── Drawing helpers ────────────────────────────────────────────────────────────
+def _wrap(text, fnt, max_w):
     words, lines, cur = text.split(), [], ""
     for w in words:
-        t = (cur + " " + w).strip()
-        if fnt.getbbox(t)[2] <= max_w:
-            cur = t
+        test = (cur + " " + w).strip()
+        if fnt.getbbox(test)[2] <= max_w: cur = test
         else:
-            if cur:
-                lines.append(cur)
+            if cur: lines.append(cur)
             cur = w
-    if cur:
-        lines.append(cur)
+    if cur: lines.append(cur)
     return lines
 
-def _alpha(val: float) -> int:
-    return max(0, min(255, int(val)))
+def _text(draw, x, y, txt, fnt, col, alpha, shadow=True):
+    if shadow:
+        draw.text((x+2, y+2), txt, font=fnt, fill=(0,0,0,_a(alpha*0.4)))
+    draw.text((x, y), txt, font=fnt, fill=(*col, _a(alpha)))
 
-def _ease_in_out(x: float) -> float:
-    """Smooth cubic ease."""
-    return 3 * x * x - 2 * x * x * x
+def _glass(draw, x1, y1, x2, y2, fill_col=(255,255,255),
+           fill_a=20, stroke_col=(255,255,255), stroke_a=35,
+           radius=18):
+    draw.rounded_rectangle([x1,y1,x2,y2], radius=radius,
+                            fill=(*fill_col, fill_a),
+                            outline=(*stroke_col, stroke_a), width=1)
 
-def _ease_out(x: float) -> float:
-    return 1 - (1 - x) ** 3
+def _hairline(draw, x1, y, x2, col, alpha):
+    draw.rectangle([x1, y, x2, y+1], fill=(*col, _a(alpha)))
 
-def _slide_alpha(t: float, start: float, dur: float = 0.35) -> int:
-    if t < start:
-        return 0
-    return _alpha(_ease_out(min(1.0, (t - start) / dur)) * 255)
-
-def _draw_text_crisp(draw, x, y, text, fnt, color, alpha):
-    """Crisp text with single subtle shadow — Apple style."""
-    draw.text((x + 2, y + 2), text, font=fnt, fill=(0, 0, 0, _alpha(alpha * 0.35)))
-    draw.text((x, y), text, font=fnt, fill=(*color, _alpha(alpha)))
-
-def _draw_hairline(draw, x1, y, x2, color, alpha):
-    draw.rectangle([x1, y, x2, y + 1], fill=(*color, _alpha(alpha)))
-
-def _draw_particles(draw, t: float, color: tuple, n: int = 35, seed: int = 7):
+def _particles(draw, t, col, n=30, seed=99):
     rng = random.Random(seed)
     for _ in range(n):
         px = rng.randint(0, W)
         py = rng.randint(0, H)
-        sz = rng.choice([1, 1, 1, 2, 2, 3])
-        sp = rng.uniform(0.2, 1.0)
-        py2 = int((py - t * sp * 15) % H)
-        pulse = 0.5 + 0.5 * math.sin(t * sp * 1.5 + px * 0.01)
-        a = _alpha(140 * pulse)
-        draw.ellipse([px-sz, py2-sz, px+sz, py2+sz], fill=(*color, a))
+        sz = rng.choice([1,1,2,2,3])
+        sp = rng.uniform(0.2, 1.2)
+        py2 = int((py - t * sp * 18) % H)
+        pulse = 0.5 + 0.5 * math.sin(t * sp + px * 0.02)
+        draw.ellipse([px-sz, py2-sz, px+sz, py2+sz],
+                     fill=(*col, _a(160*pulse)))
+
+def _vignette(frame: Image.Image) -> Image.Image:
+    """Strong cinema vignette."""
+    vig = Image.new("RGBA", (W, H), (0,0,0,0))
+    vd  = ImageDraw.Draw(vig)
+    steps = 60
+    for i in range(steps, 0, -1):
+        r  = int((min(W,H)//2) * i / steps)
+        aa = _a(200 * (1 - i/steps) ** 2.2)
+        pad_ = steps - i
+        vd.rectangle([pad_, pad_, W-pad_, H-pad_],
+                     outline=(0,0,0,aa), width=6)
+    return Image.alpha_composite(frame, vig)
+
+def _grain(frame: Image.Image, strength: int = 12) -> Image.Image:
+    """Subtle film grain for texture."""
+    noise = np.random.randint(-strength, strength,
+                              (H, W, 3), dtype=np.int16)
+    arr   = np.array(frame.convert("RGB")).astype(np.int16)
+    arr   = np.clip(arr + noise, 0, 255).astype(np.uint8)
+    return Image.fromarray(arr).convert("RGBA")
+
+def _draw_background(theme: dict, t: float) -> Image.Image:
+    """Animated multi-stop gradient background."""
+    bg   = Image.new("RGBA", (W, H))
+    pix  = bg.load()
+    cols = theme["gradient"]
+    n    = len(cols)
+    # Slow animated shift
+    shift = (t * 0.015) % 1.0
+    for y in range(H):
+        fy  = ((y / H) + shift) % 1.0
+        idx = fy * (n - 1)
+        i   = min(int(idx), n - 2)
+        fr  = idx - i
+        c1, c2 = cols[i], cols[i+1]
+        r = int(c1[0] + (c2[0]-c1[0]) * fr)
+        g = int(c1[1] + (c2[1]-c1[1]) * fr)
+        b = int(c1[2] + (c2[2]-c1[2]) * fr)
+        for x in range(W):
+            pix[x, y] = (r, g, b, 255)
+    return bg
+
+def _draw_decorative_bg(draw, theme: dict, t: float, style: str):
+    """Per-topic subtle decorative background elements."""
+    acc = theme["accent"]
+    a   = 18  # very subtle
+
+    if style == "cosmic":
+        # Concentric arc rings — nebula feel
+        cx, cy = W // 2, int(H * 0.38)
+        for r in range(180, 520, 70):
+            rot = t * 0.04 * (1 if r % 2 == 0 else -1)
+            pulse = 0.6 + 0.4 * math.sin(t * 0.3 + r * 0.008)
+            sa = _a(a * pulse)
+            if sa > 0:
+                draw.arc([cx-r, cy-r, cx+r, cy+r],
+                         start=int(rot*57), end=int(rot*57+200),
+                         fill=(*acc, sa), width=1)
+
+    elif style == "tech":
+        # Dot grid
+        spacing = 80
+        for gx in range(0, W, spacing):
+            for gy in range(0, H, spacing):
+                drift_x = int(4 * math.sin(t * 0.5 + gy * 0.02))
+                drift_y = int(4 * math.cos(t * 0.4 + gx * 0.02))
+                draw.ellipse([gx+drift_x-1, gy+drift_y-1,
+                              gx+drift_x+1, gy+drift_y+1],
+                             fill=(*acc, a))
+
+    elif style == "parchment":
+        # Diagonal ruled lines
+        for i in range(-4, 12):
+            off = i * 220
+            draw.line([(off, 0), (off + H, H)],
+                      fill=(*acc, a // 2), width=1)
+
+    elif style == "nature":
+        # Organic wave arcs
+        for i in range(4):
+            cy2 = H // 2 + i * 180 - 250
+            xo  = int(40 * math.sin(t * 0.2 + i))
+            draw.arc([xo - 350, cy2 - 200, xo + 350, cy2 + 200],
+                     start=0, end=180, fill=(*acc, a), width=1)
+
+    elif style == "dynamic":
+        # Speed lines (sport energy)
+        rng = random.Random(42)
+        for _ in range(12):
+            lx = rng.randint(0, W)
+            draw.line([(lx, 0), (lx + rng.randint(-30,30), H)],
+                      fill=(*acc, a // 2), width=1)
+
+    elif style == "news":
+        # Horizontal rule lines (broadcast TV feel)
+        for y2 in range(0, H, 160):
+            draw.rectangle([0, y2, W, y2+1], fill=(*acc, a//2))
 
 
-# ── Frame renderer ─────────────────────────────────────────────────────────────
+# ── MAIN FRAME ─────────────────────────────────────────────────────────────────
 
-def _make_frame(bg: Image.Image, hook: str, body: str, body_words: list,
-                topic_key: str, topic: dict, lang: str,
-                follow_text: str, tags: list,
+def _make_frame(bg_photo: Image.Image, hook: str, body: str,
+                body_words: list, topic_key: str, topic: dict,
+                lang: str, follow_text: str, tags: list,
                 t: float, total: float) -> np.ndarray:
 
-    th = THEMES.get(topic_key, THEMES["space"])
+    th   = THEMES.get(topic_key, THEMES["space"])
     acc  = th["accent"]
     acc2 = th["accent2"]
+    acc3 = th["accent3"]
     txt  = th["text"]
-    tint = th["bg_tint"]
+    mut  = th["muted"]
 
-    # ── Background: darkened + tinted image ───────────────────────────────
-    scale = 1.0 + 0.04 * (t / total)   # very subtle Ken Burns
+    # ── Layer 1: photo base ────────────────────────────────────────────────
+    scale = 1.0 + 0.04 * (t / total)
     nw, nh = int(W * scale), int(H * scale)
-    bg_s  = bg.resize((nw, nh), Image.LANCZOS)
-    lft   = (nw - W) // 2
-    top_  = (nh - H) // 2
-    frame = bg_s.crop((lft, top_, lft + W, top_ + H)).convert("RGB")
+    photo  = bg_photo.resize((nw, nh), Image.LANCZOS)
+    lft    = (nw - W) // 2
+    top_   = (nh - H) // 2
+    photo  = photo.crop((lft, top_, lft+W, top_+H)).convert("RGBA")
 
-    # Desaturate slightly → luxury feel
-    frame = ImageEnhance.Color(frame).enhance(0.75)
-    frame = ImageEnhance.Brightness(frame).enhance(0.55)   # darker = premium
+    # Desaturate + darken for luxury look
+    photo_rgb = ImageEnhance.Color(photo.convert("RGB")).enhance(0.65)
+    photo_rgb = ImageEnhance.Brightness(photo_rgb).enhance(0.45)
+    photo     = photo_rgb.convert("RGBA")
 
-    # Tint overlay
-    tint_layer = Image.new("RGB", (W, H), tint)
-    frame = Image.blend(frame, tint_layer, alpha=0.55)
-    frame = frame.convert("RGBA")
+    # ── Layer 2: animated gradient bg (blended over photo) ────────────────
+    grad = _draw_background(th, t)
+    base = Image.blend(photo, grad, alpha=0.60)
 
-    # Vignette (dark edges → cinema look)
-    vig = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    vd  = ImageDraw.Draw(vig)
-    for r in range(0, min(W, H) // 2, 8):
-        a_vig = _alpha(180 * (1 - r / (min(W, H) // 2)) ** 2)
-        vd.rectangle([r, r, W - r, H - r],
-                     outline=(0, 0, 0, a_vig), width=8)
-    frame = Image.alpha_composite(frame, vig)
+    # ── Layer 3: vignette ─────────────────────────────────────────────────
+    base = _vignette(base)
 
-    draw = ImageDraw.Draw(frame)
+    # ── Layer 4: grain ────────────────────────────────────────────────────
+    base = _grain(base, strength=8)
 
-    # ── Particles ────────────────────────────────────────────────────────
+    draw = ImageDraw.Draw(base)
+
+    # ── Layer 5: decorative bg elements ───────────────────────────────────
+    _draw_decorative_bg(draw, th, t, th["style"])
+
+    # ── Particles ─────────────────────────────────────────────────────────
     if th.get("particles"):
-        _draw_particles(draw, t, acc, n=30, seed=42)
+        _particles(draw, t, th.get("p_color", acc), n=35, seed=77)
 
-    # ── Cinematic letterbox bars ──────────────────────────────────────────
-    # Slide in from top and bottom over 0.4s
-    bar_h = 90
-    if t < 0.4:
-        bar_prog = _ease_out(t / 0.4)
-        top_bar_y  = int(-bar_h + bar_h * bar_prog)
-        bot_bar_y  = int(H - bar_h * bar_prog)
+    # ═══════════════════════════════════════════════════════════════════════
+    # CINEMATIC BARS
+    # ═══════════════════════════════════════════════════════════════════════
+    bar_h = 100
+    if t < 0.5:
+        bp = _ease_out(t / 0.5)
+        ty_top = int(-bar_h + bar_h * bp)
+        ty_bot = int(H - bar_h * bp)
     else:
-        top_bar_y  = 0
-        bot_bar_y  = H - bar_h
+        ty_top = 0
+        ty_bot = H - bar_h
 
-    draw.rectangle([0, top_bar_y, W, top_bar_y + bar_h], fill=(0, 0, 0, 240))
-    draw.rectangle([0, bot_bar_y, W, bot_bar_y + bar_h], fill=(0, 0, 0, 240))
+    draw.rectangle([0, ty_top, W, ty_top+bar_h],   fill=(0,0,0,248))
+    draw.rectangle([0, ty_bot, W, ty_bot+bar_h],   fill=(0,0,0,248))
 
-    # Thin accent line at letterbox edges
-    _draw_hairline(draw, 0, top_bar_y + bar_h, W, acc, _slide_alpha(t, 0.4))
-    _draw_hairline(draw, 0, bot_bar_y - 1,     W, acc, _slide_alpha(t, 0.4))
+    bar_a = _slide(t, 0.4, 0.3)
+    _hairline(draw, 0, ty_top+bar_h,   W, acc,  bar_a)
+    _hairline(draw, 0, ty_bot-1,       W, acc2, bar_a)
 
-    # ── Progress bar (thin, at very top) ─────────────────────────────────
-    prog_a = _slide_alpha(t, 0.5)
-    prog_w = int(W * (t / total))
+    # ═══════════════════════════════════════════════════════════════════════
+    # PROGRESS BAR
+    # ═══════════════════════════════════════════════════════════════════════
+    pb_a   = _slide(t, 0.5, 0.3)
+    pb_y   = ty_top + bar_h + 3
+    pb_w   = int(W * (t / total))
     # Track
-    draw.rectangle([0, top_bar_y + bar_h + 2, W, top_bar_y + bar_h + 4],
-                   fill=(*acc, _alpha(prog_a * 0.25)))
-    # Fill
-    if prog_w > 0:
-        draw.rectangle([0, top_bar_y + bar_h + 2, prog_w, top_bar_y + bar_h + 4],
-                       fill=(*acc, prog_a))
-    # Glowing dot at progress head
-    if 4 < prog_w < W - 4:
-        draw.ellipse([prog_w - 4, top_bar_y + bar_h,
-                      prog_w + 4, top_bar_y + bar_h + 8],
-                     fill=(*acc, prog_a))
+    draw.rectangle([0, pb_y, W, pb_y+3], fill=(*acc, _a(pb_a * 0.2)))
+    # Fill with gradient effect
+    for px_ in range(0, pb_w, 4):
+        shade = 0.7 + 0.3 * (px_ / max(pb_w, 1))
+        draw.rectangle([px_, pb_y, px_+4, pb_y+3],
+                       fill=(*acc, _a(pb_a * shade)))
+    # Glow head
+    if 6 < pb_w < W - 6:
+        draw.ellipse([pb_w-5, pb_y-2, pb_w+5, pb_y+5],
+                     fill=(*acc3, pb_a))
 
-    # ── Top bar content: topic label + brand ─────────────────────────────
-    label_a = _slide_alpha(t, 0.2)
-    lbl_fnt = _font(26, bold=True, lang="en")   # always EN for label
-    lbl_key = "label_hi" if lang == "hi" else "label_en"
-    lbl_txt = th.get(lbl_key, topic.get("name", ""))
-    # Dot + label
-    dot_x = PAD
-    dot_y = top_bar_y + 38
-    draw.ellipse([dot_x, dot_y - 5, dot_x + 10, dot_y + 5],
-                 fill=(*acc, label_a))
-    draw.text((dot_x + 18, dot_y - 12), lbl_txt, font=lbl_fnt,
-              fill=(*acc, label_a))
+    # ═══════════════════════════════════════════════════════════════════════
+    # TOP BAR CONTENT
+    # ═══════════════════════════════════════════════════════════════════════
+    hdr_a = _slide(t, T_HEADER_IN, 0.4)
 
-    # Brand top-right
-    br_fnt  = _font(22, bold=False, lang="en")
-    br_text = "cosmos.capsule"
-    br_bbox = br_fnt.getbbox(br_text)
-    draw.text((W - br_bbox[2] - PAD, dot_y - 10),
-              br_text, font=br_fnt, fill=(*txt, _alpha(label_a * 0.7)))
+    # Topic label with dot
+    lbl_fnt = _font(24, bold=True, lang="en")
+    lbl_txt = th["name_hi"] if lang == "hi" else th["name"]
+    dot_x   = PAD
+    dot_y   = ty_top + 44
+    # Glowing dot
+    draw.ellipse([dot_x-1, dot_y-6, dot_x+11, dot_y+6],
+                 fill=(*acc, _a(hdr_a * 0.3)))
+    draw.ellipse([dot_x+1, dot_y-4, dot_x+9, dot_y+4],
+                 fill=(*acc, hdr_a))
+    _text(draw, dot_x+18, dot_y-12, lbl_txt,
+          lbl_fnt, acc, hdr_a, shadow=False)
 
-    # Lang badge
-    bd_fnt  = _font(22, bold=True, lang="en")
-    bd_text = "HI" if lang == "hi" else "EN"
-    draw.text((W - br_bbox[2] - PAD - 50, dot_y - 10),
-              bd_text, font=bd_fnt, fill=(*acc2, label_a))
+    # Brand name (top right)
+    br_fnt = _font(21, bold=False, lang="en")
+    br_txt = "cosmos.capsule"
+    br_bb  = br_fnt.getbbox(br_txt)
+    _text(draw, W - br_bb[2] - PAD, dot_y-10,
+          br_txt, br_fnt, mut, _a(hdr_a * 0.8), shadow=False)
 
-    # ── INSTANT HOOK LINE (appears at 0.3s) ───────────────────────────────
-    # Short teaser line above main content — stops the scroll
-    hook_a   = _slide_alpha(t, T_HOOK_IN, dur=0.25)
-    tease_fnt = _font(38, bold=True, lang=lang)
-    if lang == "en":
-        tease = "DID YOU KNOW? 👀"
-    else:
-        tease = "क्या आप जानते हैं? 👀"
-    tb      = tease_fnt.getbbox(tease)
-    tx      = (W - tb[2]) // 2
-    ty      = H // 2 - 320
-    _draw_text_crisp(draw, tx, ty, tease, tease_fnt, acc, hook_a)
+    # Language badge
+    bd_fnt  = _font(20, bold=True, lang="en")
+    bd_txt  = "HI" if lang == "hi" else "EN"
+    bd_bb   = bd_fnt.getbbox(bd_txt)
+    bd_x    = W - br_bb[2] - PAD - 48
+    _glass(draw, bd_x-6, dot_y-12, bd_x+bd_bb[2]+6, dot_y+14,
+           fill_col=acc, fill_a=30, stroke_col=acc, stroke_a=60, radius=8)
+    _text(draw, bd_x, dot_y-10, bd_txt, bd_fnt, acc, hdr_a, shadow=False)
 
-    # Hairline below tease
-    _draw_hairline(draw, PAD * 2, ty + 52, W - PAD * 2, acc,
-                   _alpha(hook_a * 0.5))
+    # ═══════════════════════════════════════════════════════════════════════
+    # HOOK SECTION
+    # ═══════════════════════════════════════════════════════════════════════
+    hook_a = _slide(t, T_HOOK_IN, 0.5)
 
-    # ── COUNTDOWN 3 → 2 → 1 ──────────────────────────────────────────────
-    if T_COUNTDOWN <= t < T_CONTENT:
-        elapsed = t - T_COUNTDOWN
-        cd_dur  = (T_CONTENT - T_COUNTDOWN) / 3.0   # each digit shown ~1s
-        digit   = 3 - int(elapsed / cd_dur)
-        digit   = max(1, min(3, digit))
-        frac    = (elapsed % cd_dur) / cd_dur
+    # "DID YOU KNOW?" teaser line
+    tease_fnt = _font(32, bold=True, lang=lang)
+    tease_txt = "क्या आप जानते हैं? 👀" if lang == "hi" else "DID YOU KNOW? 👀"
+    tb        = tease_fnt.getbbox(tease_txt)
+    tx_       = (W - tb[2]) // 2
+    ty_tease  = H // 2 - 310
 
-        # Pulse: grows then fades
-        if frac < 0.4:
-            cd_scale = 1.0 + 0.15 * _ease_out(frac / 0.4)
-            cd_alpha = 255
-        else:
-            cd_scale = 1.15
-            cd_alpha = _alpha(255 * (1 - (frac - 0.4) / 0.6))
+    # Pill behind teaser
+    _glass(draw, tx_-16, ty_tease-8, tx_+tb[2]+16, ty_tease+tb[3]+8,
+           fill_col=acc, fill_a=22, stroke_col=acc, stroke_a=45, radius=22)
+    _text(draw, tx_, ty_tease, tease_txt, tease_fnt, acc, hook_a)
 
-        cd_size = int(160 * cd_scale)
-        cd_fnt  = _font(cd_size, bold=True, lang="en")
-        cd_str  = str(digit)
-        cd_bbox = cd_fnt.getbbox(cd_str)
-        cdx     = (W - cd_bbox[2]) // 2
-        cdy     = H // 2 - cd_bbox[3] // 2 - 20
+    # Thin separator line
+    sep_y = ty_tease + tb[3] + 20
+    for xi in range(PAD*3, W-PAD*3):
+        fade = 1 - abs(xi - W//2) / (W//2 - PAD*3)
+        draw.point((xi, sep_y), fill=(*acc, _a(hook_a * 0.4 * fade)))
 
-        # Circle behind countdown
-        r = cd_size // 2 + 30
-        draw.ellipse([W//2 - r, H//2 - r - 20,
-                      W//2 + r, H//2 + r - 20],
-                     fill=(*acc, _alpha(cd_alpha * 0.12)))
-        draw.ellipse([W//2 - r + 3, H//2 - r - 17,
-                      W//2 + r - 3, H//2 + r - 23],
-                     outline=(*acc, _alpha(cd_alpha * 0.4)), width=2)
+    # Main hook text
+    hook_fnt   = _font(72, bold=True, lang=lang)
+    hook_txt   = hook.upper() if lang == "en" else hook
+    hook_lines = _wrap(hook_txt, hook_fnt, W - PAD*2 - 16)
+    line_h     = 86
+    hook_total = len(hook_lines) * line_h
+    card_top   = sep_y + 22
+    card_bot   = card_top + hook_total + 40
 
-        _draw_text_crisp(draw, cdx, cdy, cd_str, cd_fnt, acc, cd_alpha)
+    # Frosted card behind hook
+    _glass(draw, PAD-24, card_top-16, W-PAD+24, card_bot+16,
+           fill_col=(0,0,0), fill_a=68,
+           stroke_col=acc, stroke_a=28, radius=20)
 
-    # ── MAIN HOOK CARD (appears at T_CONTENT) ────────────────────────────
-    content_a = _slide_alpha(t, T_CONTENT, dur=0.5)
+    # Left accent bar
+    draw.rounded_rectangle(
+        [PAD-24, card_top-16, PAD-21, card_bot+16],
+        radius=2, fill=(*acc, _a(hook_a * 0.95))
+    )
+    # Subtle inner glow at top of card
+    draw.rectangle([PAD-24, card_top-16, W-PAD+24, card_top-13],
+                   fill=(*acc, _a(hook_a * 0.15)))
 
-    if content_a > 0:
-        hook_fnt   = _font(70, bold=True, lang=lang)
-        hook_text  = hook.upper() if lang == "en" else hook
-        hook_lines = _wrap(hook_text, hook_fnt, W - PAD * 2 - 20)
-        line_h     = 84
-        hook_h     = len(hook_lines) * line_h
-        card_y     = H // 2 - hook_h // 2 - 60
-        card_pad   = 28
+    hy = card_top
+    for line in hook_lines:
+        bb = hook_fnt.getbbox(line)
+        hx = (W - bb[2]) // 2
+        # Glow pass
+        for off in [(0,-1),(0,1),(-1,0),(1,0)]:
+            draw.text((hx+off[0], hy+off[1]), line, font=hook_fnt,
+                      fill=(*acc3, _a(hook_a*0.12)))
+        _text(draw, hx, hy, line, hook_fnt, txt, hook_a)
+        hy += line_h
 
-        # Luxury card: very subtle white stroke, near-black fill
-        draw.rounded_rectangle(
-            [PAD - card_pad, card_y - card_pad,
-             W - PAD + card_pad, card_y + hook_h + card_pad],
-            radius=16,
-            fill=(0, 0, 0, _alpha(content_a * 0.72)),
-            outline=(*acc, _alpha(content_a * 0.25)),
-            width=1,
-        )
+    # ═══════════════════════════════════════════════════════════════════════
+    # WORD-BY-WORD SUBTITLES
+    # ═══════════════════════════════════════════════════════════════════════
+    body_card_a = _slide(t, T_BODY_IN, 0.5)
 
-        # Left accent stripe
-        draw.rounded_rectangle(
-            [PAD - card_pad, card_y - card_pad,
-             PAD - card_pad + 3, card_y + hook_h + card_pad],
-            radius=2, fill=(*acc, _alpha(content_a * 0.9))
-        )
+    if body_card_a > 0:
+        sub_elapsed   = max(0, t - T_SUBS_START)
+        sub_window    = T_TAGS_IN - T_SUBS_START
+        word_interval = sub_window / max(len(body_words), 1)
+        n_words       = min(len(body_words),
+                            int(sub_elapsed / word_interval) + 1)
 
-        hy = card_y
-        for line in hook_lines:
-            bb  = hook_fnt.getbbox(line)
-            hx  = (W - bb[2]) // 2
-            _draw_text_crisp(draw, hx, hy, line, hook_fnt, txt, content_a)
-            hy += line_h
+        sub_fnt   = _font(40, bold=False, lang=lang)
+        sub_bold  = _font(40, bold=True,  lang=lang)
+        sub_lines = _wrap(" ".join(body_words[:n_words]),
+                          sub_fnt, W - PAD*2 - 10)
+        sub_lh    = 54
+        sub_total = len(sub_lines) * sub_lh
+        sub_top   = card_bot + 40
 
-    # ── ANIMATED SUBTITLES word-by-word ──────────────────────────────────
-    if t >= T_SUBS_START and content_a > 0:
-        sub_elapsed  = t - T_SUBS_START
-        sub_duration = T_TAGS - T_SUBS_START
-        word_interval = sub_duration / max(len(body_words), 1)
-        words_shown  = min(len(body_words),
-                           int(sub_elapsed / word_interval) + 1)
+        # Frosted card for body
+        _glass(draw, PAD-20, sub_top-14, W-PAD+20, sub_top+sub_total+14,
+               fill_col=(0,0,0), fill_a=62,
+               stroke_col=acc2, stroke_a=22, radius=16)
 
-        sub_fnt  = _font(38, bold=False, lang=lang)
-        sub_line = " ".join(body_words[:words_shown])
-        sub_lines = _wrap(sub_line, sub_fnt, W - PAD * 2)
+        # Small accent corner markers
+        mark_size = 8
+        for mx, my in [(PAD-20, sub_top-14), (W-PAD+20-mark_size, sub_top-14)]:
+            draw.rectangle([mx, my, mx+mark_size, my+2],
+                           fill=(*acc2, _a(body_card_a*0.6)))
+            draw.rectangle([mx, my, mx+2, my+mark_size],
+                           fill=(*acc2, _a(body_card_a*0.6)))
 
-        sub_line_h = 52
-        sub_total  = len(sub_lines) * sub_line_h
-        sub_y      = H // 2 + 130
-
-        # Subtitle card
-        if sub_lines:
-            draw.rounded_rectangle(
-                [PAD - 20, sub_y - 14,
-                 W - PAD + 20, sub_y + sub_total + 14],
-                radius=12,
-                fill=(0, 0, 0, _alpha(content_a * 0.65)),
-            )
-
-        # Last word highlight
         for li, sline in enumerate(sub_lines):
-            words_in_line = sline.split()
-            is_last_line  = li == len(sub_lines) - 1
-            sy = sub_y + li * sub_line_h
+            sy_      = sub_top + li * sub_lh
+            is_last  = li == len(sub_lines) - 1
+            words_   = sline.split()
 
-            if is_last_line and words_in_line:
-                # Render all but last word normally
-                normal_part = " ".join(words_in_line[:-1])
-                last_word   = words_in_line[-1]
+            if is_last and words_ and t >= T_SUBS_START:
+                # Highlight last word
+                normal = " ".join(words_[:-1])
+                last_w = words_[-1]
+                fl_bb  = sub_fnt.getbbox(sline)
+                line_x = (W - fl_bb[2]) // 2
 
-                # Measure normal part
-                np_fnt  = _font(38, bold=False, lang=lang)
-                lw_fnt  = _font(38, bold=True,  lang=lang)
-
-                if normal_part:
-                    np_bb = np_fnt.getbbox(normal_part + " ")
-                    np_w  = np_bb[2]
+                if normal:
+                    np_bb = sub_fnt.getbbox(normal + " ")
+                    _text(draw, line_x, sy_, normal+" ", sub_fnt,
+                          txt, body_card_a)
+                    lw_x = line_x + np_bb[2]
                 else:
-                    np_w = 0
+                    lw_x = line_x
 
-                # Full line width to center
-                full_line = sline
-                fl_bb     = np_fnt.getbbox(full_line)
-                line_x    = (W - fl_bb[2]) // 2
-
-                if normal_part:
-                    _draw_text_crisp(draw, line_x, sy,
-                                     normal_part + " ", np_fnt,
-                                     txt, content_a)
-                # Highlighted last word
-                lw_bb = lw_fnt.getbbox(last_word)
-                lw_x  = line_x + np_w
-                # Accent pill behind last word
-                pill_pad = 6
-                draw.rounded_rectangle(
-                    [lw_x - pill_pad, sy - 4,
-                     lw_x + lw_bb[2] + pill_pad, sy + lw_bb[3] + 4],
-                    radius=8,
-                    fill=(*acc, _alpha(content_a * 0.25)),
-                )
-                _draw_text_crisp(draw, lw_x, sy, last_word,
-                                 lw_fnt, acc, content_a)
+                lw_bb = sub_bold.getbbox(last_w)
+                # Pill behind highlighted word
+                _glass(draw, lw_x-6, sy_-4, lw_x+lw_bb[2]+6, sy_+lw_bb[3]+4,
+                       fill_col=acc, fill_a=28,
+                       stroke_col=acc, stroke_a=50, radius=8)
+                _text(draw, lw_x, sy_, last_w, sub_bold, acc, body_card_a)
             else:
-                bb  = sub_fnt.getbbox(sline)
-                sx_ = (W - bb[2]) // 2
-                _draw_text_crisp(draw, sx_, sy, sline,
-                                 sub_fnt, txt, content_a)
+                bb_   = sub_fnt.getbbox(sline)
+                sx_   = (W - bb_[2]) // 2
+                _text(draw, sx_, sy_, sline, sub_fnt, txt, body_card_a)
 
-    # ── HASHTAG STRIP ────────────────────────────────────────────────────
-    tag_a = _slide_alpha(t, T_TAGS, dur=0.4)
+    # ═══════════════════════════════════════════════════════════════════════
+    # HASHTAG STRIP
+    # ═══════════════════════════════════════════════════════════════════════
+    tag_a = _slide(t, T_TAGS_IN, 0.45)
     if tag_a > 0 and tags:
         tag_fnt = _font(24, bold=False, lang=lang)
-        tag_y   = H - 185
-        # Subtle card
-        draw.rounded_rectangle(
-            [PAD - 16, tag_y - 8, W - PAD + 16, tag_y + 62],
-            radius=10, fill=(0, 0, 0, _alpha(tag_a * 0.5)),
-        )
-        row1 = "   ".join(tags[:3])
-        row2 = "   ".join(tags[3:6])
-        for ri, row in enumerate([row1, row2]):
-            if not row:
-                continue
-            rb   = tag_fnt.getbbox(row)
-            rx   = (W - rb[2]) // 2
-            ry   = tag_y + ri * 30
-            draw.text((rx + 1, ry + 1), row, font=tag_fnt,
-                      fill=(0, 0, 0, _alpha(tag_a * 0.4)))
-            draw.text((rx, ry), row, font=tag_fnt,
-                      fill=(*acc, _alpha(tag_a * 0.9)))
+        tag_top = H - 195
 
-    # ── BOTTOM BAR: Follow CTA ────────────────────────────────────────────
-    cta_a = _slide_alpha(t, T_CTA, dur=0.5)
+        _glass(draw, PAD-16, tag_top-8, W-PAD+16, tag_top+64,
+               fill_col=(0,0,0), fill_a=55,
+               stroke_col=acc, stroke_a=25, radius=14)
 
-    # Gradient fade bottom
-    for i in range(bar_h):
-        ba = _alpha(230 * (i / bar_h) ** 1.5)
-        draw.rectangle([0, bot_bar_y + i, W, bot_bar_y + i + 1],
-                       fill=(0, 0, 0, ba))
+        for ri, row in enumerate(["   ".join(tags[:3]),
+                                   "   ".join(tags[3:6])]):
+            if not row: continue
+            rb  = tag_fnt.getbbox(row)
+            rx_ = (W - rb[2]) // 2
+            ry_ = tag_top + ri * 30
+            _text(draw, rx_, ry_, row, tag_fnt, acc, _a(tag_a * 0.88))
 
-    # CTA text
+    # ═══════════════════════════════════════════════════════════════════════
+    # BOTTOM CTA
+    # ═══════════════════════════════════════════════════════════════════════
+    cta_a = _slide(t, T_CTA_IN, 0.5)
+
+    # Gradient fade into bottom bar
+    for i in range(bar_h + 20):
+        fa = _a(240 * ((i / (bar_h + 20)) ** 1.8))
+        draw.rectangle([0, ty_bot+i, W, ty_bot+i+1],
+                       fill=(0,0,0, fa))
+
     cta_fnt  = _font(30, bold=True, lang=lang)
-    cta_text = follow_text
-    cta_bb   = cta_fnt.getbbox(cta_text)
-    ctx      = (W - cta_bb[2]) // 2
-    cty      = bot_bar_y + (bar_h - cta_bb[3]) // 2 - 4
+    cta_bb   = cta_fnt.getbbox(follow_text)
+    ctx_     = (W - cta_bb[2]) // 2
+    cty_     = ty_bot + (bar_h - cta_bb[3]) // 2 - 4
 
-    # Pulsing glow on CTA
-    pulse = 0.85 + 0.15 * math.sin(t * 3.5)
-    _draw_text_crisp(draw, ctx, cty, cta_text, cta_fnt,
-                     acc, _alpha(cta_a * pulse))
+    # Pulsing glow dot before CTA
+    pulse = 0.8 + 0.2 * math.sin(t * 4)
+    dot_r = 5
+    draw.ellipse([ctx_-22-dot_r, cty_+10-dot_r,
+                  ctx_-22+dot_r, cty_+10+dot_r],
+                 fill=(*acc, _a(cta_a * pulse)))
 
-    # Small arrow after CTA
-    arr_fnt = _font(28, bold=True, lang="en")
-    draw.text((ctx + cta_bb[2] + 10, cty + 2), "↑",
-              font=arr_fnt, fill=(*acc, _alpha(cta_a * pulse)))
+    _text(draw, ctx_, cty_, follow_text, cta_fnt,
+          acc, _a(cta_a * pulse))
 
-    return np.array(frame.convert("RGB"))
+    # Up arrow
+    arr_fnt = _font(26, bold=True, lang="en")
+    draw.text((ctx_ + cta_bb[2] + 10, cty_+3), "↑",
+              font=arr_fnt, fill=(*acc2, _a(cta_a * pulse)))
+
+    return np.array(base.convert("RGB"))
 
 
 # ── VideoCreator ───────────────────────────────────────────────────────────────
 
 class VideoCreator:
     def create_reel(self, image_path: Path, music_path: Path,
-                    fact_data: dict, topic: dict, lang: str,
-                    output_dir: Path) -> Path:
+                    fact_data: dict, topic: dict,
+                    lang: str, output_dir: Path) -> Path:
 
-        log.info(f"🎬 Rendering premium [{lang.upper()}] reel…")
+        log.info(f"🎬 Rendering ultra-premium [{lang.upper()}] reel…")
 
         import config as cfg
         topic_key = "space"
@@ -561,8 +656,8 @@ class VideoCreator:
                                follow_text, tags, t, REEL_DURATION)
 
         clip = VideoClip(make_frame, duration=REEL_DURATION).set_fps(REEL_FPS)
-        clip = fadein(clip, 0.3)
-        clip = fadeout(clip, 0.5)
+        clip = fadein(clip, 0.4)
+        clip = fadeout(clip, 0.6)
 
         audio = (AudioFileClip(str(music_path))
                  .subclip(0, REEL_DURATION)
