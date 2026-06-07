@@ -2,6 +2,8 @@
 src/audio_mixer.py — Mixes narration voice with background music.
 Documentary style: voice at 100%, music ducked to 15% during speech,
 fades back to 40% after narration ends.
+
+Fixed for MoviePy 1.0.3 compatibility.
 """
 
 import logging
@@ -14,68 +16,103 @@ def mix_audio(music_path: Path, narration_path: Path,
               output_dir: Path, duration: int = 20) -> Path:
     """
     Mix background music + narration voice.
-
-    Levels:
-      - Music:     15% volume during narration (ducked)
-      - Narration: 95% volume (clear and prominent)
-      - Music fades back to 40% after narration ends
-
-    Returns path to mixed .wav file.
+    Uses numpy-based ducking compatible with MoviePy 1.0.3
     """
+    import numpy as np
     from moviepy.editor import AudioFileClip, CompositeAudioClip
 
     output_dir.mkdir(parents=True, exist_ok=True)
     out_path = output_dir / "mixed_audio.wav"
 
     try:
-        # Load music
-        music = (AudioFileClip(str(music_path))
-                 .subclip(0, duration)
-                 .audio_fadeout(2.0))
-
-        # Load narration
+        # Load clips
+        music     = (AudioFileClip(str(music_path))
+                     .subclip(0, duration)
+                     .audio_fadeout(2.0))
         narration = AudioFileClip(str(narration_path))
-        narr_dur  = min(narration.duration, duration - 1.0)
+        narr_dur  = min(narration.duration, duration - 0.5)
         narration = narration.subclip(0, narr_dur)
 
-        # Duck music during narration, fade back after
-        def music_volume(t):
-            """Volume curve: 40% → ducks to 15% at 0.5s → back to 40% after narration."""
-            duck_start = 0.5
-            duck_end   = narr_dur + 0.3
-            fade_dur   = 1.5
+        sample_rate = 44100
+        n_samples   = duration * sample_rate
 
-            if t < duck_start:
-                # Fade from 40% to 15%
-                progress = t / duck_start
-                return 0.40 - (0.25 * progress)
-            elif t < duck_end:
-                return 0.15   # ducked under voice
-            elif t < duck_end + fade_dur:
-                # Fade back up from 15% to 40%
-                progress = (t - duck_end) / fade_dur
-                return 0.15 + (0.25 * progress)
-            else:
-                return 0.40   # back to normal
+        # ── Get raw audio arrays ───────────────────────────────────────────
+        music_arr = music.to_soundarray(fps=sample_rate)
+        narr_arr  = narration.to_soundarray(fps=sample_rate)
 
-        music_ducked = music.volumex(music_volume)
+        # Ensure stereo
+        if music_arr.ndim == 1:
+            music_arr = np.column_stack([music_arr, music_arr])
+        if narr_arr.ndim == 1:
+            narr_arr = np.column_stack([narr_arr, narr_arr])
 
-        # Set narration volume and start time
-        narration_loud = narration.volumex(0.95).set_start(0.3)
+        # Pad/trim to exact duration
+        if len(music_arr) < n_samples:
+            pad = np.zeros((n_samples - len(music_arr), 2))
+            music_arr = np.vstack([music_arr, pad])
+        music_arr = music_arr[:n_samples]
 
-        # Composite
-        mixed = CompositeAudioClip([music_ducked, narration_loud])
-        mixed = mixed.subclip(0, duration)
+        # Narration starts at 0.3s
+        narr_start = int(0.3 * sample_rate)
+        narr_end   = narr_start + len(narr_arr)
+        if narr_end > n_samples:
+            narr_arr = narr_arr[:n_samples - narr_start]
+            narr_end = n_samples
 
-        # Export
-        mixed.write_audiofile(
-            str(out_path),
-            fps=44100,
-            nbytes=2,
-            codec="pcm_s16le",
-            logger=None,
-        )
-        log.info(f"✅ Mixed audio: {out_path.name}")
+        # ── Build music volume envelope ────────────────────────────────────
+        # 0.40 normally → ducks to 0.15 during narration → back to 0.40
+        vol_env    = np.full(n_samples, 0.40)
+        duck_start = narr_start - int(0.3 * sample_rate)  # start ducking 0.3s before narration
+        duck_end   = narr_end   + int(0.5 * sample_rate)  # stop ducking 0.5s after narration
+        fade_in_s  = int(0.4 * sample_rate)
+        fade_out_s = int(1.2 * sample_rate)
+
+        duck_start = max(0, duck_start)
+        duck_end   = min(n_samples, duck_end)
+
+        # Smooth fade down
+        for i in range(min(fade_in_s, duck_start, n_samples - duck_start)):
+            t = i / fade_in_s
+            vol_env[duck_start + i] = 0.40 - 0.25 * t
+
+        # Full duck region
+        full_duck_start = duck_start + fade_in_s
+        full_duck_end   = max(full_duck_start, duck_end - fade_out_s)
+        vol_env[full_duck_start:full_duck_end] = 0.15
+
+        # Smooth fade up
+        fade_up_start = full_duck_end
+        fade_up_end   = min(n_samples, fade_up_start + fade_out_s)
+        for i in range(fade_up_end - fade_up_start):
+            t = i / fade_out_s
+            vol_env[fade_up_start + i] = 0.15 + 0.25 * t
+
+        # Rest stays at 0.40
+        vol_env[fade_up_end:] = 0.40
+
+        # Apply volume envelope to music
+        vol_col   = vol_env.reshape(-1, 1)
+        music_arr = music_arr * vol_col
+
+        # ── Narration at 0.95 volume ───────────────────────────────────────
+        narr_full = np.zeros((n_samples, 2))
+        end_idx   = min(narr_start + len(narr_arr), n_samples)
+        narr_full[narr_start:end_idx] = narr_arr[:end_idx - narr_start] * 0.95
+
+        # ── Mix ────────────────────────────────────────────────────────────
+        mixed = music_arr + narr_full
+        mixed = np.clip(mixed, -1.0, 1.0)   # prevent clipping
+
+        # ── Write to WAV ───────────────────────────────────────────────────
+        import wave, struct
+        with wave.open(str(out_path), "w") as wf:
+            wf.setnchannels(2)
+            wf.setsampwidth(2)
+            wf.setframerate(sample_rate)
+            pcm = (mixed * 32767).astype(np.int16)
+            wf.writeframes(pcm.tobytes())
+
+        log.info(f"✅ Mixed audio: {out_path.name} ({out_path.stat().st_size // 1024} KB)")
         return out_path
 
     except Exception as e:
