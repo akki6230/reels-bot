@@ -54,8 +54,14 @@ jobs:
           sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation fonts-noto
           fc-cache -fv
 
+      - name: 🗑 Clear pip cache
+        run: pip cache purge
+
       - name: 📦 Install Python dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install --upgrade pip
+          pip install --no-cache-dir moviepy==1.0.3 decorator==4.4.2 imageio==2.25.1 imageio-ffmpeg==0.4.9
+          pip install --no-cache-dir -r requirements.txt
 
       - name: 💾 Restore cache
         uses: actions/cache@v4
