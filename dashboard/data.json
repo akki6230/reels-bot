@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-07T09:54:11.303853+00:00",
-  "total_runs": 12,
-  "posted": 9,
+  "generated_at": "2026-06-07T10:20:13.102905+00:00",
+  "total_runs": 13,
+  "posted": 10,
   "failed": 0,
   "dry_runs": 3,
   "en_posted": 4,
-  "hi_posted": 5,
-  "success_rate": 75.0,
+  "hi_posted": 6,
+  "success_rate": 76.9,
   "topic_counts": {
-    "sports": 1,
+    "sports": 2,
     "science": 5,
     "history": 2,
     "geography": 1
@@ -23,6 +23,17 @@
       "hook": "NASA JUST MADE SUPERSONIC FLIGHT QUIET",
       "category": "Space & Technology",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_space_&_technology_en_20260607_022242.mp4"
+    },
+    {
+      "timestamp": "2026-06-07T10:13:43.891347+00:00",
+      "topic": "sports",
+      "lang": "hi",
+      "status": "posted",
+      "dry_run": false,
+      "hook": "46 \u0938\u093e\u0932 \u092c\u093e\u0926 \u0905\u092e\u0947\u0930\u093f\u0915\u093e \u0915\u093e \u0938\u092a\u0928\u093e \u0938\u091a \u0939\u0941\u0906!",
+      "category": "Sports News",
+      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_sports_news_hi_20260607_101357.mp4",
+      "media_id": "3914187844124468853_24336816956"
     },
     {
       "timestamp": "2026-06-07T09:48:16.592303+00:00",
@@ -147,6 +158,6 @@
   "current_run": {
     "status": "success",
     "topic": "sports",
-    "lang": "en"
+    "lang": "hi"
   }
 }
