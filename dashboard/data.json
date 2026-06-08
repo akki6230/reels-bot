@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-08T11:33:29.577143+00:00",
-  "total_runs": 18,
+  "generated_at": "2026-06-08T11:43:48.193559+00:00",
+  "total_runs": 19,
   "posted": 12,
   "failed": 0,
   "dry_runs": 4,
   "en_posted": 4,
   "hi_posted": 8,
-  "success_rate": 66.7,
+  "success_rate": 63.2,
   "topic_counts": {
     "space": 1,
     "worldnews": 1,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-08T11:43:48.193220+00:00",
+      "topic": "earthglitch",
+      "lang": "hi",
+      "status": "success",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-06-08T11:33:29.576848+00:00",
       "topic": "earthglitch",
@@ -220,10 +233,10 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-08T11:33:29.576848+00:00",
+    "timestamp": "2026-06-08T11:43:48.193220+00:00",
     "topic": "earthglitch",
     "lang": "hi",
-    "status": "failure",
+    "status": "success",
     "hook": "",
     "category": "",
     "media_id": "",
