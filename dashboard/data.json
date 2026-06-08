@@ -1,13 +1,14 @@
 {
-  "generated_at": "2026-06-07T15:17:17.452737+00:00",
-  "total_runs": 15,
-  "posted": 11,
+  "generated_at": "2026-06-08T04:58:34.837013+00:00",
+  "total_runs": 16,
+  "posted": 12,
   "failed": 0,
   "dry_runs": 4,
   "en_posted": 4,
-  "hi_posted": 7,
-  "success_rate": 73.3,
+  "hi_posted": 8,
+  "success_rate": 75.0,
   "topic_counts": {
+    "space": 1,
     "worldnews": 1,
     "sports": 2,
     "science": 5,
@@ -15,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-08T04:58:34.836679+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "सूर्य 109 पृथ्वियों को निगल सकता है",
+      "category": "तारे",
+      "media_id": "3914750763476240529_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-07T15:17:17.452476+00:00",
       "topic": "worldnews",
@@ -180,16 +194,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-07T15:17:17.452476+00:00",
-    "topic": "worldnews",
+    "timestamp": "2026-06-08T04:58:34.836679+00:00",
+    "topic": "space",
     "lang": "hi",
     "status": "posted",
-    "hook": "विश्व में तीन बड़े संकट एक साथ",
-    "category": "World News",
-    "media_id": "3914337396496487752_24336816956",
+    "hook": "सूर्य 109 पृथ्वियों को निगल सकता है",
+    "category": "तारे",
+    "media_id": "3914750763476240529_24336816956",
     "error": "",
-    "image_source": "pollinations",
-    "reel_style": "cartoon",
-    "duration": 33
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 20
   }
 }
