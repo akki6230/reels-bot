@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-08T11:43:48.193559+00:00",
-  "total_runs": 19,
-  "posted": 12,
+  "generated_at": "2026-06-08T12:18:37.203703+00:00",
+  "total_runs": 20,
+  "posted": 13,
   "failed": 0,
   "dry_runs": 4,
   "en_posted": 4,
-  "hi_posted": 8,
-  "success_rate": 63.2,
+  "hi_posted": 9,
+  "success_rate": 65.0,
   "topic_counts": {
-    "space": 1,
+    "space": 2,
     "worldnews": 1,
     "sports": 2,
     "science": 5,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-08T12:18:37.203355+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "एक तारा जो 10 बिलियन साल पुराना है",
+      "category": "Stars",
+      "media_id": "3914972222324941293_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "cartoon",
+      "duration": 17
+    },
     {
       "timestamp": "2026-06-08T11:43:48.193220+00:00",
       "topic": "earthglitch",
@@ -233,16 +246,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-08T11:43:48.193220+00:00",
-    "topic": "earthglitch",
+    "timestamp": "2026-06-08T12:18:37.203355+00:00",
+    "topic": "space",
     "lang": "hi",
-    "status": "success",
-    "hook": "",
-    "category": "",
-    "media_id": "",
+    "status": "posted",
+    "hook": "एक तारा जो 10 बिलियन साल पुराना है",
+    "category": "Stars",
+    "media_id": "3914972222324941293_24336816956",
     "error": "",
-    "image_source": "",
-    "reel_style": "",
-    "duration": 0
+    "image_source": "pexels",
+    "reel_style": "cartoon",
+    "duration": 17
   }
 }
