@@ -1,23 +1,19 @@
-name: 🚀 Post Daily Educational Reels
+name: 🚀 Post Daily Educational Reels — cosmos.capsule
 
 on:
   schedule:
-    # 3 reels/day — 1 English + 2 Hindi
+    # 3 reels/day — all Hindi, topics rotate by day
     # IST = UTC + 5:30
-    - cron: "30 3 * * *"    # 9:00 AM IST  — Hindi  (morning peak)
-    - cron: "30 7 * * *"    # 1:00 PM IST  — English (afternoon)
-    - cron: "30 13 * * *"   # 7:00 PM IST  — Hindi  (prime time — best slot)
+    - cron: "30 3 * * *"    # 9:00 AM IST  — Hindi (morning peak)
+    - cron: "30 7 * * *"    # 1:00 PM IST  — Hindi (afternoon)
+    - cron: "30 13 * * *"   # 7:00 PM IST  — Hindi (prime time ⭐)
 
   workflow_dispatch:
     inputs:
       topic:
-        description: "Topic (space/history/geography/science/sports/worldnews)"
+        description: "Topic: psychology / mindblowing / space / sciencewrong / earthglitch"
         required: false
         default: "space"
-      lang:
-        description: "Language (en/hi)"
-        required: false
-        default: "hi"
       dry_run:
         description: "Dry run — generate video but don't post to Instagram"
         required: false
@@ -74,19 +70,17 @@ jobs:
           key: reels-cache-v3-${{ github.run_number }}
           restore-keys: reels-cache-v3-
 
-      - name: 🎯 Determine topic and language
+      - name: 🎯 Determine topic
         id: topic
         run: python src/pick_topic.py
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           INPUT_TOPIC: ${{ github.event.inputs.topic }}
-          INPUT_LANG:  ${{ github.event.inputs.lang }}
 
       - name: 🎬 Generate & post reel
         run: |
           python src/main.py run \
             "${{ steps.topic.outputs.topic }}" \
-            "${{ steps.topic.outputs.lang }}" \
             ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
         env:
           ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
