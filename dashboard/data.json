@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-08T04:58:34.837013+00:00",
-  "total_runs": 16,
+  "generated_at": "2026-06-08T08:32:11.659672+00:00",
+  "total_runs": 17,
   "posted": 12,
   "failed": 0,
   "dry_runs": 4,
   "en_posted": 4,
   "hi_posted": 8,
-  "success_rate": 75.0,
+  "success_rate": 70.6,
   "topic_counts": {
     "space": 1,
     "worldnews": 1,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-08T08:32:11.659286+00:00",
+      "topic": "history",
+      "lang": "en",
+      "status": "success",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-06-08T04:58:34.836679+00:00",
       "topic": "space",
@@ -194,16 +207,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-08T04:58:34.836679+00:00",
-    "topic": "space",
-    "lang": "hi",
-    "status": "posted",
-    "hook": "सूर्य 109 पृथ्वियों को निगल सकता है",
-    "category": "तारे",
-    "media_id": "3914750763476240529_24336816956",
+    "timestamp": "2026-06-08T08:32:11.659286+00:00",
+    "topic": "history",
+    "lang": "en",
+    "status": "success",
+    "hook": "",
+    "category": "",
+    "media_id": "",
     "error": "",
-    "image_source": "pexels",
-    "reel_style": "kinetic",
-    "duration": 20
+    "image_source": "",
+    "reel_style": "",
+    "duration": 0
   }
 }
