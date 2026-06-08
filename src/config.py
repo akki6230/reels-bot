@@ -1,383 +1,131 @@
 """
-src/config.py — All topic definitions, languages, and global constants.
-6 topics × 2 languages (English + Hindi) = 12 reels/day
-
-Hashtag strategy:
-- Mix of high volume (1M+), medium (100K-1M), and niche (<100K) tags
-- Niche tags get MORE engagement per post than mega tags
-- Include brand tag #cosmoscapsule on every post for discovery
-- Rotate between 3 hashtag sets per topic to avoid shadowban
-- Max 30 hashtags per post (Instagram limit)
+src/config.py — 5 viral topics, Hindi only, smart duration + voiceover logic.
 """
 
 import random
-
-# ── Hashtag sets (3 rotating sets per topic per language) ─────────────────────
-# Each set has 28 tags — mix of sizes for maximum reach
-
-HASHTAG_SETS = {
-
-    "space_en": [
-        # Set A — Discovery & Education focused
-        "#space #universe #astronomy #NASA #cosmos #spacefacts #didyouknow "
-        "#astrophysics #blackhole #galaxy #sciencefacts #learneveryday "
-        "#knowledgeispower #education #reels #reelsinstagram #reelsviral "
-        "#viralreels #explorepage #explore #trending #instagramreels "
-        "#sciencelovers #spaceexploration #ISRO #hubble #milkyway #cosmoscapsule",
-
-        # Set B — Viral & Trending focused
-        "#spacefacts #universeisbeautiful #nasagram #cosmicwonder #stargaze "
-        "#astronomy101 #sciencedaily #mindblown #amazingfacts #factsdaily "
-        "#interestingfacts #dailyfacts #reelsviral #reelsvideos #viral "
-        "#viralposts #explorepage🔍 #foryou #foryoupage #fyp "
-        "#instagramreels #reelsindia #indianreels #educationalreels "
-        "#learnwithreel #spacenerd #cosmosfacts #cosmoscapsule",
-
-        # Set C — India & Hindi audience crossover
-        "#space #NASA #ISRO #chandrayaan #indianspace #sciencefacts "
-        "#knowledgedose #factcheck #amazingworld #universefacts "
-        "#spacescience #cosmicfacts #reelstrending #reelsexplore "
-        "#viralvideo #trendingvideo #instareels #reelsindia "
-        "#educationindia #learnindian #gyaan #factsinhindi "
-        "#scienceindia #indiastudents #studymotivation #cosmoscapsule",
-    ],
-
-    "space_hi": [
-        "#अंतरिक्ष #ब्रह्मांड #विज्ञान #नासा #इसरो #तथ्य #ज्ञान "
-        "#शिक्षा #रोचकतथ्य #अद्भुततथ्य #विज्ञानतथ्य #अंतरिक्षविज्ञान "
-        "#reels #reelsviral #reelsindia #instagramreels #viral "
-        "#trending #foryou #explorepage #hindireels #hindipost "
-        "#हिंदी #हिंदीरील्स #ज्ञानकीबातें #रोजनयातथ्य "
-        "#विज्ञानप्रेमी #cosmoscapsule",
-
-        "#space #universe #isro #chandrayaan #अंतरिक्ष #ब्रह्मांड "
-        "#विज्ञान #तथ्य #ज्ञान #शिक्षा #reelsviral #reelsindia "
-        "#hindireels #viralreels #trending #foryoupage #fyp "
-        "#explorepage #instagramreels #educationalreels "
-        "#हिंदीशिक्षा #भारत #indianstudents #gyaandose "
-        "#factsinhindi #dailyfacts #cosmoscapsule",
-
-        "#अंतरिक्ष #नासा #इसरो #ब्रह्मांड #तारे #ग्रह #आकाशगंगा "
-        "#विज्ञान #तथ्य #रोचकजानकारी #ज्ञानवर्धक #शिक्षाप्रद "
-        "#reels #viral #trending #hindireels #reelsindia "
-        "#instagramreels #foryou #explorepage #हिंदी "
-        "#भारतीयशिक्षा #स्टूडेंट्स #पढ़ाई #cosmoscapsule",
-    ],
-
-    "history_en": [
-        "#history #worldhistory #historyfacts #ancienthistory #historybuff "
-        "#civilization #didyouknow #amazingfacts #factsdaily #historydaily "
-        "#ancientcivilization #historicalfacts #reelsviral #reelsinstagram "
-        "#viral #trending #explorepage #foryou #fyp #instagramreels "
-        "#educationalcontent #learneveryday #knowledgeispower "
-        "#historylovers #ancientworld #mythology #historynerd #cosmoscapsule",
-
-        "#history #ancient #egypt #rome #medieval #renaissance "
-        "#worldwar #historyfacts #historybuff #didyouknow #mindblown "
-        "#amazinghistory #factcheck #interestingfacts #dailyfacts "
-        "#reelsviral #viralreels #reelsindia #instagramreels "
-        "#explorepage🔍 #foryoupage #trending #viral #education "
-        "#historyteacher #historylesson #historytime #cosmoscapsule",
-
-        "#historyfacts #ancienthistory #historybuff #worldhistory "
-        "#historicalevent #ancientcivilization #greekmythology "
-        "#romanempire #egyptianhistory #medievalhistory "
-        "#reels #reelsviral #viral #trending #foryou "
-        "#explorepage #instagramreels #educationalreels "
-        "#factsdaily #amazingfacts #knowledgedose #learnhistory "
-        "#historyisfun #pastfacts #historynerd #cosmoscapsule",
-    ],
-
-    "history_hi": [
-        "#इतिहास #विश्वइतिहास #इतिहासतथ्य #प्राचीनइतिहास #सभ्यता "
-        "#तथ्य #ज्ञान #शिक्षा #रोचकतथ्य #इतिहासप्रेमी "
-        "#reels #reelsviral #reelsindia #instagramreels #viral "
-        "#trending #foryou #explorepage #hindireels #हिंदी "
-        "#हिंदीरील्स #ज्ञानकीबातें #इतिहासकीबातें #भारतीयइतिहास "
-        "#indianhistory #ancientindia #cosmoscapsule",
-
-        "#इतिहास #प्राचीनभारत #मुगलसाम्राज्य #ब्रिटिशराज #स्वतंत्रता "
-        "#इतिहासतथ्य #तथ्य #ज्ञान #reelsviral #hindireels "
-        "#reelsindia #viral #trending #foryoupage #explorepage "
-        "#instagramreels #हिंदी #भारत #indianhistory "
-        "#historyinhindi #इतिहासप्रेमी #ऐतिहासिक #cosmoscapsule",
-
-        "#इतिहास #विश्वइतिहास #रोचकइतिहास #ऐतिहासिकतथ्य "
-        "#प्राचीनसभ्यता #reels #viral #trending #hindireels "
-        "#reelsindia #instagramreels #foryou #explorepage "
-        "#हिंदीशिक्षा #ज्ञानवर्धक #शिक्षाप्रद #इतिहासज्ञान "
-        "#भारतीयइतिहास #worldhistory #historyfacts #cosmoscapsule",
-    ],
-
-    "geography_en": [
-        "#geography #earthfacts #nature #travel #countries #geographyfacts "
-        "#amazingearth #worldgeography #naturefacts #earthscience "
-        "#didyouknow #amazingfacts #factsdaily #reelsviral #reelsinstagram "
-        "#viral #trending #explorepage #foryou #fyp #instagramreels "
-        "#travelreels #naturereels #educationalcontent #learneveryday "
-        "#planetearth #worldwonders #naturelover #cosmoscapsule",
-
-        "#geography #mountains #oceans #rivers #countries #deserts "
-        "#forests #islands #volcanoes #earthfacts #naturefacts "
-        "#amazingworld #wondersoftheworld #travelfacts #geofacts "
-        "#reelsviral #viralreels #reelsindia #instagramreels "
-        "#explorepage🔍 #foryoupage #trending #viral #education "
-        "#naturephotography #travelgram #wanderlust #cosmoscapsule",
-
-        "#geography #earthscience #worldmap #continents #oceans "
-        "#amazingnature #naturalwonders #geographylovers "
-        "#naturefacts #travelfacts #worldfacts #countryfacts "
-        "#reels #reelsviral #viral #trending #foryou "
-        "#explorepage #instagramreels #educationalreels "
-        "#factsdaily #amazingfacts #knowledgedose #cosmoscapsule",
-    ],
-
-    "geography_hi": [
-        "#भूगोल #पृथ्वी #प्रकृति #यात्रा #देश #भूगोलतथ्य "
-        "#तथ्य #ज्ञान #शिक्षा #रोचकतथ्य #प्राकृतिकतथ्य "
-        "#reels #reelsviral #reelsindia #instagramreels #viral "
-        "#trending #foryou #explorepage #hindireels #हिंदी "
-        "#हिंदीरील्स #ज्ञानकीबातें #भारतकीजानकारी "
-        "#geographyinhindi #भूगोलज्ञान #cosmoscapsule",
-
-        "#भूगोल #पहाड़ #नदी #समुद्र #देश #रेगिस्तान #जंगल "
-        "#तथ्य #ज्ञान #reelsviral #hindireels #reelsindia "
-        "#viral #trending #foryoupage #explorepage "
-        "#instagramreels #हिंदी #भारत #प्रकृति "
-        "#यात्रा #travelhindi #naturehindi #cosmoscapsule",
-
-        "#भूगोल #विश्वभूगोल #रोचकभूगोल #भूगोलतथ्य "
-        "#पृथ्वीतथ्य #reels #viral #trending #hindireels "
-        "#reelsindia #instagramreels #foryou #explorepage "
-        "#हिंदीशिक्षा #ज्ञानवर्धक #शिक्षाप्रद #cosmoscapsule",
-    ],
-
-    "science_en": [
-        "#science #sciencefacts #biology #physics #chemistry #humanbody "
-        "#sciencelovers #didyouknow #amazingfacts #factsdaily "
-        "#sciencedaily #mindblown #sciencenerd #stemlearning "
-        "#reelsviral #reelsinstagram #viral #trending #explorepage "
-        "#foryou #fyp #instagramreels #educationalcontent "
-        "#learneveryday #knowledgeispower #scienceeducation "
-        "#funscience #sciencemindblown #cosmoscapsule",
-
-        "#science #physics #chemistry #biology #neuroscience "
-        "#evolution #genetics #quantum #sciencefacts #mindblown "
-        "#amazingscience #scienceisfun #techscience #stemkids "
-        "#reelsviral #viralreels #reelsindia #instagramreels "
-        "#explorepage🔍 #foryoupage #trending #viral #education "
-        "#scienceteacher #learnscience #sciencebuff #cosmoscapsule",
-
-        "#sciencefacts #humanbody #brainfacts #physicsfacts "
-        "#chemistryfacts #biologyfacts #sciencelovers "
-        "#amazingscience #sciencenerd #stemlearning "
-        "#reels #reelsviral #viral #trending #foryou "
-        "#explorepage #instagramreels #educationalreels "
-        "#factsdaily #amazingfacts #knowledgedose #cosmoscapsule",
-    ],
-
-    "science_hi": [
-        "#विज्ञान #विज्ञानतथ्य #भौतिकी #रसायन #जीवविज्ञान "
-        "#मानवशरीर #तथ्य #ज्ञान #शिक्षा #रोचकतथ्य "
-        "#reels #reelsviral #reelsindia #instagramreels #viral "
-        "#trending #foryou #explorepage #hindireels #हिंदी "
-        "#हिंदीरील्स #विज्ञानप्रेमी #scienceinhindi #cosmoscapsule",
-
-        "#विज्ञान #भौतिकी #रसायनशास्त्र #जीवविज्ञान #तंत्रिकाविज्ञान "
-        "#तथ्य #ज्ञान #reelsviral #hindireels #reelsindia "
-        "#viral #trending #foryoupage #explorepage "
-        "#instagramreels #हिंदी #भारत #विज्ञानशिक्षा "
-        "#scienceinhindi #विज्ञानज्ञान #cosmoscapsule",
-
-        "#विज्ञान #अद्भुतविज्ञान #रोचकविज्ञान #विज्ञानतथ्य "
-        "#reels #viral #trending #hindireels #reelsindia "
-        "#instagramreels #foryou #explorepage "
-        "#हिंदीशिक्षा #ज्ञानवर्धक #शिक्षाप्रद #cosmoscapsule",
-    ],
-
-    "sports_en": [
-        "#sports #sportsnews #cricket #IPL #football #FIFA #olympics "
-        "#athlete #India #sportsfacts #cricketlovers #sportsreels "
-        "#cricketfans #sportsmotivation #didyouknow #amazingfacts "
-        "#reelsviral #reelsinstagram #viral #trending #explorepage "
-        "#foryou #fyp #instagramreels #sportsday #sportsindia "
-        "#cricketindia #ipl2026 #cosmoscapsule",
-
-        "#cricket #IPL #virat #rohit #football #neymar #messi "
-        "#olympics #sportsnews #sportsupdate #cricketfever "
-        "#cricketworld #footballfever #sportslover #athlete "
-        "#reelsviral #viralreels #reelsindia #instagramreels "
-        "#explorepage🔍 #foryoupage #trending #viral "
-        "#sportstagram #sportslife #sportsmotivation #cosmoscapsule",
-
-        "#sports #cricket #football #badminton #hockey #kabaddi "
-        "#indiansports #sportsnews #sportsfacts #sportsreels "
-        "#athletelife #sportsworld #olympicgames "
-        "#reels #reelsviral #viral #trending #foryou "
-        "#explorepage #instagramreels #sportsindiaofficial "
-        "#bcci #ipl #cosmoscapsule",
-    ],
-
-    "sports_hi": [
-        "#खेल #क्रिकेट #फुटबॉल #ओलंपिक #आईपीएल #भारत "
-        "#खिलाड़ी #समाचार #खेलसमाचार #क्रिकेटप्रेमी "
-        "#reels #reelsviral #reelsindia #instagramreels #viral "
-        "#trending #foryou #explorepage #hindireels #हिंदी "
-        "#हिंदीरील्स #खेलभावना #sportsinhindi #cosmoscapsule",
-
-        "#क्रिकेट #आईपीएल #विराट #रोहित #फुटबॉल #बैडमिंटन "
-        "#खेल #खेलसमाचार #reelsviral #hindireels #reelsindia "
-        "#viral #trending #foryoupage #explorepage "
-        "#instagramreels #हिंदी #भारत #भारतीयखेल "
-        "#sportsinhindi #खेलप्रेमी #cosmoscapsule",
-
-        "#खेल #क्रिकेट #हॉकी #कबड्डी #बैडमिंटन #ओलंपिक "
-        "#खेलसमाचार #भारतीयखेल #reels #viral #trending "
-        "#hindireels #reelsindia #instagramreels #foryou "
-        "#explorepage #हिंदीशिक्षा #खेलभारत #cosmoscapsule",
-    ],
-
-    "worldnews_en": [
-        "#worldnews #breakingnews #politics #NASA #ISRO #spaceagency "
-        "#geopolitics #currentaffairs #newsupdate #todaynews "
-        "#didyouknow #amazingfacts #factsdaily #newsfacts "
-        "#reelsviral #reelsinstagram #viral #trending #explorepage "
-        "#foryou #fyp #instagramreels #educationalcontent "
-        "#awareness #globalaffairs #newsdaily #infonews #cosmoscapsule",
-
-        "#worldnews #politics #war #conflict #diplomacy #NASA "
-        "#spacenews #isronews #breakingnews #currentevents "
-        "#newsreels #politicsnews #globalcrisis #worldaffairs "
-        "#reelsviral #viralreels #reelsindia #instagramreels "
-        "#explorepage🔍 #foryoupage #trending #viral "
-        "#newsoftheday #dailynews #awarenessposts #cosmoscapsule",
-
-        "#worldnews #india #politics #government #NASA #ISRO "
-        "#spaceexploration #breakingnews #newsupdate #factsnews "
-        "#globalaffairs #worldpolitics #currentaffairs "
-        "#reels #reelsviral #viral #trending #foryou "
-        "#explorepage #instagramreels #newsdaily "
-        "#informative #awareness #cosmoscapsule",
-    ],
-
-    "worldnews_hi": [
-        "#विश्वसमाचार #राजनीति #नासा #इसरो #युद्ध #भारत "
-        "#वैश्विक #ताजाखबर #समाचार #खबरें #आजकीखबर "
-        "#reels #reelsviral #reelsindia #instagramreels #viral "
-        "#trending #foryou #explorepage #hindireels #हिंदी "
-        "#हिंदीरील्स #हिंदीसमाचार #newsinhindi #cosmoscapsule",
-
-        "#विश्वसमाचार #भारत #राजनीति #सरकार #नासा #इसरो "
-        "#ताजासमाचार #खबरें #reelsviral #hindireels #reelsindia "
-        "#viral #trending #foryoupage #explorepage "
-        "#instagramreels #हिंदी #भारतसमाचार "
-        "#newsinhindi #hindinews #cosmoscapsule",
-
-        "#विश्वसमाचार #अंतर्राष्ट्रीयसमाचार #राजनीति #युद्ध "
-        "#शांति #कूटनीति #reels #viral #trending #hindireels "
-        "#reelsindia #instagramreels #foryou #explorepage "
-        "#हिंदीखबरें #समाचार #ताजाखबर #cosmoscapsule",
-    ],
-}
-
-
-def get_hashtags(topic_key: str, lang: str) -> str:
-    """Returns a randomly selected hashtag set for the topic+language combo."""
-    key = f"{topic_key}_{lang}"
-    sets = HASHTAG_SETS.get(key, [f"#cosmoscapsule #{topic_key}"])
-    return random.choice(sets)
-
+from pathlib import Path
 
 # ── Topics ─────────────────────────────────────────────────────────────────────
 
 TOPICS = {
+    "psychology": {
+        "name":         "Psychology Facts",
+        "name_hi":      "मनोविज्ञान तथ्य",
+        "emoji":        "🧠",
+        "type":         "fact",
+        "music_mood":   "soft calm ambient",
+        "music_energy": "calm",
+        "image_keywords": ["human brain illustration", "psychology mind art",
+                           "thinking person silhouette", "mind concept art",
+                           "neuroscience illustration"],
+        "color_scheme": {
+            "bg":     (8,  4,  20),
+            "accent": (160, 100, 255),
+            "text":   (235, 220, 255),
+        },
+        "hashtags_hi": (
+            "#मनोविज्ञान #psychology #मनोवैज्ञानिकतथ्य #दिमाग #brainpower "
+            "#psychologyfacts #mindset #reelsviral #reelsindia #hindireels "
+            "#trending #foryou #viral #didyouknow #cosmoscapsule"
+        ),
+    },
+
+    "mindblowing": {
+        "name":         "Mind-Blowing Facts",
+        "name_hi":      "दिमाग हिला देने वाले तथ्य",
+        "emoji":        "🤯",
+        "type":         "fact",
+        "music_mood":   "motivational epic upbeat",
+        "music_energy": "high",
+        "image_keywords": ["explosion mind art", "shock wave digital art",
+                           "mind blown illustration", "surreal concept art",
+                           "amazing universe art"],
+        "color_scheme": {
+            "bg":     (20, 5,  5),
+            "accent": (255, 80, 50),
+            "text":   (255, 235, 228),
+        },
+        "hashtags_hi": (
+            "#mindblow #दिमागहिला #amazingfacts #रोचकतथ्य #अद्भुततथ्य "
+            "#facts #didyouknow #reelsviral #reelsindia #hindireels "
+            "#trending #foryou #viral #mindblown #cosmoscapsule"
+        ),
+    },
 
     "space": {
-        "name":     "Space & Universe",
-        "name_hi":  "अंतरिक्ष और ब्रह्मांड",
-        "emoji":    "🚀",
-        "type":     "fact",
-        "music_mood": "ambient cinematic space",
-        "image_keywords": ["galaxy", "nebula", "cosmos", "planets", "stars", "milky way", "space telescope"],
-        "color_scheme": {"bg": (5, 5, 25), "accent": (100, 180, 255), "text": (220, 240, 255)},
+        "name":         "Space & Universe",
+        "name_hi":      "अंतरिक्ष और ब्रह्मांड",
+        "emoji":        "🚀",
+        "type":         "fact",
+        "music_mood":   "soft calm ambient",
+        "music_energy": "calm",
+        "image_keywords": ["galaxy digital art", "nebula illustration",
+                           "space anime art", "cosmic concept art",
+                           "universe watercolor painting"],
+        "color_scheme": {
+            "bg":     (4,  6,  22),
+            "accent": (100, 185, 255),
+            "text":   (225, 242, 255),
+        },
+        "hashtags_hi": (
+            "#अंतरिक्ष #ब्रह्मांड #spacefacts #NASA #ISRO #universe "
+            "#reelsviral #reelsindia #hindireels #trending #foryou "
+            "#viral #spacehindi #cosmoscapsule"
+        ),
     },
 
-    "history": {
-        "name":     "World History",
-        "name_hi":  "विश्व इतिहास",
-        "emoji":    "📜",
-        "type":     "fact",
-        "music_mood": "epic orchestral historical",
-        "image_keywords": ["ancient ruins", "historical monument", "medieval castle", "roman colosseum", "pyramid"],
-        "color_scheme": {"bg": (25, 15, 5), "accent": (200, 150, 80), "text": (255, 240, 210)},
+    "sciencewrong": {
+        "name":         "Science Gone Wrong",
+        "name_hi":      "विज्ञान जब गलत हो गया",
+        "emoji":        "⚗️",
+        "type":         "fact",
+        "music_mood":   "motivational epic upbeat",
+        "music_energy": "high",
+        "image_keywords": ["science experiment explosion art",
+                           "chemistry disaster illustration",
+                           "mad scientist cartoon",
+                           "laboratory accident comic",
+                           "science fail concept art"],
+        "color_scheme": {
+            "bg":     (5,  18, 5),
+            "accent": (80, 230, 120),
+            "text":   (215, 255, 225),
+        },
+        "hashtags_hi": (
+            "#sciencegonewrong #विज्ञानगलत #sciencefail #sciencefacts "
+            "#रोचकविज्ञान #reelsviral #reelsindia #hindireels "
+            "#trending #foryou #viral #sciencehindi #cosmoscapsule"
+        ),
     },
 
-    "geography": {
-        "name":     "Geography",
-        "name_hi":  "भूगोल",
-        "emoji":    "🌍",
-        "type":     "fact",
-        "music_mood": "nature acoustic world",
-        "image_keywords": ["mountain landscape", "ocean aerial", "rainforest", "desert dunes", "waterfall", "river"],
-        "color_scheme": {"bg": (5, 20, 10), "accent": (80, 200, 120), "text": (210, 255, 225)},
-    },
-
-    "science": {
-        "name":     "Science Facts",
-        "name_hi":  "विज्ञान तथ्य",
-        "emoji":    "🔬",
-        "type":     "fact",
-        "music_mood": "electronic upbeat discovery",
-        "image_keywords": ["laboratory", "dna strand", "microscope", "chemistry", "atom", "research", "biology"],
-        "color_scheme": {"bg": (15, 5, 25), "accent": (180, 100, 255), "text": (230, 210, 255)},
-    },
-
-    "sports": {
-        "name":     "Sports News",
-        "name_hi":  "खेल समाचार",
-        "emoji":    "🏆",
-        "type":     "news",
-        "music_mood": "electronic upbeat discovery",
-        "image_keywords": ["cricket stadium", "football match", "olympic stadium", "sports arena", "athlete"],
-        "color_scheme": {"bg": (5, 15, 5), "accent": (255, 200, 50), "text": (255, 250, 210)},
-        "news_queries": [
-            "latest sports news India today",
-            "cricket news today IPL",
-            "football news today FIFA",
-            "Olympics sports news latest",
-            "India sports achievement today",
-        ],
-    },
-
-    "worldnews": {
-        "name":     "World News",
-        "name_hi":  "विश्व समाचार",
-        "emoji":    "🌐",
-        "type":     "news",
-        "music_mood": "epic orchestral historical",
-        "image_keywords": ["world map", "united nations", "space rocket launch", "news broadcast", "globe politics"],
-        "color_scheme": {"bg": (20, 5, 5), "accent": (255, 100, 80), "text": (255, 225, 220)},
-        "news_queries": [
-            "NASA space news today",
-            "India politics news today",
-            "world war conflict news today",
-            "ISRO space mission news",
-            "global political news today",
-            "India government news today",
-            "international news today important",
-        ],
+    "earthglitch": {
+        "name":         "Earth Glitches",
+        "name_hi":      "धरती की अजीब घटनाएं",
+        "emoji":        "🌍",
+        "type":         "fact",
+        "music_mood":   "motivational epic upbeat",
+        "music_energy": "high",
+        "image_keywords": ["earth glitch digital art",
+                           "natural phenomenon illustration",
+                           "mysterious nature art",
+                           "earth anomaly concept",
+                           "strange weather phenomenon art"],
+        "color_scheme": {
+            "bg":     (4,  14, 8),
+            "accent": (70, 215, 130),
+            "text":   (215, 255, 230),
+        },
+        "hashtags_hi": (
+            "#earthglitch #धरतीकेरहस्य #naturalfacts #अजीबघटनाएं "
+            "#amazingnature #reelsviral #reelsindia #hindireels "
+            "#trending #foryou #viral #earthfacts #cosmoscapsule"
+        ),
     },
 }
 
-# ── Languages ──────────────────────────────────────────────────────────────────
+# ── Language — Hindi only ──────────────────────────────────────────────────────
 
 LANGUAGES = {
-    "en": {
-        "code":        "en",
-        "name":        "English",
-        "follow_text": "Follow for daily facts  ✨",
-        "font_url":    None,
-    },
     "hi": {
         "code":        "hi",
         "name":        "हिंदी",
@@ -387,26 +135,47 @@ LANGUAGES = {
     },
 }
 
-# ── Schedule ───────────────────────────────────────────────────────────────────
+# ── Duration logic ─────────────────────────────────────────────────────────────
+# 30 out of 100 reels get voiceover (max 20s)
+# Rest are 10–20s randomly (no voiceover)
+VOICEOVER_PROBABILITY = 0.30   # 30%
+DURATION_WITH_VOICE   = 20     # always 20s when voiceover
+DURATION_MIN          = 10     # minimum without voiceover
+DURATION_MAX          = 20     # maximum without voiceover
 
-SCHEDULE = [
-    ("space",     "en",  7,  0),
-    ("space",     "hi",  8,  0),
-    ("history",   "en",  9,  0),
-    ("history",   "hi", 10,  0),
-    ("geography", "en", 11,  0),
-    ("geography", "hi", 12,  0),
-    ("science",   "en", 13,  0),
-    ("science",   "hi", 14,  0),
-    ("sports",    "en", 15,  0),
-    ("sports",    "hi", 16,  0),
-    ("worldnews", "en", 17,  0),
-    ("worldnews", "hi", 21,  0),
-]
+
+def get_duration_and_voice() -> tuple[int, bool]:
+    """Returns (duration_seconds, use_voiceover)."""
+    use_voice = random.random() < VOICEOVER_PROBABILITY
+    if use_voice:
+        return DURATION_WITH_VOICE, True
+    return random.randint(DURATION_MIN, DURATION_MAX), False
+
+
+# ── Schedule: 3 reels/day, all Hindi ──────────────────────────────────────────
+
+# Day of week (0=Mon…6=Sun) → (9AM_topic, 1PM_topic, 7PM_topic)
+DAY_ROTATION = {
+    0: ("psychology",   "mindblowing",  "space"),        # Monday
+    1: ("mindblowing",  "space",        "sciencewrong"), # Tuesday
+    2: ("space",        "sciencewrong", "earthglitch"),  # Wednesday
+    3: ("sciencewrong", "earthglitch",  "psychology"),   # Thursday
+    4: ("earthglitch",  "psychology",   "mindblowing"),  # Friday
+    5: ("psychology",   "space",        "mindblowing"),  # Saturday
+    6: ("mindblowing",  "earthglitch",  "space"),        # Sunday
+}
 
 # ── Video specs ────────────────────────────────────────────────────────────────
-REEL_WIDTH    = 1080
-REEL_HEIGHT   = 1920
-REEL_DURATION = 20
-REEL_FPS      = 30
-MUSIC_VOLUME  = 0.38
+REEL_WIDTH  = 1080
+REEL_HEIGHT = 1920
+REEL_FPS    = 30
+MUSIC_VOLUME_CALM = 0.45    # calm music — slightly louder
+MUSIC_VOLUME_HIGH = 0.38    # high energy music — let voice cut through
+
+
+def get_music_volume(energy: str) -> float:
+    return MUSIC_VOLUME_CALM if energy == "calm" else MUSIC_VOLUME_HIGH
+
+
+def get_hashtags(topic_key: str, lang: str = "hi") -> str:
+    return TOPICS[topic_key].get("hashtags_hi", "#cosmoscapsule")

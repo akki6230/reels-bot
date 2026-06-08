@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <title>Cosmos Capsule — Bot Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
@@ -81,7 +84,7 @@ footer a{color:var(--accent);text-decoration:none}
 <header>
   <div>
     <h1>🚀 Cosmos<span>Capsule</span> Dashboard</h1>
-    <p>6 topics · 2 Hindi + 1 English · 3 reels/day · GitHub Actions</p>
+    <p>5 viral topics · हिंदी only · 3 reels/day · GitHub Actions</p>
   </div>
   <div class="live"><span class="dot"></span>Automated</div>
 </header>
@@ -126,33 +129,31 @@ footer a{color:var(--accent);text-decoration:none}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 const TOPICS={
-  space:    {emoji:"🚀",name:"Space & Universe",  nameHi:"अंतरिक्ष", color:"#4f8ef7"},
-  history:  {emoji:"📜",name:"World History",     nameHi:"इतिहास",   color:"#fbbf24"},
-  geography:{emoji:"🌍",name:"Geography",          nameHi:"भूगोल",    color:"#34d399"},
-  science:  {emoji:"🔬",name:"Science Facts",     nameHi:"विज्ञान",   color:"#a78bfa"},
-  sports:   {emoji:"🏆",name:"Sports News",       nameHi:"खेल",      color:"#f87171"},
-  worldnews:{emoji:"🌐",name:"World News",         nameHi:"विश्व समाचार",color:"#fb923c"},
+  psychology:   {emoji:"🧠",name:"Psychology Facts",   nameHi:"मनोविज्ञान तथ्य",     color:"#a78bfa"},
+  mindblowing:  {emoji:"🤯",name:"Mind-Blowing Facts", nameHi:"दिमाग हिला देने वाले", color:"#f87171"},
+  space:        {emoji:"🚀",name:"Space & Universe",   nameHi:"अंतरिक्ष और ब्रह्मांड", color:"#4f8ef7"},
+  sciencewrong: {emoji:"⚗️",name:"Science Gone Wrong", nameHi:"विज्ञान जब गलत हो गया",color:"#34d399"},
+  earthglitch:  {emoji:"🌍",name:"Earth Glitches",     nameHi:"धरती की अजीब घटनाएं",  color:"#fbbf24"},
 };
 
-// 3 reels/day: 2 Hindi + 1 English
-// Topics rotate by day of week (matching pick_topic.py)
-const DAY_ROTATION = {
-  0: ["space",    "history",   "science"],    // Monday
-  1: ["history",  "geography", "space"],      // Tuesday
-  2: ["geography","science",   "history"],    // Wednesday
-  3: ["science",  "sports",    "geography"],  // Thursday
-  4: ["sports",   "worldnews", "science"],    // Friday
-  5: ["worldnews","space",     "sports"],     // Saturday
-  6: ["space",    "science",   "worldnews"],  // Sunday
+// 3 reels/day all Hindi — topics rotate by day
+const DAY_ROTATION={
+  0:["psychology",  "mindblowing", "space"],
+  1:["mindblowing", "space",       "sciencewrong"],
+  2:["space",       "sciencewrong","earthglitch"],
+  3:["sciencewrong","earthglitch", "psychology"],
+  4:["earthglitch", "psychology",  "mindblowing"],
+  5:["psychology",  "space",       "mindblowing"],
+  6:["mindblowing", "earthglitch", "space"],
 };
-const today     = new Date().getDay(); // 0=Sun, 1=Mon...
-const weekday   = today === 0 ? 6 : today - 1; // convert to Mon=0
-const todayTopics = DAY_ROTATION[weekday] || ["space","history","science"];
+const today=new Date().getDay();
+const weekday=today===0?6:today-1;
+const todayTopics=DAY_ROTATION[weekday]||["psychology","mindblowing","space"];
 
 const SCHEDULE=[
-  {time:"09:00 AM", topic: todayTopics[0], lang:"hi",  note:"Morning peak"},
-  {time:"01:00 PM", topic: todayTopics[1], lang:"en",  note:"Afternoon"},
-  {time:"07:00 PM", topic: todayTopics[2], lang:"hi",  note:"Prime time ⭐"},
+  {time:"09:00 AM",topic:todayTopics[0],lang:"hi",note:"Morning peak"},
+  {time:"01:00 PM",topic:todayTopics[1],lang:"hi",note:"Afternoon"},
+  {time:"07:00 PM",topic:todayTopics[2],lang:"hi",note:"Prime time ⭐"},
 ];
 
 function relTime(iso){
@@ -276,7 +277,7 @@ function renderChart(d){
 
 async function load(){
   try{
-    const r=await fetch(`data.json?t=${Date.now()}`);
+    const r=await fetch(`data.json?v=${Date.now()}`,{cache:"no-store"});
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const d=await r.json();
     renderMetrics(d);
@@ -292,6 +293,7 @@ async function load(){
 
 renderSchedule();
 load();
+setInterval(load,60000);
 setInterval(load,60000);
 </script>
 </body>

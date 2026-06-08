@@ -554,7 +554,8 @@ class VideoCreator:
                     fact_data: dict, topic: dict,
                     lang: str, output_dir: Path,
                     reel_style: str = "kinetic",
-                    duration: int = 20) -> Path:
+                    duration: int = 20,
+                    music_volume: float = 0.40) -> Path:
 
         log.info(f"🎬 [{reel_style.upper()}] [{lang.upper()}] {duration}s reel…")
 
@@ -568,14 +569,22 @@ class VideoCreator:
         hook        = fact_data["hook"]
         body        = fact_data["body"]
         body_words  = body.split()
-        follow_text = LANGUAGES[lang]["follow_text"]
-        tags        = VIDEO_TAGS.get(f"{topic_key}_{lang}", ["#cosmoscapsule"])
+        follow_text = LANGUAGES["hi"]["follow_text"]
 
-        # Select renderer
+        # New topic-specific video tags
+        VIDEO_TAGS_NEW = {
+            "psychology":   ["#मनोविज्ञान","#psychology","#दिमाग","#mindset","#brainpower","#cosmoscapsule"],
+            "mindblowing":  ["#mindblow","#दिमागहिला","#amazingfacts","#रोचकतथ्य","#viral","#cosmoscapsule"],
+            "space":        ["#अंतरिक्ष","#ब्रह्मांड","#spacefacts","#NASA","#ISRO","#cosmoscapsule"],
+            "sciencewrong": ["#sciencefail","#विज्ञान","#sciencefacts","#funny","#facts","#cosmoscapsule"],
+            "earthglitch":  ["#earthglitch","#धरती","#naturalfacts","#amazing","#mystery","#cosmoscapsule"],
+        }
+        tags = VIDEO_TAGS_NEW.get(topic_key, VIDEO_TAGS.get(f"{topic_key}_hi", ["#cosmoscapsule"]))
+
         renderers = {
-            "kinetic":      _kinetic_frame,
-            "documentary":  _documentary_frame,
-            "cartoon":      _cartoon_frame,
+            "kinetic":     _kinetic_frame,
+            "documentary": _documentary_frame,
+            "cartoon":     _cartoon_frame,
         }
         render_fn = renderers.get(reel_style, _kinetic_frame)
 
@@ -584,17 +593,17 @@ class VideoCreator:
                              topic_key, lang, follow_text, tags, t, duration)
 
         clip = VideoClip(make_frame, duration=duration).set_fps(REEL_FPS)
-        clip = fadein(clip, 0.4)
-        clip = fadeout(clip, 0.6)
+        clip = fadein(clip, min(0.4, duration * 0.05))
+        clip = fadeout(clip, min(0.6, duration * 0.06))
 
         audio = (AudioFileClip(str(music_path))
-                 .subclip(0, duration)
-                 .audio_fadeout(2.5)
-                 .volumex(MUSIC_VOLUME))
+                 .subclip(0, min(duration, AudioFileClip(str(music_path)).duration))
+                 .audio_fadeout(min(2.5, duration * 0.15))
+                 .volumex(music_volume))
         clip = clip.set_audio(audio)
 
         ts       = datetime.now().strftime("%Y%m%d_%H%M%S")
-        cat_slug = (fact_data.get("fact_category", topic["name"])[:15]
+        cat_slug = (fact_data.get("fact_category", topic.get("name",""))[:15]
                     .replace(" ","_").lower())
         out_path = output_dir / f"reel_{cat_slug}_{lang}_{reel_style}_{ts}.mp4"
 
