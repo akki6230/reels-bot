@@ -26,7 +26,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 from moviepy.editor import VideoClip, AudioFileClip
 from moviepy.video.fx.all import fadein, fadeout
 
-from config import REEL_WIDTH, REEL_HEIGHT, REEL_FPS, MUSIC_VOLUME, LANGUAGES
+from config import REEL_WIDTH, REEL_HEIGHT, REEL_FPS, LANGUAGES
 
 log       = logging.getLogger(__name__)
 W, H      = REEL_WIDTH, REEL_HEIGHT
