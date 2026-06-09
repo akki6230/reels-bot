@@ -78,34 +78,134 @@ VIDEO_TAGS = {
 # ── Font helpers ───────────────────────────────────────────────────────────────
 FC: dict = {}
 
+# Multiple CDN sources for Noto Sans Devanagari (fallback chain)
+DEVANAGARI_FONT_URLS = {
+    "bold": [
+        "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansDevanagari/NotoSansDevanagari-Bold.ttf",
+        "https://fonts.gstatic.com/s/notosansdevanagari/v25/TuGKUUVzXI5FBtUq5a8bjKYTZjtgv-_J9WqDBz4.ttf",
+        "https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-devanagari@5.0.8/files/noto-sans-devanagari-devanagari-700-normal.woff2",
+    ],
+    "regular": [
+        "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansDevanagari/NotoSansDevanagari-Regular.ttf",
+        "https://fonts.gstatic.com/s/notosansdevanagari/v25/TuGKUUVzXI5FBtUq5a8bjKYTZjtgv-_J9WqDBz4.ttf",
+    ],
+}
+
+# System paths where Noto Devanagari may already be installed
+SYSTEM_DEVANAGARI_PATHS = [
+    "/usr/share/fonts/truetype/noto/NotoSansDevanagari-Bold.ttf",
+    "/usr/share/fonts/truetype/noto/NotoSansDevanagari-Regular.ttf",
+    "/usr/share/fonts/noto/NotoSansDevanagari-Bold.ttf",
+    "/usr/share/fonts/noto/NotoSansDevanagari-Regular.ttf",
+    "/usr/share/fonts/opentype/noto/NotoSansDevanagari-Regular.ttf",
+    "/usr/share/fonts/truetype/fonts-noto/NotoSansDevanagari-Regular.ttf",
+]
+
+
+def _ensure_hindi_fonts():
+    """Download Hindi fonts at startup — call once before rendering."""
+    bold_path = FONTS_DIR / "NotoSansDevanagari-Bold.ttf"
+    reg_path  = FONTS_DIR / "NotoSansDevanagari-Regular.ttf"
+
+    # Check system fonts first (fastest)
+    for sp in SYSTEM_DEVANAGARI_PATHS:
+        if Path(sp).exists():
+            if not bold_path.exists():
+                import shutil
+                try: shutil.copy2(sp, bold_path)
+                except: pass
+            if not reg_path.exists():
+                try: shutil.copy2(sp, reg_path)
+                except: pass
+            break
+
+    # Download if still missing
+    for path, urls in [(bold_path, DEVANAGARI_FONT_URLS["bold"]),
+                       (reg_path,  DEVANAGARI_FONT_URLS["regular"])]:
+        if path.exists() and path.stat().st_size > 10000:
+            continue
+        for url in urls:
+            try:
+                log.info(f"Downloading font: {path.name} from {url[:60]}...")
+                r = requests.get(url, timeout=30)
+                r.raise_for_status()
+                if len(r.content) > 10000:
+                    path.write_bytes(r.content)
+                    log.info(f"✅ Font saved: {path.name} ({path.stat().st_size//1024}KB)")
+                    break
+            except Exception as e:
+                log.warning(f"Font URL failed {url[:50]}: {e}")
+                continue
+
+    # Final check
+    if bold_path.exists() and bold_path.stat().st_size > 10000:
+        log.info("✅ Hindi fonts ready")
+    else:
+        log.warning("⚠️ Hindi font download failed — boxes may appear in text")
+
+
 def _dl(url, dest):
-    if Path(dest).exists(): return
+    if Path(dest).exists() and Path(dest).stat().st_size > 10000:
+        return
     try:
-        r=requests.get(url,timeout=30); r.raise_for_status()
-        Path(dest).write_bytes(r.content)
-    except Exception as e: log.warning(f"Font: {e}")
+        r = requests.get(url, timeout=30)
+        r.raise_for_status()
+        if len(r.content) > 10000:
+            Path(dest).write_bytes(r.content)
+    except Exception as e:
+        log.warning(f"Font DL: {e}")
+
 
 def _f(size, bold=False, lang="hi"):
-    key=f"{lang}_{size}_{bold}"
-    if key in FC: return FC[key]
-    cands=[]
-    if lang=="hi":
-        lc=LANGUAGES["hi"]
-        bp=FONTS_DIR/"NotoSansDevanagari-Bold.ttf"
-        rp=FONTS_DIR/"NotoSansDevanagari-Regular.ttf"
-        _dl(lc["font_url"],bp); _dl(lc["font_url_reg"],rp)
-        cands=[bp if bold else rp]
-    cands+=[
-        FONTS_DIR/("Poppins-Bold.ttf" if bold else "Poppins-Regular.ttf"),
+    key = f"{lang}_{size}_{bold}"
+    if key in FC:
+        return FC[key]
+
+    cands = []
+
+    if lang == "hi":
+        # Primary: downloaded Noto Devanagari
+        bp = FONTS_DIR / "NotoSansDevanagari-Bold.ttf"
+        rp = FONTS_DIR / "NotoSansDevanagari-Regular.ttf"
+
+        # Ensure downloaded (lazy fallback if _ensure_hindi_fonts wasn't called)
+        target = bp if bold else rp
+        if not target.exists() or target.stat().st_size < 10000:
+            urls = DEVANAGARI_FONT_URLS["bold" if bold else "regular"]
+            for url in urls:
+                _dl(url, target)
+                if target.exists() and target.stat().st_size > 10000:
+                    break
+
+        cands = [target]
+
+        # System Noto fallbacks
+        for sp in SYSTEM_DEVANAGARI_PATHS:
+            if Path(sp).exists():
+                cands.append(Path(sp))
+
+    # Latin fallbacks (won't render Hindi but better than nothing)
+    cands += [
+        FONTS_DIR / ("Poppins-Bold.ttf" if bold else "Poppins-Regular.ttf"),
         Path("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
              if bold else "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"),
         Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
              if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
     ]
+
     for p in cands:
-        if Path(p).exists():
-            f=ImageFont.truetype(str(p),size); FC[key]=f; return f
+        p = Path(p)
+        if p.exists() and p.stat().st_size > 1000:
+            try:
+                f = ImageFont.truetype(str(p), size)
+                FC[key] = f
+                return f
+            except Exception:
+                continue
+
+    log.warning(f"No valid font found for {lang} size {size} — using default")
     return ImageFont.load_default()
+
 
 # ── Math ───────────────────────────────────────────────────────────────────────
 def _a(v): return max(0,min(255,int(v)))
@@ -575,6 +675,9 @@ class VideoCreator:
                     scene_paths: list = None) -> Path:
 
         log.info(f"🎬 [{reel_style.upper()}] {duration}s…")
+
+        # Pre-download Hindi fonts before any rendering
+        _ensure_hindi_fonts()
 
         import config as cfg
         topic_key = "space"
