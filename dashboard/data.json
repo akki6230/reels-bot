@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-09T03:24:28.659629+00:00",
-  "total_runs": 24,
+  "generated_at": "2026-06-09T03:44:08.369634+00:00",
+  "total_runs": 25,
   "posted": 14,
   "failed": 0,
-  "dry_runs": 4,
+  "dry_runs": 5,
   "en_posted": 4,
   "hi_posted": 10,
-  "success_rate": 58.3,
+  "success_rate": 56.0,
   "topic_counts": {
     "space": 3,
     "worldnews": 1,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-09T03:44:08.368965+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "dry_run_ok",
+      "hook": "एक सेकंड में 3 लाख किमी दूर जाएंगे",
+      "category": "Galaxies",
+      "media_id": "",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-09T03:24:28.659245+00:00",
       "topic": "sciencewrong",
@@ -298,16 +311,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-09T03:24:28.659245+00:00",
-    "topic": "sciencewrong",
+    "timestamp": "2026-06-09T03:44:08.368965+00:00",
+    "topic": "space",
     "lang": "hi",
-    "status": "cancelled",
-    "hook": "",
-    "category": "",
+    "status": "dry_run_ok",
+    "hook": "एक सेकंड में 3 लाख किमी दूर जाएंगे",
+    "category": "Galaxies",
     "media_id": "",
     "error": "",
-    "image_source": "",
-    "reel_style": "",
-    "duration": 0
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 20
   }
 }
