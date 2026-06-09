@@ -147,30 +147,53 @@ Body: {body}
 class FactGenerator:
     def __init__(self):
         self.client = Anthropic(api_key=ANTHROPIC_API_KEY)
-        self._used  = self._load_used()
+        from fact_memory import FactMemory
+        self.memory    = FactMemory()
         IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
     def generate(self, topic_key: str, topic_config: dict,
                  lang: str = "hi") -> dict:
+
         prompt = TOPIC_PROMPTS.get(topic_key, TOPIC_PROMPTS["mindblowing"])
 
-        recent = self._used.get(topic_key, [])[-6:]
-        if recent:
-            avoid = ", ".join(f'"{c}"' for c in recent)
-            prompt += f"\n\nइन categories को avoid करें: {avoid}"
+        # Add memory context — tell Claude what to avoid
+        avoid_ctx = self.memory.get_avoid_context(topic_key)
+        if avoid_ctx:
+            prompt += f"\n\n---\n{avoid_ctx}\n---\n\nBe creative and different from the above."
 
-        msg  = self.client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=700,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        data = self._parse_json(msg.content[0].text)
-        log.info(f"Generated: {data['hook'][:60]}")
+        max_attempts = 3
+        for attempt in range(max_attempts):
+            msg  = self.client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=700,
+                system=SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            data = self._parse_json(msg.content[0].text)
+            log.info(f"Generated (attempt {attempt+1}): {data['hook'][:60]}")
 
-        # Verify
-        data = self._verify(data)
-        self._track(topic_key, data.get("fact_category", ""))
+            # Check for duplicate
+            if self.memory.is_duplicate(topic_key, data["hook"], data["body"]):
+                log.warning(f"Duplicate detected — regenerating ({attempt+1}/{max_attempts})")
+                prompt += f"\n\nThis hook was too similar to recent ones: '{data['hook']}'\nGenerate something completely different."
+                continue
+
+            # Verify accuracy
+            data = self._verify(data)
+
+            # Track in memory
+            self.memory.track(
+                topic    = topic_key,
+                hook     = data["hook"],
+                body     = data["body"],
+                category = data.get("fact_category", ""),
+            )
+            return data
+
+        # After max attempts, return last generated (at least different category)
+        log.warning("Max uniqueness attempts reached — using last generated")
+        self.memory.track(topic_key, data["hook"], data["body"],
+                          data.get("fact_category",""))
         return data
 
     def _verify(self, data: dict) -> dict:
@@ -335,17 +358,3 @@ class FactGenerator:
         raw = re.sub(r"^```json\s*","",raw.strip(),flags=re.MULTILINE)
         raw = re.sub(r"\s*```\s*$","",raw,flags=re.MULTILINE)
         return json.loads(raw)
-
-    def _load_used(self) -> dict:
-        if USED_FACTS_FILE.exists():
-            try: return json.loads(USED_FACTS_FILE.read_text())
-            except: pass
-        return {}
-
-    def _track(self, key: str, category: str):
-        if not category: return
-        bucket = self._used.setdefault(key, [])
-        bucket.append(category)
-        self._used[key] = bucket[-30:]
-        USED_FACTS_FILE.parent.mkdir(parents=True, exist_ok=True)
-        USED_FACTS_FILE.write_text(json.dumps(self._used, indent=2))

@@ -64,8 +64,8 @@ jobs:
             output/logs
             output/used_facts.json
             fonts/
-          key: reels-cache-v3-${{ github.run_number }}
-          restore-keys: reels-cache-v3-
+          key: reels-cache-v4-${{ github.run_number }}
+          restore-keys: reels-cache-v4-
 
       - name: 🎯 Determine topic
         id: topic

@@ -382,11 +382,17 @@ def render_slide(slide: dict, photo: Image.Image,
 class CarouselGenerator:
     def __init__(self):
         self.client = Anthropic(api_key=ANTHROPIC_API_KEY)
+        from fact_memory import FactMemory
+        self.memory = FactMemory()
 
     def generate_content(self, topic_key: str) -> dict:
-        """Generate 5 slides of content (1 intro + 4 facts)."""
-        prompt = CAROUSEL_PROMPTS.get(topic_key, CAROUSEL_PROMPTS["mindblowing"])
-        msg    = self.client.messages.create(
+        """Generate 5 slides with uniqueness check."""
+        prompt    = CAROUSEL_PROMPTS.get(topic_key, CAROUSEL_PROMPTS["mindblowing"])
+        avoid_ctx = self.memory.get_avoid_context(topic_key)
+        if avoid_ctx:
+            prompt += f"\n\n---\n{avoid_ctx}\n---\nBe creative and completely different."
+
+        msg  = self.client.messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=1000,
             system=SYSTEM,
@@ -396,7 +402,19 @@ class CarouselGenerator:
         raw  = re.sub(r"^```json\s*", "", raw, flags=re.MULTILINE)
         raw  = re.sub(r"\s*```\s*$",  "", raw, flags=re.MULTILINE)
         data = json.loads(raw)
-        log.info(f"📋 Carousel: {data.get('title','')} — {len(data.get('slides',[]))} slides")
+
+        # Track all fact headlines in memory
+        slides = data.get("slides", [])
+        for slide in slides:
+            if slide.get("type") == "fact":
+                self.memory.track(
+                    topic    = topic_key,
+                    hook     = slide.get("headline", ""),
+                    body     = slide.get("detail", ""),
+                    category = data.get("title", ""),
+                )
+
+        log.info(f"📋 Carousel: {data.get('title','')} — {len(slides)} slides")
         return data
 
     def fetch_images(self, slides: list, topic_key: str,
