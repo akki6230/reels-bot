@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-09T10:28:47.441672+00:00",
-  "total_runs": 30,
-  "posted": 14,
+  "generated_at": "2026-06-09T10:52:05.986270+00:00",
+  "total_runs": 31,
+  "posted": 15,
   "failed": 1,
   "dry_runs": 6,
   "en_posted": 4,
-  "hi_posted": 10,
-  "success_rate": 46.7,
+  "hi_posted": 11,
+  "success_rate": 48.4,
   "topic_counts": {
-    "space": 3,
+    "space": 4,
     "worldnews": 1,
     "sports": 2,
     "science": 5,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-09T10:52:05.985962+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "हमारी पूरी दुनिया एक धूल है।",
+      "category": "Planets",
+      "media_id": "3915653484266099297_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 24
+    },
     {
       "timestamp": "2026-06-09T10:28:47.441283+00:00",
       "topic": "psychology",
@@ -376,16 +389,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-09T10:28:47.441283+00:00",
-    "topic": "psychology",
+    "timestamp": "2026-06-09T10:52:05.985962+00:00",
+    "topic": "space",
     "lang": "hi",
-    "status": "success",
-    "hook": "",
-    "category": "",
-    "media_id": "",
+    "status": "posted",
+    "hook": "हमारी पूरी दुनिया एक धूल है।",
+    "category": "Planets",
+    "media_id": "3915653484266099297_24336816956",
     "error": "",
-    "image_source": "",
-    "reel_style": "",
-    "duration": 0
+    "image_source": "pil",
+    "reel_style": "cartoon",
+    "duration": 24
   }
 }
