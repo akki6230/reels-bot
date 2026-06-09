@@ -1,9 +1,6 @@
 """
-src/main.py — Pipeline orchestrator.
-- Hindi only
-- 30% voiceover probability
-- 10-20s duration (20s if voiceover)
-- Music energy matched to topic
+src/main.py — Pipeline with illustrated + animated mode selection.
+65% illustrated (HF scenes), 35% animated (kinetic/documentary/cartoon)
 """
 
 import os, sys, json, random, logging
@@ -16,8 +13,9 @@ VIDEOS_DIR = OUTPUT_DIR / "videos"
 LOGS_DIR   = OUTPUT_DIR / "logs"
 IMAGES_DIR = OUTPUT_DIR / "images"
 AUDIO_DIR  = OUTPUT_DIR / "audio"
+SCENES_DIR = OUTPUT_DIR / "scenes"
 
-for d in [VIDEOS_DIR, LOGS_DIR, IMAGES_DIR, OUTPUT_DIR/"music", AUDIO_DIR]:
+for d in [VIDEOS_DIR,LOGS_DIR,IMAGES_DIR,OUTPUT_DIR/"music",AUDIO_DIR,SCENES_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
@@ -40,7 +38,17 @@ from narration   import generate_narration
 from audio_mixer import mix_audio
 from poster      import InstagramPoster
 
-REEL_STYLES = ["kinetic", "documentary", "cartoon"]
+# Style selection weights
+# 65% illustrated, 35% animated (kinetic/documentary/cartoon)
+ILLUSTRATED_PROB = 0.65
+ANIMATED_STYLES  = ["kinetic", "documentary", "cartoon"]
+
+
+def pick_style() -> str:
+    """Pick reel style: 65% illustrated, 35% animated."""
+    if random.random() < ILLUSTRATED_PROB:
+        return "illustrated"
+    return random.choice(ANIMATED_STYLES)
 
 
 def run_pipeline(topic_key: str, lang: str = "hi",
@@ -53,37 +61,52 @@ def run_pipeline(topic_key: str, lang: str = "hi",
     }
 
     try:
-        # 1 — Duration + voiceover decision
+        # 1 — Duration + voiceover
         duration, use_voice = get_duration_and_voice()
-        result["duration"]    = duration
-        result["use_voice"]   = use_voice
+        result["duration"]  = duration
+        result["use_voice"] = use_voice
         log.info(f"▶ [{topic['name_hi']}] {duration}s | Voice: {'YES' if use_voice else 'NO'}")
 
-        # 2 — Generate + verify fact
+        # 2 — Style selection
+        reel_style = pick_style()
+        result["reel_style"] = reel_style
+        log.info(f"🎨 Style: {reel_style}")
+
+        # 3 — Generate + verify fact
         generator = FactGenerator()
         fact_data = generator.generate(topic_key, topic, lang)
         result["hook"]     = fact_data["hook"]
         result["category"] = fact_data.get("fact_category","")
         log.info(f"✅ Fact: {fact_data['hook'][:60]}")
 
-        # 3 — Image
-        image_path, img_source, _ = generator.fetch_image(
-            topic["image_keywords"], topic_key
-        )
-        result["image_source"] = img_source
-        log.info(f"✅ Image [{img_source}]: {image_path.name}")
+        # 4 — Illustrated: generate 3 scenes; Animated: fetch 1 image
+        scene_paths = None
+        image_path  = None
 
-        # 4 — Reel style
-        reel_style = random.choice(REEL_STYLES)
-        result["reel_style"] = reel_style
+        if reel_style == "illustrated":
+            log.info("📸 Generating illustrated scenes...")
+            from scene_gen import SceneGenerator
+            run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+            sg = SceneGenerator()
+            scene_paths = sg.generate_scenes(topic_key, fact_data, run_id)
+            result["image_source"] = "illustrated_hf"
+            # Duration: illustrated reels always 15-21s (3 scenes × 5-7s)
+            duration = len(scene_paths) * random.randint(5, 7)
+            result["duration"] = duration
+            log.info(f"✅ {len(scene_paths)} scenes generated, {duration}s reel")
+        else:
+            image_path, img_source, _ = generator.fetch_image(
+                topic["image_keywords"], topic_key
+            )
+            result["image_source"] = img_source
+            log.info(f"✅ Image [{img_source}]")
 
-        # 5 — Music (energy-matched)
+        # 5 — Music
         music_mgr  = MusicManager()
         music_path = music_mgr.get_track(topic["music_mood"], topic_key)
         vol        = get_music_volume(topic["music_energy"])
-        log.info(f"✅ Music [{topic['music_energy']}]: {music_path.name}")
 
-        # 6 — Voiceover (only 30% of reels)
+        # 6 — Voiceover (30% probability)
         final_audio = music_path
         if use_voice:
             log.info("🎙 Generating voiceover...")
@@ -96,20 +119,22 @@ def run_pipeline(topic_key: str, lang: str = "hi",
                     music_path=music_path, narration_path=narr,
                     output_dir=AUDIO_DIR, duration=duration,
                 )
-                log.info(f"✅ Mixed audio: {final_audio.name}")
-            else:
-                log.warning("Voiceover failed — using music only")
 
         # 7 — Render video
         creator    = VideoCreator()
         video_path = creator.create_reel(
-            image_path=image_path, music_path=final_audio,
-            fact_data=fact_data, topic=topic, lang=lang,
-            output_dir=VIDEOS_DIR, reel_style=reel_style,
-            duration=duration, music_volume=vol,
+            image_path   = image_path or Path("/dev/null"),
+            music_path   = final_audio,
+            fact_data    = fact_data,
+            topic        = topic,
+            lang         = lang,
+            output_dir   = VIDEOS_DIR,
+            reel_style   = reel_style,
+            duration     = duration,
+            music_volume = vol,
+            scene_paths  = scene_paths,
         )
         result["video_path"] = str(video_path)
-        log.info(f"✅ Video: {video_path.name}")
 
         # 8 — Post
         if dry_run:
@@ -127,12 +152,12 @@ def run_pipeline(topic_key: str, lang: str = "hi",
     except Exception as exc:
         result["status"] = "failed"
         result["error"]  = str(exc)
-        log.error(f"❌ Failed: {exc}", exc_info=True)
+        log.error(f"❌ {exc}", exc_info=True)
         sys.exit(1)
     finally:
-        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        ts=(datetime.now().strftime("%Y%m%d_%H%M%S"))
         (LOGS_DIR/f"run_{topic_key}_{lang}_{ts}.json").write_text(
-            json.dumps(result, indent=2))
+            json.dumps(result,indent=2))
     return result
 
 
@@ -147,8 +172,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     topic_key = args[1] if len(args) > 1 else "space"
-    lang      = "hi"  # always Hindi
     if topic_key not in TOPICS:
         print(f"Unknown topic: {topic_key}")
         sys.exit(1)
-    run_pipeline(topic_key, lang, dry_run=dry_run)
+    run_pipeline(topic_key, "hi", dry_run=dry_run)
