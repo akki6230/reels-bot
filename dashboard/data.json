@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-09T03:44:08.369634+00:00",
-  "total_runs": 25,
+  "generated_at": "2026-06-09T03:55:54.787341+00:00",
+  "total_runs": 26,
   "posted": 14,
-  "failed": 0,
+  "failed": 1,
   "dry_runs": 5,
   "en_posted": 4,
   "hi_posted": 10,
-  "success_rate": 56.0,
+  "success_rate": 53.8,
   "topic_counts": {
     "space": 3,
     "worldnews": 1,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-09T03:55:54.786959+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "failed",
+      "hook": "एक ग्रह जो पृथ्वी से 10 लाख गुना बड़ा",
+      "category": "Black Holes",
+      "media_id": "",
+      "error": "name 'body_start' is not defined",
+      "image_source": "illustrated_hf",
+      "reel_style": "illustrated",
+      "duration": 15
+    },
     {
       "timestamp": "2026-06-09T03:44:08.368965+00:00",
       "topic": "space",
@@ -311,16 +324,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-09T03:44:08.368965+00:00",
+    "timestamp": "2026-06-09T03:55:54.786959+00:00",
     "topic": "space",
     "lang": "hi",
-    "status": "dry_run_ok",
-    "hook": "एक सेकंड में 3 लाख किमी दूर जाएंगे",
-    "category": "Galaxies",
+    "status": "failed",
+    "hook": "एक ग्रह जो पृथ्वी से 10 लाख गुना बड़ा",
+    "category": "Black Holes",
     "media_id": "",
-    "error": "",
-    "image_source": "pexels",
-    "reel_style": "kinetic",
-    "duration": 20
+    "error": "name 'body_start' is not defined",
+    "image_source": "illustrated_hf",
+    "reel_style": "illustrated",
+    "duration": 15
   }
 }
