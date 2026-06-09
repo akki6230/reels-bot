@@ -218,155 +218,163 @@ def _txt_w(text, size, bold=False):
 def render_slide(slide: dict, photo: Image.Image,
                  topic_key: str, slide_idx: int,
                  total_slides: int) -> Image.Image:
-    """Render one 1080×1920 carousel slide."""
-
+    """
+    Render one 1080×1920 carousel slide.
+    Photo fills the ENTIRE slide. Text overlaid in center.
+    No split layout — exactly like the reference images.
+    """
     theme = THEMES.get(topic_key, THEMES["space"])
     acc   = theme["acc"]
     num_c = theme["num"]
-    bg_c  = theme["bg"]
 
-    img   = Image.new("RGB", (W, H), bg_c)
-    draw  = ImageDraw.Draw(img)
+    # ── Full-bleed background photo ────────────────────────────────────────
+    img = photo.resize((W, H), Image.LANCZOS)
+    # Desaturate slightly + darken for text readability
+    img = ImageEnhance.Color(img).enhance(0.80)
+    img = ImageEnhance.Brightness(img).enhance(0.60)
+    img = img.convert("RGBA")
 
-    # ── Background photo (top 65% of slide) ───────────────────────────────
-    photo_h = int(H * 0.62)
-    photo_r = photo.resize((W, photo_h), Image.LANCZOS)
-    # Slight desaturate + darken for premium feel
-    photo_r = ImageEnhance.Color(photo_r).enhance(0.85)
-    photo_r = ImageEnhance.Brightness(photo_r).enhance(0.75)
-    img.paste(photo_r, (0, 0))
+    # Dark overlay in center area for text contrast
+    overlay = Image.new("RGBA", (W, H), (0,0,0,0))
+    od      = ImageDraw.Draw(overlay)
 
-    # Gradient fade from photo into black
-    for y in range(photo_h - 200, photo_h + 60):
-        if 0 <= y < H:
-            prog   = (y - (photo_h - 200)) / 260
-            prog   = max(0, min(1, prog))
-            alpha  = int(255 * (prog ** 1.4))
-            draw.rectangle([0, y, W, y+1],
-                           fill=(*bg_c, alpha))
+    # Vertical gradient — darker in middle where text lives
+    for y in range(H):
+        fy    = y / H
+        # Darkest around 40-80% height (text area)
+        dist  = abs(fy - 0.60)
+        alpha = int(180 * max(0, 1 - dist * 2.5))
+        od.rectangle([0, y, W, y+1], fill=(0,0,0,alpha))
 
-    # Vignette on photo
-    for i in range(0, photo_h, 1):
-        va = _a(120 * (1 - i / photo_h) ** 2)
-        if va > 2:
-            draw.rectangle([0, i, W, i+1], fill=(0,0,0,va))
+    img = Image.alpha_composite(img, overlay)
+    draw = ImageDraw.Draw(img)
 
-    # ── Thin accent top bar ────────────────────────────────────────────────
-    draw.rectangle([0, 0, W, 5], fill=acc)
+    # ── Thin accent bar at top ─────────────────────────────────────────────
+    draw.rectangle([0, 0, W, 6], fill=(*acc, 255))
 
-    # ── Brand watermark top-right ──────────────────────────────────────────
-    br_fnt = _f(24, lang="en")
-    draw.text((W - PAD - 230, 18), "cosmos.capsule",
-              font=br_fnt, fill=(200,200,200,200))
+    # ── Brand watermark top-left ───────────────────────────────────────────
+    br_fnt = _f(26, bold=True, lang="en")
+    draw.text((PAD, 20), "cosmos.capsule",
+              font=br_fnt, fill=(*acc, 220))
 
-    # Slide indicator dots top-right
-    dot_y = 50
+    # ── Slide indicator dots top-right ────────────────────────────────────
+    dot_y = 30
     for di in range(total_slides):
-        dx    = W - PAD - (total_slides - di) * 22
-        is_c  = di == slide_idx
-        col_  = acc if is_c else (100,100,100)
-        r_    = 5 if is_c else 3
+        dx   = W - PAD - (total_slides - di - 1) * 26
+        is_c = di == slide_idx
+        r_   = 6 if is_c else 4
+        col_ = acc if is_c else (140,140,140)
         draw.ellipse([dx-r_, dot_y-r_, dx+r_, dot_y+r_],
-                     fill=col_)
-
-    # ── Text section (bottom 38%) ──────────────────────────────────────────
-    text_start = photo_h - 30
+                     fill=(*col_, 255))
 
     slide_type = slide.get("type", "fact")
 
     if slide_type == "intro":
-        # Intro slide: large centered headline + swipe prompt
+        # ── INTRO SLIDE — centered big text ───────────────────────────────
         headline = slide.get("headline", "")
         detail   = slide.get("detail", "Swipe करें 👉")
 
-        # Large headline
-        h_size  = 58
+        h_size  = 62
         h_lines = _wrap_mixed(headline, h_size, W-PAD*2, bold=True)
-        h_total = len(h_lines) * 72
-        hy      = text_start + 30
+        h_total = len(h_lines) * 78
+        # Center vertically
+        hy      = H//2 - h_total//2 - 40
 
         for line in h_lines:
-            lw_ = _txt_w(line, h_size, bold=True)
             _txt_mixed(draw, 0, hy, line, h_size,
                        (*acc, 255), bold=True, center_w=W)
-            hy += 72
+            hy += 78
 
-        # Detail / swipe prompt
-        d_size  = 34
+        # Divider line
+        draw.rectangle([PAD*3, hy+10, W-PAD*3, hy+13],
+                       fill=(*acc, 120))
+
+        # Detail
+        d_size  = 36
         d_lines = _wrap_mixed(detail, d_size, W-PAD*2)
-        hy     += 16
+        dy      = hy + 28
         for line in d_lines:
-            _txt_mixed(draw, 0, hy, line, d_size,
+            _txt_mixed(draw, 0, dy, line, d_size,
                        (220,220,220,240), center_w=W)
-            hy += 46
+            dy += 50
 
-        # Big arrow "swipe" indicator
-        arr_fnt = _f(60, lang="en")
-        draw.text((W//2-20, H-180), "›", font=arr_fnt,
-                  fill=(*acc, 200))
+        # Swipe arrow at bottom
+        arr_fnt = _f(72, lang="en")
+        draw.text((W//2-22, H-180), "›",
+                  font=arr_fnt, fill=(*acc, 200))
 
     else:
-        # Fact slide: number badge + headline + detail
+        # ── FACT SLIDE — number + headline + detail centered ──────────────
         number   = slide.get("number", f"0{slide_idx}")
         headline = slide.get("headline", "")
         detail   = slide.get("detail", "")
 
-        # Number badge
-        num_fnt  = _f(52, bold=True, lang="en")
-        num_bb   = num_fnt.getbbox(number)
-        # Pill background
-        pill_w   = num_bb[2] + 32
-        pill_h   = 60
-        pill_x   = PAD
-        pill_y   = text_start + 20
-        draw.rounded_rectangle(
-            [pill_x, pill_y, pill_x+pill_w, pill_y+pill_h],
-            radius=14, fill=(*num_c, 30),
-            outline=(*num_c, 180), width=2
-        )
-        draw.text((pill_x+16, pill_y+4), number,
-                  font=num_fnt, fill=(*num_c, 255))
-
-        # Headline (bold, accent color)
-        h_size  = 54
-        h_start = pill_y + pill_h + 18
+        # Calculate total text block height for centering
+        h_size  = 56
         h_lines = _wrap_mixed(headline, h_size, W-PAD*2, bold=True)
-
-        hy = h_start
-        for line in h_lines:
-            lw_ = _txt_w(line, h_size, bold=True)
-            lx_ = (W - lw_) // 2
-            # Glow pass
-            _txt_mixed(draw, lx_+1, hy+1, line, h_size,
-                       (0,0,0,80), bold=True, shadow=False)
-            _txt_mixed(draw, lx_, hy, line, h_size,
-                       (*acc, 255), bold=True, shadow=False)
-            hy += 66
-
-        # Detail (white, regular)
         d_size  = 32
-        d_start = hy + 12
         d_lines = _wrap_mixed(detail, d_size, W-PAD*2)
 
-        dy = d_start
+        num_h   = 72    # number badge height
+        h_h     = len(h_lines) * 70
+        gap     = 20
+        d_h     = len(d_lines) * 44
+        total_h = num_h + gap + h_h + gap + d_h
+
+        # Start Y to center the whole block
+        start_y = H//2 - total_h//2
+
+        # Number badge
+        num_fnt = _f(48, bold=True, lang="en")
+        num_bb  = num_fnt.getbbox(number)
+        pill_w  = num_bb[2] + 40
+        pill_h  = 60
+        pill_x  = (W - pill_w) // 2   # centered
+        pill_y  = start_y
+
+        draw.rounded_rectangle(
+            [pill_x, pill_y, pill_x+pill_w, pill_y+pill_h],
+            radius=16,
+            fill=(*num_c, 35),
+            outline=(*num_c, 200),
+            width=2
+        )
+        draw.text((pill_x + 20, pill_y + 6), number,
+                  font=num_fnt, fill=(*num_c, 255))
+
+        # Headline (bold, accent color, centered)
+        hy = pill_y + pill_h + gap
+        for line in h_lines:
+            # Glow / shadow
+            _txt_mixed(draw, 2, hy+2, line, h_size,
+                       (0,0,0,100), bold=True,
+                       shadow=False, center_w=W)
+            _txt_mixed(draw, 0, hy, line, h_size,
+                       (*acc, 255), bold=True,
+                       shadow=False, center_w=W)
+            hy += 70
+
+        # Thin divider
+        draw.rectangle([PAD*2, hy+8, W-PAD*2, hy+10],
+                       fill=(*acc, 60))
+
+        # Detail (white, centered)
+        dy = hy + 24
         for line in d_lines:
-            lw_ = _txt_w(line, d_size)
-            lx_ = (W - lw_) // 2
-            _txt_mixed(draw, lx_, dy, line, d_size,
-                       (225,225,225,240), shadow=True)
+            _txt_mixed(draw, 0, dy, line, d_size,
+                       (225,225,225,235), center_w=W)
             dy += 44
 
-        # Thin accent line at very bottom
-        draw.rectangle([PAD, H-80, W-PAD, H-78],
-                       fill=(*acc, 80))
-        # Follow text
-        fl_fnt = _f(24, lang="hi")
-        fl_txt = "रोज़ नई जानकारी के लिए फॉलो करें ✨"
-        fl_w   = _txt_w(fl_txt, 24)
-        _txt_mixed(draw, 0, H-64, fl_txt, 24,
-                   (160,160,160,200), center_w=W)
+    # ── Bottom bar ─────────────────────────────────────────────────────────
+    draw.rectangle([0, H-70, W, H], fill=(0,0,0,180))
+    draw.rectangle([0, H-70, W, H-68], fill=(*acc, 80))
 
-    return img
+    fl_fnt = _f(24, lang="hi")
+    fl_txt = "रोज़ नई जानकारी के लिए फॉलो करें ✨"
+    _txt_mixed(draw, 0, H-52, fl_txt, 24,
+               (180,180,180,200), center_w=W)
+
+    return img.convert("RGB")
 
 
 # ── CarouselGenerator ──────────────────────────────────────────────────────────
@@ -423,15 +431,20 @@ class CarouselGenerator:
         try:
             resp = requests.get(
                 "https://api.pexels.com/v1/search",
-                params={"query": query, "orientation": "portrait",
-                        "size": "large", "per_page": 15,
-                        "page": random.randint(1, 4)},
+                params={
+                    "query":       query,
+                    "orientation": "portrait",   # always portrait for 9:16
+                    "size":        "large",
+                    "per_page":    15,
+                    "page":        random.randint(1, 4),
+                },
                 headers={"Authorization": PEXELS_API_KEY},
                 timeout=15,
             )
             resp.raise_for_status()
             photos = resp.json().get("photos", [])
-            if not photos: return None
+            if not photos:
+                return None
             photo    = random.choice(photos)
             img_resp = requests.get(photo["src"]["large2x"], timeout=30)
             out.write_bytes(img_resp.content)
@@ -444,12 +457,14 @@ class CarouselGenerator:
     def _picsum(self, out: Path) -> Path | None:
         try:
             seed = random.randint(1, 1000)
+            # Must be portrait 1080x1920 for carousel slides
             resp = requests.get(
                 f"https://picsum.photos/seed/{seed}/1080/1920",
                 timeout=20
             )
             resp.raise_for_status()
-            if len(resp.content) < 10000: return None
+            if len(resp.content) < 10000:
+                return None
             out.write_bytes(resp.content)
             log.info(f"  Picsum: {out.name}")
             return out
@@ -458,22 +473,63 @@ class CarouselGenerator:
             return None
 
     def _pil_fallback(self, topic_key: str, out: Path) -> Path:
+        """Rich PIL background when no photo available."""
+        import math
         th   = THEMES.get(topic_key, THEMES["space"])
         bg   = th["bg"]
         acc  = th["acc"]
-        img  = Image.new("RGB", (W, H), bg)
+        num  = th["num"]
+        img  = Image.new("RGBA", (W, H), (*bg, 255))
         draw = ImageDraw.Draw(img)
-        for i in range(8):
-            cx = random.randint(100, W-100)
-            cy = random.randint(100, H-100)
-            r  = random.randint(50, 200)
-            draw.ellipse([cx-r,cy-r,cx+r,cy+r], outline=(*acc,30), width=2)
-        img.save(out, "JPEG", quality=92)
+
+        # Multi-stop gradient
+        colors = [bg, tuple(min(255,c+30) for c in bg),
+                  tuple(min(255,c+15) for c in bg), bg]
+        pix = img.load()
+        n   = len(colors)
+        for y in range(H):
+            fy  = y / H
+            idx = fy * (n-1)
+            i   = min(int(idx), n-2)
+            fr  = idx - i
+            c1, c2 = colors[i], colors[i+1]
+            color  = tuple(int(c1[j]+(c2[j]-c1[j])*fr) for j in range(3))
+            for x in range(W):
+                pix[x,y] = (*color, 255)
+
+        # Decorative circles
+        rng = random.Random(hash(topic_key) % 999)
+        for _ in range(12):
+            cx_ = rng.randint(0, W)
+            cy_ = rng.randint(0, H)
+            r_  = rng.randint(60, 300)
+            draw.ellipse([cx_-r_,cy_-r_,cx_+r_,cy_+r_],
+                         outline=(*acc,35), width=2)
+
+        # Stars for space topic
+        if topic_key == "space":
+            for _ in range(250):
+                sx, sy = rng.randint(0,W), rng.randint(0,H)
+                ss     = rng.randint(1,3)
+                draw.ellipse([sx-ss,sy-ss,sx+ss,sy+ss],
+                             fill=(255,255,255,rng.randint(80,200)))
+
+        # Vignette
+        for r_ in range(0, min(540,960), 12):
+            fade = int(100*(1-r_/min(540,960))**2)
+            draw.rectangle([r_,r_,W-r_,H-r_],
+                           outline=(0,0,0,fade),width=12)
+
+        img.convert("RGB").save(out, "JPEG", quality=92)
         return out
 
     def render_all_slides(self, content: dict, image_paths: list,
                            topic_key: str, run_id: str) -> list[Path]:
-        """Render all slides and save as individual JPGs."""
+        """
+        Render text directly onto each fetched image.
+        Overwrites the original fetched file — no duplicate images.
+        Total output = same number of files as input.
+        """
         _ensure_fonts()
         slides       = content.get("slides", [])
         n            = len(slides)
@@ -481,14 +537,18 @@ class CarouselGenerator:
 
         for i, (slide, img_path) in enumerate(zip(slides, image_paths)):
             try:
+                # Open the already-fetched Pexels/Picsum image
                 photo = Image.open(img_path).convert("RGB")
             except Exception:
-                photo = Image.new("RGB", (W, H), THEMES.get(topic_key,THEMES["space"])["bg"])
+                photo = Image.new("RGB", (W, H),
+                                  THEMES.get(topic_key, THEMES["space"])["bg"])
 
+            # Render text centered on the image
             rendered = render_slide(slide, photo, topic_key, i, n)
-            out_path = CAROUSEL_DIR / f"slide_{run_id}_{i:02d}.jpg"
-            rendered.save(out_path, "JPEG", quality=95)
-            output_paths.append(out_path)
-            log.info(f"  ✅ Slide {i+1}/{n}: {out_path.name}")
+
+            # Save back to the SAME path — no new file created
+            rendered.save(img_path, "JPEG", quality=95)
+            output_paths.append(img_path)
+            log.info(f"  ✅ Slide {i+1}/{n}: {img_path.name}")
 
         return output_paths
