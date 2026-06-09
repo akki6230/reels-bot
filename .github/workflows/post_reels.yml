@@ -95,6 +95,7 @@ jobs:
           name: reel-${{ steps.topic.outputs.topic }}-${{ github.run_number }}
           path: |
             output/videos/*.mp4
+            output/carousel/*.jpg
             output/logs/run_*.json
           retention-days: 7
 
