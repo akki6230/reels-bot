@@ -38,14 +38,14 @@ from narration   import generate_narration
 from audio_mixer import mix_audio
 from poster      import InstagramPoster
 
-# Style weights: 70% listicle, 30% animated
-LISTICLE_PROB  = 0.70
+# Style weights: 70% animated reels, 30% carousel
+CAROUSEL_PROB   = 0.30
 ANIMATED_STYLES = ["kinetic", "documentary", "cartoon"]
 
 
 def pick_style() -> str:
-    if random.random() < LISTICLE_PROB:
-        return "listicle"
+    if random.random() < CAROUSEL_PROB:
+        return "listicle"   # carousel
     return random.choice(ANIMATED_STYLES)
 
 
