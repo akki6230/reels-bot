@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-08T12:18:37.203703+00:00",
-  "total_runs": 20,
-  "posted": 13,
+  "generated_at": "2026-06-08T17:00:01.133109+00:00",
+  "total_runs": 21,
+  "posted": 14,
   "failed": 0,
   "dry_runs": 4,
   "en_posted": 4,
-  "hi_posted": 9,
-  "success_rate": 65.0,
+  "hi_posted": 10,
+  "success_rate": 66.7,
   "topic_counts": {
-    "space": 2,
+    "space": 3,
     "worldnews": 1,
     "sports": 2,
     "science": 5,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-08T17:00:01.132759+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "एक सेकंड में सूरज से 47 लाख किमी दूर",
+      "category": "NASA",
+      "media_id": "3915113855817244849_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "documentary",
+      "duration": 17
+    },
     {
       "timestamp": "2026-06-08T12:18:37.203355+00:00",
       "topic": "space",
@@ -246,16 +259,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-08T12:18:37.203355+00:00",
+    "timestamp": "2026-06-08T17:00:01.132759+00:00",
     "topic": "space",
     "lang": "hi",
     "status": "posted",
-    "hook": "एक तारा जो 10 बिलियन साल पुराना है",
-    "category": "Stars",
-    "media_id": "3914972222324941293_24336816956",
+    "hook": "एक सेकंड में सूरज से 47 लाख किमी दूर",
+    "category": "NASA",
+    "media_id": "3915113855817244849_24336816956",
     "error": "",
     "image_source": "pexels",
-    "reel_style": "cartoon",
+    "reel_style": "documentary",
     "duration": 17
   }
 }
