@@ -31,20 +31,19 @@ HF_API_KEY        = os.environ.get("HF_API_KEY", "")
 # Best HF models for Indian cartoon illustration style
 HF_MODELS = [
     {
-        "model": "stabilityai/stable-diffusion-xl-base-1.0",
-        "url":   "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+        "model": "stabilityai/stable-diffusion-2-1",
+        "url":   "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
     },
     {
         "model": "runwayml/stable-diffusion-v1-5",
         "url":   "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
     },
     {
-        "model": "stabilityai/stable-diffusion-2-1",
-        "url":   "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
+        "model": "prompthero/openjourney-v4",
+        "url":   "https://api-inference.huggingface.co/models/prompthero/openjourney-v4",
     },
 ]
 
-# Router endpoint — newer HF API that works better
 HF_ROUTER_URL = "https://router.huggingface.co/hf-inference/models/{model}/v1/images/generate"
 
 # Style suffix added to every prompt for consistent look

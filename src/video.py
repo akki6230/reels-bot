@@ -432,7 +432,7 @@ def _illustrated_frame(scenes: list, hook: str, body: str, body_words: list,
         _glass(draw, PAD-16, st_-10, W-PAD+16, st_+sh_+10,
                fc=(0,0,0), fa=_a(body_a*0.6), sc=acc2, sa=_a(body_a*0.2), r=14)
         for li, sl in enumerate(sls):
-            la_ = _slide(t, body_start+li*0.2, 0.35)
+            la_ = _slide(t, body_start_t+li*0.2, 0.35)
             bb_ = sf.getbbox(sl)
             _txt(draw, (W-bb_[2])//2, st_+li*48, sl, sf, txt, la_)
 
