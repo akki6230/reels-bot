@@ -30,10 +30,22 @@ HF_API_KEY        = os.environ.get("HF_API_KEY", "")
 
 # Best HF models for Indian cartoon illustration style
 HF_MODELS = [
-    "stabilityai/stable-diffusion-xl-base-1.0",
-    "runwayml/stable-diffusion-v1-5",
-    "CompVis/stable-diffusion-v1-4",
+    {
+        "model": "stabilityai/stable-diffusion-xl-base-1.0",
+        "url":   "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+    },
+    {
+        "model": "runwayml/stable-diffusion-v1-5",
+        "url":   "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+    },
+    {
+        "model": "stabilityai/stable-diffusion-2-1",
+        "url":   "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
+    },
 ]
+
+# Router endpoint — newer HF API that works better
+HF_ROUTER_URL = "https://router.huggingface.co/hf-inference/models/{model}/v1/images/generate"
 
 # Style suffix added to every prompt for consistent look
 STYLE_SUFFIX = (
@@ -165,108 +177,145 @@ Rules:
 
     def _generate_image(self, description: str, topic_key: str,
                          run_id: str, idx: int) -> Path | None:
-        """Try HF first, then Pollinations fallback."""
+        """Try HF → Pollinations → Picsum → PIL fallback."""
         out = SCENES_DIR / f"scene_{run_id}_{idx}.jpg"
 
-        # Try Hugging Face
+        # 1. Try Hugging Face (best quality)
         if HF_API_KEY:
             result = self._hf_image(description, out)
             if result:
                 return result
+            log.warning("  HF failed — trying Pollinations...")
 
-        # Try Pollinations (free, no key)
+        # 2. Try Pollinations (free, short prompt)
         result = self._pollinations_image(description, topic_key, out)
+        if result:
+            return result
+
+        # 3. Try Picsum (free beautiful photos — not illustrated but works)
+        result = self._picsum_image(out)
         if result:
             return result
 
         return None
 
+    def _picsum_image(self, out: Path) -> Path | None:
+        """Picsum.photos — free, no key, always works."""
+        try:
+            seed = random.randint(1, 1000)
+            url  = f"https://picsum.photos/seed/{seed}/1080/1920"
+            resp = requests.get(url, timeout=20)
+            resp.raise_for_status()
+            if len(resp.content) < 10000:
+                return None
+            out.write_bytes(resp.content)
+            log.info(f"  Picsum fallback: {out.name}")
+            return out
+        except Exception as e:
+            log.warning(f"  Picsum error: {e}")
+            return None
+
     def _hf_image(self, description: str, out: Path) -> Path | None:
         """Generate image via Hugging Face Inference API."""
         full_prompt = f"{description}, {STYLE_SUFFIX}"
 
-        for model in HF_MODELS:
-            try:
-                log.info(f"  HF model: {model.split('/')[-1]}")
-                url  = f"https://api-inference.huggingface.co/models/{model}"
-                resp = requests.post(
-                    url,
-                    headers={
-                        "Authorization": f"Bearer {HF_API_KEY}",
-                        "Content-Type": "application/json",
-                    },
-                    json={
-                        "inputs": full_prompt,
-                        "parameters": {
-                            "negative_prompt": NEGATIVE_PROMPT,
-                            "num_inference_steps": 25,
-                            "guidance_scale": 7.5,
-                            "width": 576,
-                            "height": 1024,
+        for model_info in HF_MODELS:
+            model = model_info["model"]
+            # Try router endpoint first (newer, more reliable)
+            endpoints = [
+                HF_ROUTER_URL.format(model=model),
+                model_info["url"],
+            ]
+
+            for url in endpoints:
+                try:
+                    log.info(f"  HF: {model.split('/')[-1]}")
+                    resp = requests.post(
+                        url,
+                        headers={
+                            "Authorization": f"Bearer {HF_API_KEY}",
+                            "Content-Type":  "application/json",
                         },
-                        "options": {"wait_for_model": True},
-                    },
-                    timeout=120,
-                )
-
-                if resp.status_code == 200 and len(resp.content) > 5000:
-                    # Upscale to 1080x1920
-                    from PIL import Image
-                    import io
-                    img = Image.open(io.BytesIO(resp.content)).convert("RGB")
-                    img = img.resize((1080, 1920), Image.LANCZOS)
-                    img.save(out, "JPEG", quality=92)
-                    log.info(f"  HF success: {out.name} ({len(resp.content)//1024}KB)")
-                    return out
-
-                elif resp.status_code == 503:
-                    log.warning(f"  HF model loading, waiting 15s...")
-                    time.sleep(15)
-                    # Retry once
-                    resp2 = requests.post(url,
-                        headers={"Authorization": f"Bearer {HF_API_KEY}",
-                                 "Content-Type": "application/json"},
-                        json={"inputs": full_prompt,
-                              "parameters": {"negative_prompt": NEGATIVE_PROMPT,
-                                             "width": 576, "height": 1024},
-                              "options": {"wait_for_model": True}},
+                        json={
+                            "inputs": full_prompt,
+                            "parameters": {
+                                "negative_prompt":    NEGATIVE_PROMPT,
+                                "num_inference_steps": 25,
+                                "guidance_scale":      7.5,
+                                "width":  576,
+                                "height": 1024,
+                            },
+                            "options": {"wait_for_model": True},
+                        },
                         timeout=120,
                     )
-                    if resp2.status_code == 200 and len(resp2.content) > 5000:
+
+                    if resp.status_code == 200 and len(resp.content) > 5000:
                         from PIL import Image
                         import io
-                        img = Image.open(io.BytesIO(resp2.content)).convert("RGB")
+                        img = Image.open(io.BytesIO(resp.content)).convert("RGB")
                         img = img.resize((1080, 1920), Image.LANCZOS)
                         img.save(out, "JPEG", quality=92)
+                        log.info(f"  ✅ HF success: {out.name}")
                         return out
-                else:
-                    log.warning(f"  HF {resp.status_code}: {resp.text[:100]}")
+                    elif resp.status_code == 503:
+                        log.warning(f"  HF model loading, waiting 20s...")
+                        time.sleep(20)
+                        continue
+                    elif resp.status_code in (401, 403):
+                        log.warning(f"  HF auth error — check HF_API_KEY secret")
+                        return None
+                    else:
+                        log.warning(f"  HF {resp.status_code}")
+                        continue
 
-            except Exception as e:
-                log.warning(f"  HF error: {e}")
-                continue
+                except requests.exceptions.ConnectionError as e:
+                    log.warning(f"  HF DNS/connection error: {str(e)[:80]}")
+                    log.warning(f"  → HF API unreachable from this runner")
+                    # DNS failure means ALL HF endpoints will fail — exit early
+                    return None
+                except Exception as e:
+                    log.warning(f"  HF error: {str(e)[:80]}")
+                    continue
 
         return None
 
     def _pollinations_image(self, description: str, topic_key: str,
                              out: Path) -> Path | None:
-        """Fallback: Pollinations.ai free tier."""
+        """Fallback: Pollinations.ai free tier with SHORT prompt."""
         try:
-            full = f"{description}, Indian 2D cartoon illustration style, flat colors"
-            enc  = urllib.parse.quote(full)
-            seed = random.randint(1, 99999)
-            url  = (f"https://image.pollinations.ai/prompt/{enc}"
-                    f"?width=512&height=912&nologo=true&seed={seed}&model=flux")
-            resp = requests.get(url, timeout=45)
+            # Keep prompt SHORT — long prompts cause 402 errors
+            # Strip any Hindi/non-ASCII characters from prompt
+            clean = re.sub(r'[^\x00-\x7F]+', '', description)
+            clean = clean[:120].strip()   # max 120 chars
+            if not clean:
+                clean = f"Indian cartoon illustration {topic_key} scene"
+
+            style = "Indian 2D cartoon flat colors clean lines"
+            full  = f"{clean}, {style}"
+            enc   = urllib.parse.quote(full)
+            seed  = random.randint(1, 99999)
+
+            # Use smaller size — free tier limit
+            url = (f"https://image.pollinations.ai/prompt/{enc}"
+                   f"?width=512&height=912&nologo=true&seed={seed}&model=flux&enhance=false")
+
+            resp = requests.get(url, timeout=60)
+
+            if resp.status_code == 402:
+                log.warning("  Pollinations: payment required — using PIL fallback")
+                return None
+
             resp.raise_for_status()
             if len(resp.content) < 5000:
                 return None
+
             from PIL import Image
             import io
             img = Image.open(io.BytesIO(resp.content)).convert("RGB")
             img = img.resize((1080, 1920), Image.LANCZOS)
             img.save(out, "JPEG", quality=92)
-            log.info(f"  Pollinations fallback: {out.name}")
+            log.info(f"  Pollinations: {out.name}")
             return out
         except Exception as e:
             log.warning(f"  Pollinations error: {e}")
