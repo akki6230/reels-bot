@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-09T10:53:54.257287+00:00",
-  "total_runs": 32,
+  "generated_at": "2026-06-09T10:59:26.512121+00:00",
+  "total_runs": 33,
   "posted": 15,
   "failed": 1,
   "dry_runs": 7,
   "en_posted": 4,
   "hi_posted": 11,
-  "success_rate": 46.9,
+  "success_rate": 45.5,
   "topic_counts": {
     "space": 4,
     "worldnews": 1,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-09T10:59:26.511788+00:00",
+      "topic": "psychology",
+      "lang": "hi",
+      "status": "success",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-06-09T10:53:54.256923+00:00",
       "topic": "space",
@@ -402,16 +415,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-09T10:53:54.256923+00:00",
-    "topic": "space",
+    "timestamp": "2026-06-09T10:59:26.511788+00:00",
+    "topic": "psychology",
     "lang": "hi",
-    "status": "dry_run_ok",
-    "hook": "अंतरिक्ष के 5 रहस्य 🚀",
+    "status": "success",
+    "hook": "",
     "category": "",
     "media_id": "",
     "error": "",
-    "image_source": "carousel_pexels",
-    "reel_style": "carousel",
-    "duration": 20
+    "image_source": "",
+    "reel_style": "",
+    "duration": 0
   }
 }
