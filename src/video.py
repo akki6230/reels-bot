@@ -305,7 +305,9 @@ def _chrome(draw,th,topic_key,t,dur,tags,follow_text):
 def _illustrated_frame(scenes: list, hook: str, body: str, body_words: list,
                         topic_key: str, lang: str, follow_text: str,
                         tags: list, t: float, dur: float,
-                        scene_times: list) -> np.ndarray:
+                        scene_times: list,
+                        body_start_t: float = 5.0,
+                        body_window: float = 8.0) -> np.ndarray:
     """
     Render illustrated reel frame.
     3 scenes, each shown for scene_dur seconds with Ken Burns effect.
@@ -416,14 +418,12 @@ def _illustrated_frame(scenes: list, hook: str, body: str, body_words: list,
             hy += 82
 
     # ── Body text fades in after scene 1 (at scene 2) ─────────────────────
-    body_start = scene_times[1][0] if len(scene_times) > 1 else dur*0.4
-    body_a     = _slide(t, body_start, 0.6)
+    body_a     = _slide(t, body_start_t, 0.6)
 
     if body_a > 0:
-        body_elapsed = max(0, t - body_start)
-        body_window  = (scene_times[2][0] if len(scene_times)>2 else dur*0.8) - body_start
+        body_elapsed = max(0, t - body_start_t)
         n_words      = min(len(body_words),
-                           int(body_elapsed/max(0.25,body_window/max(len(body_words),1)))+1)
+                           int(body_elapsed/max(0.25, body_window/max(len(body_words),1)))+1)
         sf   = _f(36, lang=lang)
         sls  = _wrap(" ".join(body_words[:n_words]), sf, W-PAD*2-10)
         st_  = hook_y + hook_h + 20
@@ -507,11 +507,11 @@ def _draw_gradient_bg(img, th, t):
         b_=int(c_a[2]+(c_b[2]-c_a[2])*fr)
         for x in range(W): pix[x,y]=(r_,g_,b_,255)
 
-def _kinetic_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur):
+def _kinetic_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur,
+                   hook_word_interval=0.35,body_start_t=5.5,body_window=None):
     th=THEMES.get(topic_key,THEMES["space"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
     base=Image.new("RGBA",(W,H)); _draw_gradient_bg(base,th,t)
     draw=ImageDraw.Draw(base); _draw_animated_bg(base,th,t,th["bg_style"])
-    # Floating emojis
     rng=random.Random(77)
     for i in range(6):
         ex_=rng.randint(PAD,W-PAD); speed=rng.uniform(40,100); offset=rng.random()*10
@@ -519,15 +519,16 @@ def _kinetic_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur
         if -40<ey_<H+20:
             try:
                 ef=_f(rng.randint(28,40),lang="en")
-                draw.text((ex_,ey_),th["emoji_pool"][i%len(th["emoji_pool"])],
-                         font=ef,fill=(255,255,255,_a(120)))
+                draw.text((ex_,ey_),th["emoji_pool"][i%len(th["emoji_pool"])],font=ef,fill=(255,255,255,_a(120)))
             except: pass
     _vignette(draw)
     ty_t,ty_b,BAR=_chrome(draw,th,topic_key,t,dur,tags,follow_text)
-    hf=_f(76,bold=True,lang=lang); hw=hook.split(); wd=0.4; hs=0.7
+    hf=_f(76,bold=True,lang=lang); hw=hook.split()
+    hs=0.7   # hook starts at 0.7s
+    bw_=body_window if body_window else dur*0.45
     shown=[]
     for wi,word in enumerate(hw):
-        ws=hs+wi*wd*0.55
+        ws=hs+wi*hook_word_interval
         if t<ws: break
         shown.append((word,min(1.0,(t-ws)/0.28)))
     tls=_wrap(" ".join(w for w,_ in shown),hf,W-PAD*2-20)
@@ -545,18 +546,18 @@ def _kinetic_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur
                 cx_+=hf.getbbox(word+" ")[2]
             ss+=1
         hy+=88
-    bt0=hs+len(hw)*wd*0.55+0.6
-    if t>bt0:
-        be=t-bt0; nw=min(len(body_words),int(be/max(0.25,(dur*0.5)/max(len(body_words),1)))+1)
+    if t>body_start_t:
+        be=t-body_start_t; nw=min(len(body_words),int(be/max(0.25,bw_/max(len(body_words),1)))+1)
         sf=_f(38,lang=lang); sls=_wrap(" ".join(body_words[:nw]),sf,W-PAD*2-10)
         sth=len(sls)*52; sto=cy_+ht+35
         _glass(draw,PAD-20,sto-12,W-PAD+20,sto+sth+12,fc=(0,0,0),fa=60,sc=acc2,sa=20,r=14)
         for li,sl in enumerate(sls):
-            la=_slide(t,bt0+li*0.25,0.4); bb=sf.getbbox(sl)
+            la=_slide(t,body_start_t+li*0.25,0.4); bb=sf.getbbox(sl)
             _txt(draw,(W-bb[2])//2,sto+li*52,sl,sf,txt,la)
     return np.array(base.convert("RGB"))
 
-def _documentary_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur):
+def _documentary_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur,
+                       hook_word_interval=0.35,body_start_t=5.5,body_window=None):
     th=THEMES.get(topic_key,THEMES["space"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
     base=Image.new("RGBA",(W,H)); _draw_gradient_bg(base,th,t)
     draw=ImageDraw.Draw(base); _draw_animated_bg(base,th,t,th["bg_style"]); _vignette(draw)
@@ -590,7 +591,8 @@ def _documentary_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t
             _txt(draw,(W-bb[2])//2,st+li*56,sls[li],sf,txt,_a(la*fo/255))
     return np.array(base.convert("RGB"))
 
-def _cartoon_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur):
+def _cartoon_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur,
+                   hook_word_interval=0.35,body_start_t=5.5,body_window=None):
     th=THEMES.get(topic_key,THEMES["space"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
     base=Image.new("RGBA",(W,H)); _draw_gradient_bg(base,th,t)
     draw=ImageDraw.Draw(base); _draw_animated_bg(base,th,t,th["bg_style"])
@@ -672,9 +674,10 @@ class VideoCreator:
                     reel_style: str = "illustrated",
                     duration: int = 20,
                     music_volume: float = 0.40,
-                    scene_paths: list = None) -> Path:
+                    scene_paths: list = None,
+                    narr_duration: float = 0.0) -> Path:
 
-        log.info(f"🎬 [{reel_style.upper()}] {duration}s…")
+        log.info(f"🎬 [{reel_style.upper()}] {duration}s | narr: {narr_duration:.1f}s…")
 
         # Pre-download Hindi fonts before any rendering
         _ensure_hindi_fonts()
@@ -691,8 +694,31 @@ class VideoCreator:
         follow_text = LANGUAGES["hi"]["follow_text"]
         tags        = VIDEO_TAGS.get(topic_key, ["#cosmoscapsule"])
 
+        # Word reveal timing — sync to narration if available
+        # narration starts at 0.3s (audio mixer offset)
+        narr_start  = 0.3
+        hook_words  = hook.split()
+        body_words_ = body.split()
+
+        if narr_duration > 1.0:
+            # Sync to actual speech: split narr_duration between hook and body
+            # Hook takes ~40% of speech time, body takes ~60%
+            hook_speech_dur = narr_duration * 0.40
+            body_speech_dur = narr_duration * 0.60
+            # Word interval for hook
+            hook_word_interval = hook_speech_dur / max(len(hook_words), 1)
+            # Body starts after hook speech + small pause
+            body_start_t = narr_start + hook_speech_dur + 0.3
+            body_window  = body_speech_dur
+        else:
+            # No narration — use fixed timing spread across reel duration
+            hook_word_interval = 0.35
+            body_start_t       = min(duration * 0.35, 5.5)
+            body_window        = duration * 0.45
+
+        log.info(f"  Word timing: hook_interval={hook_word_interval:.2f}s body_start={body_start_t:.1f}s")
+
         if reel_style == "illustrated" and scene_paths and len(scene_paths) == 3:
-            # Load all 3 scene images
             scenes = []
             for sp in scene_paths:
                 try:
@@ -700,7 +726,6 @@ class VideoCreator:
                 except Exception:
                     scenes.append(Image.new("RGB",(W,H),(10,10,30)))
 
-            # Calculate scene timings (5-7s each)
             scene_dur   = duration / 3
             scene_times = [(i*scene_dur, (i+1)*scene_dur) for i in range(3)]
 
@@ -708,10 +733,11 @@ class VideoCreator:
                 return _illustrated_frame(
                     scenes, hook, body, body_words,
                     topic_key, lang, follow_text, tags,
-                    t, duration, scene_times
+                    t, duration, scene_times,
+                    body_start_t=body_start_t,
+                    body_window=body_window,
                 )
         else:
-            # Animated fallback
             renderers = {
                 "kinetic":     _kinetic_frame,
                 "documentary": _documentary_frame,
@@ -721,6 +747,13 @@ class VideoCreator:
             bg = (Image.open(image_path).convert("RGB")
                   if image_path and image_path.exists()
                   else Image.new("RGB",(W,H),(10,10,30)))
+
+            def make_frame(t):
+                return render_fn(bg, hook, body, body_words,
+                                 topic_key, lang, follow_text, tags, t, duration,
+                                 hook_word_interval=hook_word_interval,
+                                 body_start_t=body_start_t,
+                                 body_window=body_window)
 
             def make_frame(t):
                 return render_fn(bg, hook, body, body_words,

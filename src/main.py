@@ -107,32 +107,45 @@ def run_pipeline(topic_key: str, lang: str = "hi",
         vol        = get_music_volume(topic["music_energy"])
 
         # 6 — Voiceover (30% probability)
-        final_audio = music_path
+        final_audio   = music_path
+        narr_duration = 0.0
+
         if use_voice:
             log.info("🎙 Generating voiceover...")
-            narr = generate_narration(
+            narr, narr_duration = generate_narration(
                 hook=fact_data["hook"], body=fact_data["body"],
                 lang=lang, topic_key=topic_key, output_dir=AUDIO_DIR,
+                reel_duration=duration,
             )
             if narr and narr.exists():
+                # Extend reel if narration is longer than planned duration
+                if narr_duration > duration - 2:
+                    duration = min(45, int(narr_duration) + 4)
+                    result["duration"] = duration
+                    log.info(f"📐 Duration extended to {duration}s to fit narration")
                 final_audio = mix_audio(
                     music_path=music_path, narration_path=narr,
                     output_dir=AUDIO_DIR, duration=duration,
                 )
+                log.info(f"✅ Narration: {narr_duration:.1f}s | Reel: {duration}s")
+            else:
+                log.warning("Voiceover failed — using music only")
+                narr_duration = 0.0
 
         # 7 — Render video
         creator    = VideoCreator()
         video_path = creator.create_reel(
-            image_path   = image_path or Path("/dev/null"),
-            music_path   = final_audio,
-            fact_data    = fact_data,
-            topic        = topic,
-            lang         = lang,
-            output_dir   = VIDEOS_DIR,
-            reel_style   = reel_style,
-            duration     = duration,
-            music_volume = vol,
-            scene_paths  = scene_paths,
+            image_path    = image_path or Path("/dev/null"),
+            music_path    = final_audio,
+            fact_data     = fact_data,
+            topic         = topic,
+            lang          = lang,
+            output_dir    = VIDEOS_DIR,
+            reel_style    = reel_style,
+            duration      = duration,
+            music_volume  = vol,
+            scene_paths   = scene_paths,
+            narr_duration = narr_duration,
         )
         result["video_path"] = str(video_path)
 
