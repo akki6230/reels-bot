@@ -2,11 +2,9 @@ name: 🚀 Post Daily Educational Reels — cosmos.capsule
 
 on:
   schedule:
-    # 3 reels/day — all Hindi, topics rotate by day
-    # IST = UTC + 5:30
-    - cron: "30 3 * * *"    # 9:00 AM IST  — Hindi (morning peak)
-    - cron: "30 7 * * *"    # 1:00 PM IST  — Hindi (afternoon)
-    - cron: "30 13 * * *"   # 7:00 PM IST  — Hindi (prime time ⭐)
+    - cron: "30 3 * * *"
+    - cron: "30 7 * * *"
+    - cron: "30 13 * * *"
 
   workflow_dispatch:
     inputs:
@@ -20,7 +18,6 @@ on:
         default: "false"
         type: boolean
 
-# ── Required for git push back to repo ────────────────────────────────────────
 permissions:
   contents: write
   pages: write
@@ -47,12 +44,8 @@ jobs:
       - name: 🔧 Install system dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation \
-            fonts-noto fonts-noto-core fonts-noto-hinted \
-            fonts-noto-unhinted fonts-noto-extra
+          sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation fonts-noto fonts-noto-core fonts-noto-hinted fonts-noto-unhinted fonts-noto-extra
           fc-cache -fv
-          echo "Installed fonts:"
-          fc-list | grep -i devanagari | head -10 || echo "No Devanagari fonts found in system"
 
       - name: 🗑 Clear pip cache
         run: pip cache purge
@@ -94,15 +87,12 @@ jobs:
           FREESOUND_API_KEY:  ${{ secrets.FREESOUND_API_KEY }}
           IG_SESSION_DATA:    ${{ secrets.IG_SESSION_DATA }}
           HF_API_KEY:         ${{ secrets.HF_API_KEY }}
-          # Allow outbound connections to HF API
-          no_proxy:           ""
-          NO_PROXY:           ""
 
       - name: 📤 Upload video artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: reel-${{ steps.topic.outputs.topic }}-${{ steps.topic.outputs.lang }}-${{ github.run_number }}
+          name: reel-${{ steps.topic.outputs.topic }}-${{ github.run_number }}
           path: |
             output/videos/*.mp4
             output/logs/run_*.json
@@ -116,7 +106,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           RUN_STATUS:        ${{ job.status }}
           TOPIC:             ${{ steps.topic.outputs.topic }}
-          LANG:              ${{ steps.topic.outputs.lang }}
+          LANG:              "hi"
 
       - name: 💾 Commit dashboard data
         if: always()
