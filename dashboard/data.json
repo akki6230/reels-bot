@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-09T10:59:26.512121+00:00",
-  "total_runs": 33,
+  "generated_at": "2026-06-09T13:43:04.431936+00:00",
+  "total_runs": 34,
   "posted": 15,
   "failed": 1,
-  "dry_runs": 7,
+  "dry_runs": 8,
   "en_posted": 4,
   "hi_posted": 11,
-  "success_rate": 45.5,
+  "success_rate": 44.1,
   "topic_counts": {
     "space": 4,
     "worldnews": 1,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-09T13:43:04.431657+00:00",
+      "topic": "mindblowing",
+      "lang": "hi",
+      "status": "dry_run_ok",
+      "hook": "5 ऐसे तथ्य जो दिमाग हिला दें 🤯",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-09T10:59:26.511788+00:00",
       "topic": "psychology",
@@ -415,16 +428,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-09T10:59:26.511788+00:00",
-    "topic": "psychology",
+    "timestamp": "2026-06-09T13:43:04.431657+00:00",
+    "topic": "mindblowing",
     "lang": "hi",
-    "status": "success",
-    "hook": "",
+    "status": "dry_run_ok",
+    "hook": "5 ऐसे तथ्य जो दिमाग हिला दें 🤯",
     "category": "",
     "media_id": "",
     "error": "",
-    "image_source": "",
-    "reel_style": "",
-    "duration": 0
+    "image_source": "carousel_pexels",
+    "reel_style": "carousel",
+    "duration": 20
   }
 }
