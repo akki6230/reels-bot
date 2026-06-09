@@ -218,7 +218,13 @@ def _eb(x):
     if x<0.9:  return 7.5625*(x-0.81)**2+0.9375
     return 7.5625*(x-0.954)**2+0.984375
 def _slide(t,start,dur=0.4): return _a(_eo(max(0,(t-start)/dur))*255) if t>=start else 0
-def _wrap(text,fnt,max_w):
+
+def _is_latin(word: str) -> bool:
+    """Check if word is primarily Latin/English (not Devanagari)."""
+    latin = sum(1 for c in word if ord(c) < 256)
+    return latin > len(word) * 0.5
+
+def _wrap(text, fnt, max_w):
     words,lines,cur=text.split(),[],""
     for w in words:
         tt=(cur+" "+w).strip()
@@ -227,6 +233,54 @@ def _wrap(text,fnt,max_w):
             if cur: lines.append(cur)
             cur=w
     if cur: lines.append(cur)
+    return lines
+
+def _txt_mixed(draw, x, y, text, size, col, a, bold=False, shadow=True):
+    """
+    Render text with automatic font switching per word.
+    Hindi words → Noto Devanagari
+    English/Latin words (NASA, DNA, numbers) → Liberation/DejaVu
+    This eliminates rectangle boxes for mixed Hindi-English text.
+    """
+    hi_fnt = _f(size, bold=bold, lang="hi")
+    en_fnt = _f(size, bold=bold, lang="en")
+    cx = x
+    for word in text.split():
+        fnt = en_fnt if _is_latin(word) else hi_fnt
+        word_with_space = word + " "
+        if shadow:
+            draw.text((cx+2, y+2), word_with_space, font=fnt,
+                     fill=(0,0,0,_a(a*0.4)))
+        draw.text((cx, y), word_with_space, font=fnt,
+                 fill=(*col, _a(a)))
+        cx += fnt.getbbox(word_with_space)[2]
+
+def _txt_mixed_width(text, size, bold=False) -> int:
+    """Measure width of mixed-language text."""
+    hi_fnt = _f(size, bold=bold, lang="hi")
+    en_fnt = _f(size, bold=bold, lang="en")
+    w = 0
+    for word in text.split():
+        fnt = en_fnt if _is_latin(word) else hi_fnt
+        w += fnt.getbbox(word + " ")[2]
+    return w
+
+def _wrap_mixed(text, size, max_w, bold=False):
+    """Wrap mixed Hindi-English text correctly."""
+    hi_fnt = _f(size, bold=bold, lang="hi")
+    en_fnt = _f(size, bold=bold, lang="en")
+    words,lines,cur,cur_w=[],[],"",0
+    for word in text.split():
+        fnt = en_fnt if _is_latin(word) else hi_fnt
+        ww  = fnt.getbbox(word+" ")[2]
+        if cur_w + ww <= max_w:
+            cur   += word+" "
+            cur_w += ww
+        else:
+            if cur: lines.append(cur.strip())
+            cur   = word+" "
+            cur_w = ww
+    if cur.strip(): lines.append(cur.strip())
     return lines
 
 def _txt(draw,x,y,text,fnt,col,a,shadow=True):
@@ -243,6 +297,7 @@ def _vignette(draw):
     for i in range(55):
         va=_a(190*(1-i/55)**2.5)
         draw.rectangle([i,i,W-i,H-i],outline=(0,0,0,va),width=6)
+
 
 # ── Shared chrome ──────────────────────────────────────────────────────────────
 def _chrome(draw,th,topic_key,t,dur,tags,follow_text):
@@ -276,12 +331,13 @@ def _chrome(draw,th,topic_key,t,dur,tags,follow_text):
     # Tags
     tag_a=_slide(t,dur*0.72,0.4)
     if tag_a>0 and tags:
-        tf=_f(24,lang="hi"); tt=H-195
+        tag_sz=24; tt=H-195
         _glass(draw,PAD-16,tt-8,W-PAD+16,tt+62,fc=(0,0,0),fa=55,sc=acc,sa=22,r=12)
         for ri,row in enumerate(["  ".join(tags[:3]),"  ".join(tags[3:6])]):
             if not row: continue
-            rb=tf.getbbox(row); rx_=(W-rb[2])//2; ry_=tt+ri*30
-            _txt(draw,rx_,ry_,row,tf,acc,_a(tag_a*0.88))
+            lw_=_txt_mixed_width(row,tag_sz)
+            rx_=(W-lw_)//2; ry_=tt+ri*30
+            _txt_mixed(draw,rx_,ry_,row,tag_sz,acc,_a(tag_a*0.88))
 
     # CTA
     cta_a=_slide(t,dur*0.82,0.5)
@@ -399,33 +455,32 @@ def _illustrated_frame(scenes: list, hook: str, body: str, body_words: list,
 
     # ── Hook text (shown from t=0) ─────────────────────────────────────────
     hook_a    = _slide(t, 0.3, 0.5)
-    hook_fnt  = _f(68, bold=True, lang=lang)
-    hook_lines= _wrap(hook, hook_fnt, W-PAD*2-20)
+    hook_size = 68
+    hook_lines= _wrap_mixed(hook, hook_size, W-PAD*2-20, bold=True)
     hook_h    = len(hook_lines)*82
     hook_y    = int(H*0.58)
 
     if hook_a > 0:
-        # Semi-transparent card
         _glass(draw, PAD-20, hook_y-14, W-PAD+20, hook_y+hook_h+14,
                fc=(0,0,0), fa=_a(hook_a*0.65), sc=acc, sa=_a(hook_a*0.3), r=18)
         draw.rounded_rectangle([PAD-20, hook_y-14, PAD-17, hook_y+hook_h+14],
                                radius=2, fill=(*acc, _a(hook_a*0.9)))
         hy = hook_y
         for line in hook_lines:
-            bb  = hook_fnt.getbbox(line)
-            hx  = (W-bb[2])//2
-            _txt(draw, hx, hy, line, hook_fnt, txt, hook_a)
+            lw  = _txt_mixed_width(line, hook_size, bold=True)
+            hx  = (W-lw)//2
+            _txt_mixed(draw, hx, hy, line, hook_size, txt, hook_a, bold=True)
             hy += 82
 
-    # ── Body text fades in after scene 1 (at scene 2) ─────────────────────
-    body_a     = _slide(t, body_start_t, 0.6)
+    # ── Body text fades in after scene 1 ──────────────────────────────────
+    body_a = _slide(t, body_start_t, 0.6)
 
     if body_a > 0:
         body_elapsed = max(0, t - body_start_t)
         n_words      = min(len(body_words),
                            int(body_elapsed/max(0.25, body_window/max(len(body_words),1)))+1)
-        sf   = _f(36, lang=lang)
-        sls  = _wrap(" ".join(body_words[:n_words]), sf, W-PAD*2-10)
+        body_size = 36
+        sls  = _wrap_mixed(" ".join(body_words[:n_words]), body_size, W-PAD*2-10)
         st_  = hook_y + hook_h + 20
         sh_  = len(sls)*48
 
@@ -433,8 +488,8 @@ def _illustrated_frame(scenes: list, hook: str, body: str, body_words: list,
                fc=(0,0,0), fa=_a(body_a*0.6), sc=acc2, sa=_a(body_a*0.2), r=14)
         for li, sl in enumerate(sls):
             la_ = _slide(t, body_start_t+li*0.2, 0.35)
-            bb_ = sf.getbbox(sl)
-            _txt(draw, (W-bb_[2])//2, st_+li*48, sl, sf, txt, la_)
+            lw_ = _txt_mixed_width(sl, body_size)
+            _txt_mixed(draw, (W-lw_)//2, st_+li*48, sl, body_size, txt, la_)
 
     # Chrome
     _chrome(draw, th, topic_key, t, dur, tags, follow_text)
@@ -523,37 +578,51 @@ def _kinetic_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur
             except: pass
     _vignette(draw)
     ty_t,ty_b,BAR=_chrome(draw,th,topic_key,t,dur,tags,follow_text)
-    hf=_f(76,bold=True,lang=lang); hw=hook.split()
-    hs=0.7   # hook starts at 0.7s
+    hook_sz=76; hw=hook.split()
+    hs=0.7
     bw_=body_window if body_window else dur*0.45
     shown=[]
     for wi,word in enumerate(hw):
         ws=hs+wi*hook_word_interval
         if t<ws: break
         shown.append((word,min(1.0,(t-ws)/0.28)))
-    tls=_wrap(" ".join(w for w,_ in shown),hf,W-PAD*2-20)
+    # Use mixed wrap for correct width calculation
+    tls=_wrap_mixed(" ".join(w for w,_ in shown),hook_sz,W-PAD*2-20,bold=True)
     ht=len(tls)*88; cy_=H//2-ht//2-50
     _glass(draw,PAD-28,cy_-24,W-PAD+28,cy_+ht+24,fc=(0,0,0),fa=70,sc=acc,sa=35,r=26)
     draw.rounded_rectangle([PAD-28,cy_-24,PAD-24,cy_+ht+24],radius=2,fill=(*acc,_a(min(255,t*400))))
     hy=cy_; ss=0
     for line in tls:
-        wds=line.split(); lw=sum(hf.getbbox(w+" ")[2] for w in wds); cx_=(W-lw)//2
+        wds=line.split()
+        lw_total=_txt_mixed_width(line,hook_sz,bold=True)
+        cx_=(W-lw_total)//2
         for word in wds:
             if ss<len(shown):
-                _,prog=shown[ss]; bounce=int(18*(1-_eb(prog))); sz=max(32,int(76*_eo(prog)))
-                wf=_f(sz,bold=True,lang=lang)
-                _txt(draw,cx_,hy-bounce,word+" ",wf,acc if ss==len(shown)-1 else txt,_a(prog*255))
-                cx_+=hf.getbbox(word+" ")[2]
+                _,prog=shown[ss]
+                bounce=int(18*(1-_eb(prog)))
+                sz=max(32,int(hook_sz*_eo(prog)))
+                col_=acc if ss==len(shown)-1 else txt
+                en_f=_f(sz,bold=True,lang="en")
+                hi_f=_f(sz,bold=True,lang="hi")
+                wf=en_f if _is_latin(word) else hi_f
+                wp=word+" "
+                if prog>0:
+                    draw.text((cx_+2,hy-bounce+2),wp,font=wf,fill=(0,0,0,_a(prog*100)))
+                    draw.text((cx_,hy-bounce),wp,font=wf,fill=(*col_,_a(prog*255)))
+                cx_+=wf.getbbox(wp)[2]
             ss+=1
         hy+=88
     if t>body_start_t:
-        be=t-body_start_t; nw=min(len(body_words),int(be/max(0.25,bw_/max(len(body_words),1)))+1)
-        sf=_f(38,lang=lang); sls=_wrap(" ".join(body_words[:nw]),sf,W-PAD*2-10)
+        be=t-body_start_t
+        nw=min(len(body_words),int(be/max(0.25,bw_/max(len(body_words),1)))+1)
+        body_sz=38
+        sls=_wrap_mixed(" ".join(body_words[:nw]),body_sz,W-PAD*2-10)
         sth=len(sls)*52; sto=cy_+ht+35
         _glass(draw,PAD-20,sto-12,W-PAD+20,sto+sth+12,fc=(0,0,0),fa=60,sc=acc2,sa=20,r=14)
         for li,sl in enumerate(sls):
-            la=_slide(t,body_start_t+li*0.25,0.4); bb=sf.getbbox(sl)
-            _txt(draw,(W-bb[2])//2,sto+li*52,sl,sf,txt,la)
+            la=_slide(t,body_start_t+li*0.25,0.4)
+            lw_=_txt_mixed_width(sl,body_sz)
+            _txt_mixed(draw,(W-lw_)//2,sto+li*52,sl,body_sz,txt,la)
     return np.array(base.convert("RGB"))
 
 def _documentary_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur,
@@ -567,28 +636,31 @@ def _documentary_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t
     if ch==0:
         ef=_f(90,lang="en"); ep=th["emoji_pool"][0]; pulse=0.85+0.15*math.sin(t*2.5)
         eb=ef.getbbox(ep); draw.text(((W-eb[2])//2,H//2-200),ep,font=ef,fill=(255,255,255,_a(ca*fo/255*pulse)))
-        tf=_f(38,bold=True,lang=lang); lb=THEMES.get(topic_key,{}).get("label","")
-        lbb=tf.getbbox(lb); lx=(W-lbb[2])//2
-        _glass(draw,lx-20,H//2-60,lx+lbb[2]+20,H//2+20,fc=acc,fa=30,sc=acc,sa=60,r=20)
-        _txt(draw,lx,H//2-55,lb,tf,acc,_a(ca*fo/255))
+        lb=THEMES.get(topic_key,{}).get("label","")
+        lw_=_txt_mixed_width(lb,38,bold=True); lx=(W-lw_)//2
+        _glass(draw,lx-20,H//2-60,lx+lw_+20,H//2+20,fc=acc,fa=30,sc=acc,sa=60,r=20)
+        _txt_mixed(draw,lx,H//2-55,lb,38,acc,_a(ca*fo/255),bold=True)
         lw=int((W-PAD*4)*_eo(min(1,cp*2.5))); _hair(draw,PAD*2,H//2+40,PAD*2+lw,acc,ca)
     elif ch==1:
-        hf=_f(66,bold=True,lang=lang); hls=_wrap(hook,hf,W-PAD*2-20)
+        hook_sz=66; hls=_wrap_mixed(hook,hook_sz,W-PAD*2-20,bold=True)
         hh=len(hls)*82; hy=H//2-hh//2-10
         _glass(draw,PAD-24,hy-18,W-PAD+24,hy+hh+18,fc=(0,0,0),fa=68,sc=acc,sa=30,r=22)
         draw.rounded_rectangle([PAD-24,hy-18,PAD-21,hy+hh+18],radius=2,fill=(*acc,_a(ca*fo/255)))
         hy2=hy
         for line in hls:
-            bb=hf.getbbox(line); _txt(draw,(W-bb[2])//2,hy2,line,hf,txt,_a(ca*fo/255)); hy2+=82
+            lw_=_txt_mixed_width(line,hook_sz,bold=True)
+            _txt_mixed(draw,(W-lw_)//2,hy2,line,hook_sz,txt,_a(ca*fo/255),bold=True)
+            hy2+=82
     elif ch==2:
-        sf=_f(40,lang=lang); sls=_wrap(body,sf,W-PAD*2-10)
+        body_sz=40; sls=_wrap_mixed(body,body_sz,W-PAD*2-10)
         st=H//3; sh=len(sls)*56
         _glass(draw,PAD-20,st-16,W-PAD+20,st+sh+16,fc=(0,0,0),fa=64,sc=acc2,sa=24,r=16)
         nr=min(len(sls),int(cp*len(sls)*1.8)+1)
         for li in range(nr):
             if li>=len(sls): break
-            la=_slide(t,ch*cd+li*0.28,0.4); bb=sf.getbbox(sls[li])
-            _txt(draw,(W-bb[2])//2,st+li*56,sls[li],sf,txt,_a(la*fo/255))
+            la=_slide(t,ch*cd+li*0.28,0.4)
+            lw_=_txt_mixed_width(sls[li],body_sz)
+            _txt_mixed(draw,(W-lw_)//2,st+li*56,sls[li],body_sz,txt,_a(la*fo/255))
     return np.array(base.convert("RGB"))
 
 def _cartoon_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur,
@@ -631,7 +703,8 @@ def _cartoon_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur
     # Speech bubble
     bp=max(0.0,min(1.0,(t-2.1)/0.6))
     if bp>0:
-        hf=_f(58,bold=True,lang=lang); hls=_wrap(hook,hf,W-PAD*2-60)
+        hook_sz=58
+        hls=_wrap_mixed(hook,hook_sz,W-PAD*2-60,bold=True)
         bw=W-PAD*2; bh=max(160,len(hls)*70+40); bx=PAD; by_=int(H*0.12)
         sc=_eb(min(1.0,bp*1.5))
         if sc>0.05:
@@ -642,22 +715,30 @@ def _cartoon_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur
             pts=[(cxb-15,sy2),(cxb+15,sy2),(cxb,sy2+28)]
             if sc>0.5: draw.polygon(pts,fill=(*acc,_a(210*sc)))
             if sc>0.7:
-                ta=_a(255*(sc-0.7)/0.3); lh=int(sh*0.28); th_=len(hls)*lh; ty_=cyb-th_//2
+                ta=_a(255*(sc-0.7)/0.3); lh=int(sh*0.28)
+                th_total=len(hls)*lh; ty_=cyb-th_total//2
                 for li,line in enumerate(hls):
-                    lp=max(0,bp-li*0.15); bounce=int(12*(1-min(1,lp*3)))*(-1 if li%2==0 else 1)
-                    bb=hf.getbbox(line); lx=(cxb-bb[2]//2)
-                    draw.text((lx+2,ty_+li*lh+2+bounce),line,font=hf,fill=(0,0,0,_a(ta*0.35)))
-                    draw.text((lx,ty_+li*lh+bounce),line,font=hf,fill=(255,255,255,_a(ta)))
+                    lp=max(0,bp-li*0.15)
+                    bounce=int(12*(1-min(1,lp*3)))*(-1 if li%2==0 else 1)
+                    lw_=_txt_mixed_width(line,hook_sz,bold=True)
+                    lx_=cxb-lw_//2
+                    # Shadow
+                    _txt_mixed(draw,lx_+2,ty_+li*lh+2+bounce,line,hook_sz,(0,0,0),_a(ta*0.35),bold=True,shadow=False)
+                    # Text
+                    _txt_mixed(draw,lx_,ty_+li*lh+bounce,line,hook_sz,(255,255,255),_a(ta),bold=True,shadow=False)
     # Body text
     bst=2.1+0.6+0.5; ba=_slide(t,bst,0.6)
     if ba>0:
-        be2=max(0,t-bst); bwnd=dur*0.45; nw=min(len(body_words),int(be2/max(0.25,bwnd/max(len(body_words),1)))+1)
-        sf=_f(36,lang=lang); sls=_wrap(" ".join(body_words[:nw]),sf,W-PAD*2-20)
+        be2=max(0,t-bst); bwnd=body_window if body_window else dur*0.45
+        nw=min(len(body_words),int(be2/max(0.25,bwnd/max(len(body_words),1)))+1)
+        body_sz=36
+        sls=_wrap_mixed(" ".join(body_words[:nw]),body_sz,W-PAD*2-20)
         st=fy+30; sh_=len(sls)*52; sl_=int(40*(1-_eo(min(1,(t-bst)/0.4))))
         _glass(draw,PAD-16,st-14-sl_,W-PAD+16,st+sh_+14-sl_,fc=(0,0,0),fa=72,sc=acc,sa=28,r=18)
         for li,sl in enumerate(sls):
-            la=_slide(t,bst+li*0.2,0.35); bb=sf.getbbox(sl)
-            _txt(draw,(W-bb[2])//2,st+li*52-sl_,sl,sf,txt,la)
+            la=_slide(t,bst+li*0.2,0.35)
+            lw_=_txt_mixed_width(sl,body_sz)
+            _txt_mixed(draw,(W-lw_)//2,st+li*52-sl_,sl,body_sz,txt,la)
     _vignette(draw)
     _chrome(draw,th,topic_key,t,dur,tags,follow_text)
     return np.array(base.convert("RGB"))
