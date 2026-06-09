@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-09T10:52:05.986270+00:00",
-  "total_runs": 31,
+  "generated_at": "2026-06-09T10:53:54.257287+00:00",
+  "total_runs": 32,
   "posted": 15,
   "failed": 1,
-  "dry_runs": 6,
+  "dry_runs": 7,
   "en_posted": 4,
   "hi_posted": 11,
-  "success_rate": 48.4,
+  "success_rate": 46.9,
   "topic_counts": {
     "space": 4,
     "worldnews": 1,
@@ -16,6 +16,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-09T10:53:54.256923+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "dry_run_ok",
+      "hook": "अंतरिक्ष के 5 रहस्य 🚀",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-09T10:52:05.985962+00:00",
       "topic": "space",
@@ -389,16 +402,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-09T10:52:05.985962+00:00",
+    "timestamp": "2026-06-09T10:53:54.256923+00:00",
     "topic": "space",
     "lang": "hi",
-    "status": "posted",
-    "hook": "हमारी पूरी दुनिया एक धूल है।",
-    "category": "Planets",
-    "media_id": "3915653484266099297_24336816956",
+    "status": "dry_run_ok",
+    "hook": "अंतरिक्ष के 5 रहस्य 🚀",
+    "category": "",
+    "media_id": "",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 24
+    "image_source": "carousel_pexels",
+    "reel_style": "carousel",
+    "duration": 20
   }
 }
