@@ -191,3 +191,31 @@ class InstagramPoster:
         except Exception as e:
             log.error(f"Post failed: {e}")
             raise
+
+    def post_carousel(self, image_paths: list, caption: str) -> str:
+        """
+        Post a carousel (album) post — multiple images users can swipe.
+        image_paths: list of Path objects (JPG files, max 10)
+        """
+        import time
+        delay = random.uniform(5, 10)
+        log.info(f"Waiting {delay:.1f}s before posting carousel...")
+        time.sleep(delay)
+
+        try:
+            # instagrapi album_upload for carousel posts
+            media = self.cl.album_upload(
+                paths=[str(p) for p in image_paths[:10]],
+                caption=caption,
+            )
+            self._save_session()
+            log.info(f"✅ Carousel posted — media ID: {media.id} ({len(image_paths)} slides)")
+            return str(media.id)
+
+        except LoginRequired:
+            raise RuntimeError(
+                "Session expired. Run save_session_browser.py again."
+            )
+        except Exception as e:
+            log.error(f"Carousel post failed: {e}")
+            raise

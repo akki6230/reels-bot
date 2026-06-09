@@ -38,16 +38,14 @@ from narration   import generate_narration
 from audio_mixer import mix_audio
 from poster      import InstagramPoster
 
-# Style selection weights
-# 65% illustrated, 35% animated (kinetic/documentary/cartoon)
-ILLUSTRATED_PROB = 0.65
-ANIMATED_STYLES  = ["kinetic", "documentary", "cartoon"]
+# Style weights: 70% listicle, 30% animated
+LISTICLE_PROB  = 0.70
+ANIMATED_STYLES = ["kinetic", "documentary", "cartoon"]
 
 
 def pick_style() -> str:
-    """Pick reel style: 65% illustrated, 35% animated."""
-    if random.random() < ILLUSTRATED_PROB:
-        return "illustrated"
+    if random.random() < LISTICLE_PROB:
+        return "listicle"
     return random.choice(ANIMATED_STYLES)
 
 
@@ -72,82 +70,114 @@ def run_pipeline(topic_key: str, lang: str = "hi",
         result["reel_style"] = reel_style
         log.info(f"🎨 Style: {reel_style}")
 
-        # 3 — Generate + verify fact
-        generator = FactGenerator()
-        fact_data = generator.generate(topic_key, topic, lang)
-        result["hook"]     = fact_data["hook"]
-        result["category"] = fact_data.get("fact_category","")
-        log.info(f"✅ Fact: {fact_data['hook'][:60]}")
+        # 3 — Generate content
+        if reel_style == "listicle":
+            # ── CAROUSEL MODE (swipeable slides) ──────────────────────────
+            from carousel_gen import CarouselGenerator
 
-        # 4 — Illustrated: generate 3 scenes; Animated: fetch 1 image
-        scene_paths = None
-        image_path  = None
+            log.info("📋 Carousel mode — generating 5 slides...")
+            cg      = CarouselGenerator()
+            content = cg.generate_content(topic_key)
+            slides  = content.get("slides", [])
 
-        if reel_style == "illustrated":
-            log.info("📸 Generating illustrated scenes...")
-            from scene_gen import SceneGenerator
-            run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-            sg = SceneGenerator()
-            scene_paths = sg.generate_scenes(topic_key, fact_data, run_id)
-            result["image_source"] = "illustrated_hf"
-            # Duration: illustrated reels always 15-21s (3 scenes × 5-7s)
-            duration = len(scene_paths) * random.randint(5, 7)
-            result["duration"] = duration
-            log.info(f"✅ {len(scene_paths)} scenes generated, {duration}s reel")
+            log.info(f"🖼 Fetching {len(slides)} images...")
+            run_id      = datetime.now().strftime("%Y%m%d_%H%M%S")
+            image_paths = cg.fetch_images(slides, topic_key, run_id)
+
+            log.info("🎨 Rendering carousel slides...")
+            slide_paths = cg.render_all_slides(content, image_paths,
+                                               topic_key, run_id)
+
+            result["hook"]         = content.get("title", "")
+            result["image_source"] = "carousel_pexels"
+            result["reel_style"]   = "carousel"
+            log.info(f"✅ {len(slide_paths)} slides rendered")
+
+            # Post carousel
+            if dry_run:
+                log.info("🔵 Dry run — skipping carousel post")
+                result["status"] = "dry_run_ok"
+            else:
+                poster   = InstagramPoster()
+                hashtags = get_hashtags(topic_key, lang)
+                title    = content.get("title", "")
+                facts_preview = " | ".join(
+                    s.get("headline","") for s in slides[1:4]
+                )
+                caption = f"{title}\n\n{facts_preview}\n\n{hashtags}"
+                media_id = poster.post_carousel(slide_paths, caption)
+                result["media_id"] = str(media_id)
+                result["status"]   = "posted"
+                log.info(f"✅ Carousel posted! ID: {media_id}")
+
+            # Skip to finally — no video needed for carousel
+            return result
+
         else:
+            # ── ANIMATED MODE ──────────────────────────────────────────────
+            generator = FactGenerator()
+            fact_data = generator.generate(topic_key, topic, lang)
+            result["hook"]     = fact_data["hook"]
+            result["category"] = fact_data.get("fact_category","")
+            log.info(f"✅ Fact: {fact_data['hook'][:60]}")
+            caption_hook = fact_data["caption"]
+            caption_body = ""
+
+            # 4 — Image / scenes
+            scene_paths = None
+            image_path  = None
             image_path, img_source, _ = generator.fetch_image(
                 topic["image_keywords"], topic_key
             )
             result["image_source"] = img_source
             log.info(f"✅ Image [{img_source}]")
 
-        # 5 — Music
-        music_mgr  = MusicManager()
-        music_path = music_mgr.get_track(topic["music_mood"], topic_key)
-        vol        = get_music_volume(topic["music_energy"])
+            # 5 — Music
+            music_mgr  = MusicManager()
+            music_path = music_mgr.get_track(topic["music_mood"], topic_key)
+            vol        = get_music_volume(topic["music_energy"])
 
-        # 6 — Voiceover (30% probability)
-        final_audio   = music_path
-        narr_duration = 0.0
+            # 6 — Voiceover (30% probability)
+            final_audio   = music_path
+            narr_duration = 0.0
 
-        if use_voice:
-            log.info("🎙 Generating voiceover...")
-            narr, narr_duration = generate_narration(
-                hook=fact_data["hook"], body=fact_data["body"],
-                lang=lang, topic_key=topic_key, output_dir=AUDIO_DIR,
-                reel_duration=duration,
-            )
-            if narr and narr.exists():
-                # Extend reel if narration is longer than planned duration
-                if narr_duration > duration - 2:
-                    duration = min(45, int(narr_duration) + 4)
-                    result["duration"] = duration
-                    log.info(f"📐 Duration extended to {duration}s to fit narration")
-                final_audio = mix_audio(
-                    music_path=music_path, narration_path=narr,
-                    output_dir=AUDIO_DIR, duration=duration,
+            if use_voice:
+                log.info("🎙 Generating voiceover...")
+                narr, narr_duration = generate_narration(
+                    hook=fact_data["hook"], body=fact_data["body"],
+                    lang=lang, topic_key=topic_key, output_dir=AUDIO_DIR,
+                    reel_duration=duration,
                 )
-                log.info(f"✅ Narration: {narr_duration:.1f}s | Reel: {duration}s")
-            else:
-                log.warning("Voiceover failed — using music only")
-                narr_duration = 0.0
+                if narr and narr.exists():
+                    if narr_duration > duration - 2:
+                        duration = min(45, int(narr_duration) + 4)
+                        result["duration"] = duration
+                        log.info(f"📐 Extended to {duration}s")
+                    final_audio = mix_audio(
+                        music_path=music_path, narration_path=narr,
+                        output_dir=AUDIO_DIR, duration=duration,
+                    )
+                    log.info(f"✅ Narration: {narr_duration:.1f}s")
+                else:
+                    log.warning("Voiceover failed — music only")
+                    narr_duration = 0.0
 
-        # 7 — Render video
-        creator    = VideoCreator()
-        video_path = creator.create_reel(
-            image_path    = image_path or Path("/dev/null"),
-            music_path    = final_audio,
-            fact_data     = fact_data,
-            topic         = topic,
-            lang          = lang,
-            output_dir    = VIDEOS_DIR,
-            reel_style    = reel_style,
-            duration      = duration,
-            music_volume  = vol,
-            scene_paths   = scene_paths,
-            narr_duration = narr_duration,
-        )
-        result["video_path"] = str(video_path)
+            # 7 — Render animated video
+            creator    = VideoCreator()
+            video_path = creator.create_reel(
+                image_path    = image_path or Path("/dev/null"),
+                music_path    = final_audio,
+                fact_data     = fact_data,
+                topic         = topic,
+                lang          = lang,
+                output_dir    = VIDEOS_DIR,
+                reel_style    = reel_style,
+                duration      = duration,
+                music_volume  = vol,
+                scene_paths   = scene_paths,
+                narr_duration = narr_duration,
+            )
+            result["video_path"] = str(video_path)
 
         # 8 — Post
         if dry_run:
@@ -156,7 +186,7 @@ def run_pipeline(topic_key: str, lang: str = "hi",
         else:
             poster   = InstagramPoster()
             hashtags = get_hashtags(topic_key, lang)
-            caption  = fact_data["caption"] + "\n\n" + hashtags
+            caption  = caption_hook + ("\n\n" + caption_body if caption_body else "") + "\n\n" + hashtags
             media_id = poster.post_reel(video_path, caption, topic_key=topic_key)
             result["media_id"] = str(media_id)
             result["status"]   = "posted"
