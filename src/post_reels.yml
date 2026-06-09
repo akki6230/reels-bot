@@ -99,7 +99,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: reel-${{ steps.topic.outputs.topic }}-${{ steps.topic.outputs.lang }}-${{ github.run_number }}
+          name: reel-${{ steps.topic.outputs.topic }}-${{ github.run_number }}
           path: |
             output/videos/*.mp4
             output/logs/run_*.json
@@ -113,7 +113,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           RUN_STATUS:        ${{ job.status }}
           TOPIC:             ${{ steps.topic.outputs.topic }}
-          LANG:              ${{ steps.topic.outputs.lang }}
+          LANG:              "hi"
 
       - name: 💾 Commit dashboard data
         if: always()
