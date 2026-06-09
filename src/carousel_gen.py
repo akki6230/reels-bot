@@ -290,7 +290,7 @@ def render_slide(slide: dict, photo: Image.Image,
                        fill=(*acc, 120))
 
         # Detail
-        d_size  = 36
+        d_size  = 40
         d_lines = _wrap_mixed(detail, d_size, W-PAD*2)
         dy      = hy + 28
         for line in d_lines:
@@ -312,7 +312,7 @@ def render_slide(slide: dict, photo: Image.Image,
         # Calculate total text block height for centering
         h_size  = 56
         h_lines = _wrap_mixed(headline, h_size, W-PAD*2, bold=True)
-        d_size  = 32
+        d_size  = 38
         d_lines = _wrap_mixed(detail, d_size, W-PAD*2)
 
         num_h   = 72    # number badge height
@@ -363,7 +363,7 @@ def render_slide(slide: dict, photo: Image.Image,
         for line in d_lines:
             _txt_mixed(draw, 0, dy, line, d_size,
                        (225,225,225,235), center_w=W)
-            dy += 44
+            dy += 52
 
     # ── Bottom bar ─────────────────────────────────────────────────────────
     draw.rectangle([0, H-70, W, H], fill=(0,0,0,180))
