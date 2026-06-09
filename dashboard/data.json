@@ -1,13 +1,14 @@
 {
-  "generated_at": "2026-06-09T13:43:04.431936+00:00",
-  "total_runs": 34,
-  "posted": 15,
+  "generated_at": "2026-06-09T16:24:52.994730+00:00",
+  "total_runs": 35,
+  "posted": 16,
   "failed": 1,
   "dry_runs": 8,
   "en_posted": 4,
-  "hi_posted": 11,
-  "success_rate": 44.1,
+  "hi_posted": 12,
+  "success_rate": 45.7,
   "topic_counts": {
+    "sciencewrong": 1,
     "space": 4,
     "worldnews": 1,
     "sports": 2,
@@ -16,6 +17,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-09T16:24:52.994470+00:00",
+      "topic": "sciencewrong",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "वैज्ञानिकों ने सोचा था लोबोटॉमी इलाज है",
+      "category": "Science Disasters",
+      "media_id": "3915820968394819295_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "documentary",
+      "duration": 25
+    },
     {
       "timestamp": "2026-06-09T13:43:04.431657+00:00",
       "topic": "mindblowing",
@@ -428,16 +442,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-09T13:43:04.431657+00:00",
-    "topic": "mindblowing",
+    "timestamp": "2026-06-09T16:24:52.994470+00:00",
+    "topic": "sciencewrong",
     "lang": "hi",
-    "status": "dry_run_ok",
-    "hook": "5 ऐसे तथ्य जो दिमाग हिला दें 🤯",
-    "category": "",
-    "media_id": "",
+    "status": "posted",
+    "hook": "वैज्ञानिकों ने सोचा था लोबोटॉमी इलाज है",
+    "category": "Science Disasters",
+    "media_id": "3915820968394819295_24336816956",
     "error": "",
-    "image_source": "carousel_pexels",
-    "reel_style": "carousel",
-    "duration": 20
+    "image_source": "pexels",
+    "reel_style": "documentary",
+    "duration": 25
   }
 }
