@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-09T16:24:52.994730+00:00",
-  "total_runs": 35,
+  "generated_at": "2026-06-10T06:02:56.760566+00:00",
+  "total_runs": 36,
   "posted": 16,
-  "failed": 1,
+  "failed": 2,
   "dry_runs": 8,
   "en_posted": 4,
   "hi_posted": 12,
-  "success_rate": 45.7,
+  "success_rate": 44.4,
   "topic_counts": {
     "sciencewrong": 1,
     "space": 4,
@@ -17,6 +17,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-10T06:02:56.760281+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "failed",
+      "hook": "एक ग्रह जिसे 40 साल लगे पहुंचने में",
+      "category": "NASA",
+      "media_id": "",
+      "error": "name 'render_fn' is not defined",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 19
+    },
     {
       "timestamp": "2026-06-09T16:24:52.994470+00:00",
       "topic": "sciencewrong",
@@ -442,16 +455,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-09T16:24:52.994470+00:00",
-    "topic": "sciencewrong",
+    "timestamp": "2026-06-10T06:02:56.760281+00:00",
+    "topic": "space",
     "lang": "hi",
-    "status": "posted",
-    "hook": "वैज्ञानिकों ने सोचा था लोबोटॉमी इलाज है",
-    "category": "Science Disasters",
-    "media_id": "3915820968394819295_24336816956",
-    "error": "",
-    "image_source": "pexels",
-    "reel_style": "documentary",
-    "duration": 25
+    "status": "failed",
+    "hook": "एक ग्रह जिसे 40 साल लगे पहुंचने में",
+    "category": "NASA",
+    "media_id": "",
+    "error": "name 'render_fn' is not defined",
+    "image_source": "pil",
+    "reel_style": "cartoon",
+    "duration": 19
   }
 }
