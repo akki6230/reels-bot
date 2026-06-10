@@ -65,6 +65,18 @@ THEMES = {
                      "particles":False,"p_col":(150,240,185),
                      "bg_style":"earth","emoji_pool":["🌍","⚡","🌊","🌋","❄️","🌪️"],
                      "label":"धरती की अजीब घटनाएं"},
+    "gk":           {"acc":(255,180,40),"acc2":(255,200,80),"acc3":(255,220,120),
+                     "txt":(255,245,220),"mut":(200,175,130),
+                     "bg1":(4,8,18),"bg2":(15,18,40),"bg3":(25,28,60),
+                     "particles":False,"p_col":(255,200,100),
+                     "bg_style":"neural","emoji_pool":["📚","💡","🌍","🏛️","🔭","📖"],
+                     "label":"सामान्य ज्ञान"},
+    "examfacts":    {"acc":(80,200,255),"acc2":(120,220,255),"acc3":(180,235,255),
+                     "txt":(220,240,255),"mut":(140,175,210),
+                     "bg1":(4,4,18),"bg2":(8,10,35),"bg3":(12,16,52),
+                     "particles":False,"p_col":(150,215,255),
+                     "bg_style":"grid","emoji_pool":["🎯","📝","✅","🏆","📌","💯"],
+                     "label":"परीक्षा ज्ञान"},
 }
 
 VIDEO_TAGS = {
@@ -266,6 +278,9 @@ def _txt_mixed_width(text, size, bold=False) -> int:
         fnt = en_fnt if _is_latin(word) else hi_fnt
         w += fnt.getbbox(word + " ")[2]
     return w
+
+# Alias — both names used across the codebase
+_txt_mixed_w = _txt_mixed_width
 
 def _wrap_mixed(text, size, max_w, bold=False):
     """Wrap mixed Hindi-English text correctly."""
