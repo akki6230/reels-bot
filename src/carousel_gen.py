@@ -111,6 +111,37 @@ JSON:
     {"type": "fact", "number": "04", "headline": "...", "detail": "...", "image_query": "..."}
   ]
 }""",
+
+    "gk": """\
+सामान्य ज्ञान के 5 चौंकाने वाले facts — intro + 4 facts।
+भारत, विश्व, इतिहास, भूगोल, विज्ञान से। Exam का नाम कहीं नहीं।
+JSON:
+{
+  "title": "5 रोचक सामान्य ज्ञान तथ्य 📚",
+  "slides": [
+    {"type": "intro", "headline": "क्या आप ये 5 बातें जानते हैं?", "detail": "Swipe करें और जाँचें 👉", "image_query": "india knowledge education"},
+    {"type": "fact", "number": "01", "headline": "shocking GK fact 8 words", "detail": "accurate explanation 1-2 sentences.", "image_query": "relevant photo query"},
+    {"type": "fact", "number": "02", "headline": "...", "detail": "...", "image_query": "..."},
+    {"type": "fact", "number": "03", "headline": "...", "detail": "...", "image_query": "..."},
+    {"type": "fact", "number": "04", "headline": "...", "detail": "...", "image_query": "..."}
+  ]
+}""",
+
+    "examfacts": """\
+5 important facts जो competitive exams में अक्सर आते हैं।
+History, Geography, Science, Polity, Economy, Biology से।
+Question style में headline, answer detail में। हर slide पर exam का नाम।
+JSON:
+{
+  "title": "5 ज़रूरी सवाल और जवाब 🎯",
+  "slides": [
+    {"type": "intro", "headline": "5 सवाल जो अक्सर पूछे जाते हैं", "detail": "Swipe करें — जवाब जानें 👉", "image_query": "student studying exam india", "exam_type": ""},
+    {"type": "fact", "number": "01", "headline": "Question in 8 words?", "detail": "Answer + brief explanation.", "image_query": "relevant photo", "exam_type": "UPSC"},
+    {"type": "fact", "number": "02", "headline": "...", "detail": "...", "image_query": "...", "exam_type": "SSC"},
+    {"type": "fact", "number": "03", "headline": "...", "detail": "...", "image_query": "...", "exam_type": "NEET"},
+    {"type": "fact", "number": "04", "headline": "...", "detail": "...", "image_query": "...", "exam_type": "IIT JEE"}
+  ]
+}""",
 }
 
 TOPIC_FALLBACK_KEYWORDS = {
@@ -119,6 +150,8 @@ TOPIC_FALLBACK_KEYWORDS = {
     "space":        ["galaxy nebula", "stars cosmos", "planet space", "milky way", "aurora"],
     "sciencewrong": ["laboratory", "chemistry", "science experiment", "research"],
     "earthglitch":  ["nature phenomenon", "waterfall landscape", "earth aerial", "lightning"],
+    "gk":           ["india heritage", "world map", "history monument", "india culture", "knowledge"],
+    "examfacts":    ["student studying", "education india", "india map", "science books", "learning"],
 }
 
 # ── Font helpers ───────────────────────────────────────────────────────────────
@@ -256,6 +289,21 @@ def render_slide(slide: dict, photo: Image.Image,
     br_fnt = _f(26, bold=True, lang="en")
     draw.text((PAD, 20), "cosmos.capsule",
               font=br_fnt, fill=(*acc, 220))
+
+    # ── Exam label badge (examfacts topic only) ────────────────────────────
+    if topic_key == "examfacts" and slide.get("exam_type"):
+        ex_fnt  = _f(22, bold=True, lang="en")
+        ex_text = f"📌 {slide['exam_type']} में पूछा गया"
+        ex_bb   = ex_fnt.getbbox(ex_text)
+        ex_w    = ex_bb[2] + 24
+        ex_x    = (W - ex_w) // 2
+        ex_y    = 16
+        draw.rounded_rectangle([ex_x, ex_y, ex_x+ex_w, ex_y+34],
+                               radius=17,
+                               fill=(*num_c, 30),
+                               outline=(*num_c, 180), width=1)
+        draw.text((ex_x+12, ex_y+7), ex_text,
+                  font=ex_fnt, fill=(*num_c, 255))
 
     # ── Slide indicator dots top-right ────────────────────────────────────
     dot_y = 30

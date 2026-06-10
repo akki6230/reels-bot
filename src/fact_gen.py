@@ -122,6 +122,33 @@ JSON लौटाएं:
   "caption": "Caption जो लोगों को हैरान करे।",
   "fact_category": "Natural Phenomena / Earth Mysteries / Weather Anomalies / Geographic Wonders"
 }}""",
+
+    "gk": """\
+एक 100% सत्यापित सामान्य ज्ञान का तथ्य बनाएं।
+भारत, विश्व इतिहास, भूगोल, विज्ञान, खेल, या संस्कृति से।
+ऐसा जो लोग share करें और दोस्तों को बताएं।
+
+JSON लौटाएं:
+{{
+  "hook": "अधिकतम 8 शब्द। चौंकाने वाला सामान्य ज्ञान।",
+  "body": "2-3 वाक्य। सटीक तथ्य + रोचक संदर्भ।",
+  "caption": "Caption जो quiz style हो। 'क्या आप जानते थे?' से खत्म हो।",
+  "fact_category": "India / World History / Geography / Science / Sports / Culture"
+}}""",
+
+    "examfacts": """\
+SSC, UPSC, NEET, या IIT JEE की preparation के लिए एक important fact बनाएं।
+किसी भी subject से — History, Geography, Science, Polity, Economy, Biology, Physics।
+Question style में hook, answer body में।
+
+JSON लौटाएं:
+{{
+  "hook": "अधिकतम 8 शब्द। Question format — जैसे 'भारत का सबसे पुराना बांध कौन सा है?'",
+  "body": "सही Answer बोल्ड करके शुरू करें। फिर 1-2 sentences explanation।",
+  "caption": "Caption जो students share करें। Comment में answer पूछें।",
+  "fact_category": "History / Geography / Science / Polity / Economy / Biology / Physics / Chemistry",
+  "exam_type": "UPSC या SSC या NEET या IIT JEE — जो सबसे relevant हो"
+}}""",
 }
 
 VERIFICATION_PROMPT = """\

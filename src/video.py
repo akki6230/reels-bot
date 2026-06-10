@@ -73,6 +73,8 @@ VIDEO_TAGS = {
     "space":        ["#अंतरिक्ष","#ब्रह्मांड","#spacefacts","#NASA","#ISRO","#cosmoscapsule"],
     "sciencewrong": ["#sciencefail","#विज्ञान","#sciencefacts","#funny","#facts","#cosmoscapsule"],
     "earthglitch":  ["#earthglitch","#धरती","#naturalfacts","#amazing","#mystery","#cosmoscapsule"],
+    "gk":           ["#सामान्यज्ञान","#GK","#gkinhindi","#ज्ञान","#india","#cosmoscapsule"],
+    "examfacts":    ["#UPSC","#SSC","#NEET","#IIT","#gkinhindi","#cosmoscapsule"],
 }
 
 # ── Font helpers ───────────────────────────────────────────────────────────────
@@ -745,6 +747,165 @@ def _cartoon_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# SINGLE REEL — CAROUSEL VISUAL STYLE
+# Full photo background + centered text overlay. Clean and premium.
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _single_carousel_frame(bg_photo, hook, body, body_words,
+                            topic_key, lang, follow_text, tags,
+                            t, dur,
+                            body_start_t=5.0,
+                            body_window=8.0,
+                            fact_data=None) -> np.ndarray:
+    th   = THEMES.get(topic_key, THEMES["space"])
+    acc  = th["acc"]; acc2=th["acc2"]; acc3=th["acc3"]; txt=th["txt"]
+    progress = t / dur
+
+    # ── Full-bleed background + Ken Burns ─────────────────────────────────
+    scale = 1.0 + 0.04 * progress
+    nw, nh = int(W*scale), int(H*scale)
+    bg = bg_photo.resize((nw, nh), Image.LANCZOS)
+    lf = (nw-W)//2; tp = (nh-H)//2
+    bg = bg.crop((lf, tp, lf+W, tp+H)).convert("RGB")
+    bg = ImageEnhance.Color(bg).enhance(0.80)
+    bg = ImageEnhance.Brightness(bg).enhance(0.55)
+    frame = bg.convert("RGBA")
+
+    # Dark center overlay for text contrast
+    overlay = Image.new("RGBA", (W,H), (0,0,0,0))
+    od = ImageDraw.Draw(overlay)
+    for y in range(H):
+        fy    = y / H
+        dist  = abs(fy - 0.52)
+        alpha = _a(170 * max(0, 1 - dist*2.0))
+        od.rectangle([0,y,W,y+1], fill=(0,0,0,alpha))
+    frame = Image.alpha_composite(frame, overlay)
+    draw  = ImageDraw.Draw(frame)
+    _vignette(draw)
+
+    # ── Top accent bar + progress ──────────────────────────────────────────
+    bar_a = _slide(t, 0.2, 0.3)
+    draw.rectangle([0, 0, W, 5], fill=(*acc, bar_a))
+    pb_w = int(W * progress)
+    draw.rectangle([0, 5, W, 9], fill=(*acc, _a(bar_a*0.2)))
+    if pb_w > 0:
+        draw.rectangle([0, 5, pb_w, 9], fill=(*acc, bar_a))
+    if 6 < pb_w < W-6:
+        draw.ellipse([pb_w-5, 3, pb_w+5, 11], fill=(*acc3, bar_a))
+
+    # ── Topic label + brand ────────────────────────────────────────────────
+    hdr_a   = _slide(t, 0.2, 0.4)
+    lbl_fnt = _f(24, bold=True, lang="en")
+    lbl     = THEMES.get(topic_key, {}).get("label", "")
+    draw.text((PAD, 20), lbl, font=lbl_fnt, fill=(*acc, hdr_a))
+    brand_fnt = _f(22, lang="en")
+    brand_bb  = brand_fnt.getbbox("cosmos.capsule")
+    draw.text((W-brand_bb[2]-PAD, 22), "cosmos.capsule",
+              font=brand_fnt, fill=(180,180,180,hdr_a))
+
+    # ── Exam label badge (only for examfacts topic) ────────────────────────
+    exam_type = fact_data.get("exam_type", "") if isinstance(fact_data, dict) else ""
+    if topic_key == "examfacts" and exam_type:
+        exam_fnt  = _f(22, bold=True, lang="en")
+        exam_text = f"📌 {exam_type} में पूछा गया"
+        exam_bb   = exam_fnt.getbbox(exam_text)
+        ex_w      = exam_bb[2] + 24
+        ex_h      = 36
+        ex_x      = (W - ex_w) // 2
+        ex_y      = 60
+        # Pill badge
+        draw.rounded_rectangle([ex_x, ex_y, ex_x+ex_w, ex_y+ex_h],
+                               radius=18,
+                               fill=(*acc, _a(hdr_a*0.25)),
+                               outline=(*acc, _a(hdr_a*0.8)),
+                               width=1)
+        draw.text((ex_x+12, ex_y+7), exam_text,
+                  font=exam_fnt, fill=(*acc, hdr_a))
+
+    # ── Calculate block layout ─────────────────────────────────────────────
+    hook_sz  = 60
+    h_lines  = _wrap_mixed(hook, hook_sz, W-PAD*2, bold=True)
+    h_total  = len(h_lines) * 76
+    d_size   = 38
+    d_lines_full = _wrap_mixed(body, d_size, W-PAD*2)
+    d_total  = len(d_lines_full) * 52
+    gap      = 28
+    block_h  = h_total + gap + 2 + gap + d_total
+    start_y  = H//2 - block_h//2
+
+    # ── Hook card ─────────────────────────────────────────────────────────
+    hook_a = _slide(t, 0.4, 0.5)
+    if hook_a > 0:
+        _glass(draw, PAD-20, start_y-18, W-PAD+20, start_y+h_total+18,
+               fc=(0,0,0), fa=_a(hook_a*0.65), sc=acc, sa=_a(hook_a*0.3), r=18)
+        draw.rounded_rectangle([PAD-20, start_y-18, PAD-17, start_y+h_total+18],
+                               radius=2, fill=(*acc, _a(hook_a*0.9)))
+        hy = start_y
+        for line in h_lines:
+            lw_ = _txt_mixed_w(line, hook_sz, bold=True)
+            lx_ = (W-lw_)//2
+            draw.text((lx_+2, hy+2), "", fill=(0,0,0,0))  # placeholder
+            _txt_mixed(draw, lx_+2, hy+2, line, hook_sz,
+                       (0,0,0,_a(hook_a*0.4)), bold=True, shadow=False)
+            _txt_mixed(draw, lx_, hy, line, hook_sz,
+                       (*acc, _a(hook_a)), bold=True, shadow=False)
+            hy += 76
+
+    # ── Divider ────────────────────────────────────────────────────────────
+    div_y = start_y + h_total + gap
+    div_a = _slide(t, 0.8, 0.3)
+    div_w = int((W-PAD*4) * _eo(min(1, max(0,(t-0.8)/0.5))))
+    if div_w > 0:
+        draw.rectangle([W//2-div_w//2, div_y, W//2+div_w//2, div_y+2],
+                       fill=(*acc, _a(div_a*0.6)))
+
+    # ── Body word-by-word ─────────────────────────────────────────────────
+    body_a = _slide(t, body_start_t, 0.5)
+    if body_a > 0:
+        elapsed = max(0, t - body_start_t)
+        n_words = min(len(body_words),
+                      int(elapsed/max(0.25,body_window/max(len(body_words),1)))+1)
+        sls  = _wrap_mixed(" ".join(body_words[:n_words]), d_size, W-PAD*2)
+        sh_  = len(sls) * 52
+        sy_  = div_y + gap
+        _glass(draw, PAD-16, sy_-12, W-PAD+16, sy_+sh_+12,
+               fc=(0,0,0), fa=_a(body_a*0.55), sc=acc2, sa=_a(body_a*0.2), r=14)
+        for li, sl in enumerate(sls):
+            la_ = _slide(t, body_start_t+li*0.2, 0.35)
+            lw_ = _txt_mixed_w(sl, d_size)
+            _txt_mixed(draw, (W-lw_)//2, sy_+li*52, sl,
+                       d_size, (*txt, _a(la_)))
+
+    # ── Hashtags ──────────────────────────────────────────────────────────
+    tag_a = _slide(t, dur*0.72, 0.4)
+    if tag_a > 0 and tags:
+        tag_sz  = 22; tag_top = H-195
+        _glass(draw, PAD-16, tag_top-8, W-PAD+16, tag_top+58,
+               fc=(0,0,0), fa=55, sc=acc, sa=22, r=12)
+        for ri, row in enumerate(["  ".join(tags[:3]), "  ".join(tags[3:6])]):
+            if not row: continue
+            lw_ = _txt_mixed_w(row, tag_sz)
+            _txt_mixed(draw, (W-lw_)//2, tag_top+ri*28, row,
+                       tag_sz, (*acc, _a(tag_a*0.88)))
+
+    # ── Bottom CTA ────────────────────────────────────────────────────────
+    cta_a = _slide(t, dur*0.82, 0.5)
+    draw.rectangle([0, H-72, W, H], fill=(0,0,0,200))
+    draw.rectangle([0, H-72, W, H-70], fill=(*acc, _a(cta_a*0.5)))
+    if cta_a > 0:
+        cta_fnt = _f(28, bold=True, lang="hi")
+        cta_bb  = cta_fnt.getbbox(follow_text)
+        pulse   = 0.85 + 0.15*math.sin(t*4)
+        cx_     = (W-cta_bb[2])//2
+        draw.text((cx_+2, H-52), follow_text, font=cta_fnt,
+                  fill=(0,0,0,_a(cta_a*0.4)))
+        draw.text((cx_, H-52), follow_text, font=cta_fnt,
+                  fill=(*acc, _a(cta_a*pulse)))
+
+    return np.array(frame.convert("RGB"))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # VIDEO CREATOR
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -819,22 +980,21 @@ class VideoCreator:
                     body_window=body_window,
                 )
         else:
-            renderers = {
-                "kinetic":     _kinetic_frame,
-                "documentary": _documentary_frame,
-                "cartoon":     _cartoon_frame,
-            }
-            render_fn = renderers.get(reel_style, _kinetic_frame)
+            # All animated styles now use carousel visual style:
+            # full photo background + centered text overlay
             bg = (Image.open(image_path).convert("RGB")
                   if image_path and image_path.exists()
                   else Image.new("RGB",(W,H),(10,10,30)))
 
             def make_frame(t):
-                return render_fn(bg, hook, body, body_words,
-                                 topic_key, lang, follow_text, tags, t, duration,
-                                 hook_word_interval=hook_word_interval,
-                                 body_start_t=body_start_t,
-                                 body_window=body_window)
+                return _single_carousel_frame(
+                    bg, hook, body, body_words,
+                    topic_key, lang, follow_text, tags,
+                    t, duration,
+                    body_start_t=body_start_t,
+                    body_window=body_window,
+                    fact_data=fact_data,
+                )
 
             def make_frame(t):
                 return render_fn(bg, hook, body, body_words,
