@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-10T06:21:54.929113+00:00",
-  "total_runs": 37,
+  "generated_at": "2026-06-10T06:42:23.284354+00:00",
+  "total_runs": 38,
   "posted": 16,
-  "failed": 3,
+  "failed": 4,
   "dry_runs": 8,
   "en_posted": 4,
   "hi_posted": 12,
-  "success_rate": 43.2,
+  "success_rate": 42.1,
   "topic_counts": {
     "sciencewrong": 1,
     "space": 4,
@@ -17,6 +17,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-10T06:42:23.284073+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "failed",
+      "hook": "बृहस्पति का एक तूफान 350 साल से चल रहा है",
+      "category": "Planets",
+      "media_id": "",
+      "error": "_txt_mixed() missing 1 required positional argument: 'a'",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 15
+    },
     {
       "timestamp": "2026-06-10T06:21:54.928852+00:00",
       "topic": "space",
@@ -468,16 +481,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-10T06:21:54.928852+00:00",
+    "timestamp": "2026-06-10T06:42:23.284073+00:00",
     "topic": "space",
     "lang": "hi",
     "status": "failed",
-    "hook": "इतने तारे हैं कि गिनती नामुमकिन है",
-    "category": "Galaxies",
+    "hook": "बृहस्पति का एक तूफान 350 साल से चल रहा है",
+    "category": "Planets",
     "media_id": "",
-    "error": "name '_txt_mixed_w' is not defined",
-    "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 19
+    "error": "_txt_mixed() missing 1 required positional argument: 'a'",
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 15
   }
 }
