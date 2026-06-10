@@ -2,16 +2,16 @@ name: 🚀 Post Daily Educational Reels — cosmos.capsule
 
 on:
   schedule:
-    - cron: "30 3 * * *"
-    - cron: "30 7 * * *"
-    - cron: "30 13 * * *"
+    - cron: "30 3 * * *"    # 9:00 AM IST
+    - cron: "30 7 * * *"    # 1:00 PM IST
+    - cron: "30 13 * * *"   # 7:00 PM IST
 
   workflow_dispatch:
     inputs:
       topic:
-        description: "Topic: psychology / mindblowing / space / sciencewrong / earthglitch"
+        description: "psychology / mindblowing / space / sciencewrong / earthglitch / gk / examfacts"
         required: false
-        default: "space"
+        default: "gk"
       dry_run:
         description: "Dry run — generate video but don't post to Instagram"
         required: false
@@ -26,7 +26,7 @@ permissions:
 jobs:
   post-reel:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 55    # increased — video render can take 25+ mins
 
     steps:
       - name: 📥 Checkout repository
@@ -39,29 +39,29 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
+          cache: "pip"     # pip cache enabled — saves 5-8 mins per run
 
       - name: 🔧 Install system dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation fonts-noto fonts-noto-core fonts-noto-hinted fonts-noto-unhinted fonts-noto-extra
+          sudo apt-get install -y ffmpeg \
+            fonts-dejavu-core fonts-liberation \
+            fonts-noto fonts-noto-core fonts-noto-hinted
           fc-cache -fv
-
-      - name: 🗑 Clear pip cache
-        run: pip cache purge
 
       - name: 📦 Install Python dependencies
         run: |
           pip install --upgrade pip
-          pip install --no-cache-dir moviepy==1.0.3 decorator==4.4.2 imageio==2.25.1 imageio-ffmpeg==0.4.9
-          pip install --no-cache-dir -r requirements.txt
+          pip install --no-cache-dir \
+            moviepy==1.0.3 decorator==4.4.2 \
+            imageio==2.25.1 imageio-ffmpeg==0.4.9
+          pip install -r requirements.txt
 
       - name: 💾 Restore cache
         uses: actions/cache@v4
         with:
           path: |
             output/music
-            output/logs
             output/used_facts.json
             fonts/
           key: reels-cache-v4-${{ github.run_number }}
@@ -72,9 +72,11 @@ jobs:
         run: python src/pick_topic.py
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
-          INPUT_TOPIC: ${{ github.event.inputs.topic }}
+          INPUT_TOPIC:       ${{ github.event.inputs.topic }}
 
-      - name: 🎬 Generate & post reel
+      - name: 🎬 Generate & post reel (attempt 1)
+        id: post_attempt_1
+        continue-on-error: true
         run: |
           python src/main.py run \
             "${{ steps.topic.outputs.topic }}" \
@@ -88,7 +90,29 @@ jobs:
           IG_SESSION_DATA:    ${{ secrets.IG_SESSION_DATA }}
           HF_API_KEY:         ${{ secrets.HF_API_KEY }}
 
-      - name: 📤 Upload video artifact
+      - name: ⏳ Wait before retry
+        if: steps.post_attempt_1.outcome == 'failure'
+        run: |
+          echo "Attempt 1 failed — waiting 60s before retry..."
+          sleep 60
+
+      - name: 🎬 Generate & post reel (attempt 2 — retry)
+        if: steps.post_attempt_1.outcome == 'failure'
+        id: post_attempt_2
+        run: |
+          python src/main.py run \
+            "${{ steps.topic.outputs.topic }}" \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
+        env:
+          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
+          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+          INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+          PEXELS_API_KEY:     ${{ secrets.PEXELS_API_KEY }}
+          FREESOUND_API_KEY:  ${{ secrets.FREESOUND_API_KEY }}
+          IG_SESSION_DATA:    ${{ secrets.IG_SESSION_DATA }}
+          HF_API_KEY:         ${{ secrets.HF_API_KEY }}
+
+      - name: 📤 Upload artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -116,7 +140,8 @@ jobs:
           git config user.email "bot@reels.local"
           git pull --rebase origin main || true
           git add dashboard/data.json output/used_facts.json || true
-          git diff --cached --quiet || git commit -m "📊 Stats update [skip ci]"
+          git diff --cached --quiet || \
+            git commit -m "📊 Stats update [skip ci]"
           git push origin main || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
