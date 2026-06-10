@@ -42,13 +42,16 @@
     "93d271040912"
   ],
   "sciencewrong__hooks": [
-    "वैज्ञानिकों ने सोचा था लोबोटॉमी इलाज है"
+    "वैज्ञानिकों ने सोचा था लोबोटॉमी इलाज है",
+    "डॉक्टरों ने कहा था पारा पीना सुरक्षित है"
   ],
   "sciencewrong__categories": [
-    "Science Disasters"
+    "Science Disasters",
+    "Wrong Theories"
   ],
   "sciencewrong__fingerprints": [
-    "2eb0331054e6"
+    "2eb0331054e6",
+    "0aeed8a31e53"
   ],
   "space__hooks": [
     "एक सेकंड में 3 लाख किमी पार करो",

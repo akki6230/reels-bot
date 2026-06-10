@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-10T07:25:08.984780+00:00",
-  "total_runs": 39,
-  "posted": 16,
+  "generated_at": "2026-06-10T07:55:19.262282+00:00",
+  "total_runs": 40,
+  "posted": 17,
   "failed": 4,
   "dry_runs": 9,
   "en_posted": 4,
-  "hi_posted": 12,
-  "success_rate": 41.0,
+  "hi_posted": 13,
+  "success_rate": 42.5,
   "topic_counts": {
-    "sciencewrong": 1,
+    "sciencewrong": 2,
     "space": 4,
     "worldnews": 1,
     "sports": 2,
@@ -17,6 +17,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-10T07:55:19.262032+00:00",
+      "topic": "sciencewrong",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "डॉक्टरों ने कहा था पारा पीना सुरक्षित है",
+      "category": "Wrong Theories",
+      "media_id": "3916289273937180669_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "documentary",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-10T07:25:08.984513+00:00",
       "topic": "space",
@@ -494,16 +507,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-10T07:25:08.984513+00:00",
-    "topic": "space",
+    "timestamp": "2026-06-10T07:55:19.262032+00:00",
+    "topic": "sciencewrong",
     "lang": "hi",
-    "status": "dry_run_ok",
-    "hook": "पृथ्वी से 4.37 प्रकाश वर्ष दूर है निकटतम तारा",
-    "category": "ISRO",
-    "media_id": "",
+    "status": "posted",
+    "hook": "डॉक्टरों ने कहा था पारा पीना सुरक्षित है",
+    "category": "Wrong Theories",
+    "media_id": "3916289273937180669_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 19
+    "image_source": "pexels",
+    "reel_style": "documentary",
+    "duration": 20
   }
 }
