@@ -859,11 +859,12 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
         for line in h_lines:
             lw_ = _txt_mixed_w(line, hook_sz, bold=True)
             lx_ = (W-lw_)//2
-            draw.text((lx_+2, hy+2), "", fill=(0,0,0,0))  # placeholder
+            # Shadow
             _txt_mixed(draw, lx_+2, hy+2, line, hook_sz,
-                       (0,0,0,_a(hook_a*0.4)), bold=True, shadow=False)
+                       (0,0,0), _a(hook_a*0.4), bold=True, shadow=False)
+            # Main text
             _txt_mixed(draw, lx_, hy, line, hook_sz,
-                       (*acc, _a(hook_a)), bold=True, shadow=False)
+                       acc, _a(hook_a), bold=True, shadow=False)
             hy += 76
 
     # ── Divider ────────────────────────────────────────────────────────────
@@ -889,7 +890,7 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
             la_ = _slide(t, body_start_t+li*0.2, 0.35)
             lw_ = _txt_mixed_w(sl, d_size)
             _txt_mixed(draw, (W-lw_)//2, sy_+li*52, sl,
-                       d_size, (*txt, _a(la_)))
+                       d_size, txt, _a(la_))
 
     # ── Hashtags ──────────────────────────────────────────────────────────
     tag_a = _slide(t, dur*0.72, 0.4)
@@ -901,7 +902,7 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
             if not row: continue
             lw_ = _txt_mixed_w(row, tag_sz)
             _txt_mixed(draw, (W-lw_)//2, tag_top+ri*28, row,
-                       tag_sz, (*acc, _a(tag_a*0.88)))
+                       tag_sz, acc, _a(tag_a*0.88))
 
     # ── Bottom CTA ────────────────────────────────────────────────────────
     cta_a = _slide(t, dur*0.82, 0.5)
