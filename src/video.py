@@ -996,10 +996,6 @@ class VideoCreator:
                     fact_data=fact_data,
                 )
 
-            def make_frame(t):
-                return render_fn(bg, hook, body, body_words,
-                                 topic_key, lang, follow_text, tags, t, duration)
-
         clip = VideoClip(make_frame, duration=duration).set_fps(REEL_FPS)
         clip = fadein(clip, min(0.4, duration*0.05))
         clip = fadeout(clip, min(0.6, duration*0.06))
