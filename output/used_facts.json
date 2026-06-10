@@ -81,12 +81,15 @@
     "1d5489ff927f"
   ],
   "earthglitch__hooks": [
-    "धरती पर समुद्र उलटा बहता है?"
+    "धरती पर समुद्र उलटा बहता है?",
+    "क्या आप जानते हैं मोनोलेक का रहस्य?"
   ],
   "earthglitch__categories": [
-    "Natural Phenomena"
+    "Natural Phenomena",
+    "Geographic Wonders"
   ],
   "earthglitch__fingerprints": [
-    "b266a83fdbf1"
+    "b266a83fdbf1",
+    "3d41f07a54d7"
   ]
 }
