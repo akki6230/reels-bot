@@ -1,13 +1,14 @@
 {
-  "generated_at": "2026-06-10T07:55:19.262282+00:00",
-  "total_runs": 40,
-  "posted": 17,
+  "generated_at": "2026-06-10T11:12:47.699861+00:00",
+  "total_runs": 41,
+  "posted": 18,
   "failed": 4,
   "dry_runs": 9,
   "en_posted": 4,
-  "hi_posted": 13,
-  "success_rate": 42.5,
+  "hi_posted": 14,
+  "success_rate": 43.9,
   "topic_counts": {
+    "earthglitch": 1,
     "sciencewrong": 2,
     "space": 4,
     "worldnews": 1,
@@ -17,6 +18,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-10T11:12:47.699562+00:00",
+      "topic": "earthglitch",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "धरती पर समुद्र उलटा बहता है?",
+      "category": "Natural Phenomena",
+      "media_id": "3916388631563159443_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-10T07:55:19.262032+00:00",
       "topic": "sciencewrong",
@@ -507,16 +521,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-10T07:55:19.262032+00:00",
-    "topic": "sciencewrong",
+    "timestamp": "2026-06-10T11:12:47.699562+00:00",
+    "topic": "earthglitch",
     "lang": "hi",
     "status": "posted",
-    "hook": "डॉक्टरों ने कहा था पारा पीना सुरक्षित है",
-    "category": "Wrong Theories",
-    "media_id": "3916289273937180669_24336816956",
+    "hook": "धरती पर समुद्र उलटा बहता है?",
+    "category": "Natural Phenomena",
+    "media_id": "3916388631563159443_24336816956",
     "error": "",
-    "image_source": "pexels",
-    "reel_style": "documentary",
+    "image_source": "pil",
+    "reel_style": "cartoon",
     "duration": 20
   }
 }
