@@ -809,33 +809,36 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
         draw.ellipse([pb_w-5, 3, pb_w+5, 11], fill=(*acc3, bar_a))
 
     # ── Topic label + brand ────────────────────────────────────────────────
-    hdr_a   = _slide(t, 0.2, 0.4)
-    lbl_fnt = _f(24, bold=True, lang="en")
-    lbl     = THEMES.get(topic_key, {}).get("label", "")
-    draw.text((PAD, 20), lbl, font=lbl_fnt, fill=(*acc, hdr_a))
+    hdr_a     = _slide(t, 0.2, 0.4)
     brand_fnt = _f(22, lang="en")
     brand_bb  = brand_fnt.getbbox("cosmos.capsule")
     draw.text((W-brand_bb[2]-PAD, 22), "cosmos.capsule",
               font=brand_fnt, fill=(180,180,180,hdr_a))
 
-    # ── Exam label badge (only for examfacts topic) — 100px from top, big ──
     exam_type = fact_data.get("exam_type", "") if isinstance(fact_data, dict) else ""
+
     if topic_key == "examfacts" and exam_type:
-        exam_sz   = 32                              # bigger font
-        exam_fnt  = _f(exam_sz, bold=True, lang="en")
+        # ── Exam badge at very top (replaces topic label) ──────────────────
+        exam_sz   = 34
+        exam_fnt  = _f(exam_sz, bold=True, lang="hi")
         exam_text = f"📌 {exam_type} में पूछा गया"
         exam_bb   = exam_fnt.getbbox(exam_text)
-        ex_w      = exam_bb[2] + 40
-        ex_h      = 52
+        ex_w      = exam_bb[2] + 48
+        ex_h      = 56
         ex_x      = (W - ex_w) // 2
-        ex_y      = 100                             # 100px from top
+        ex_y      = 18                    # 18px from top — right at the top
         draw.rounded_rectangle([ex_x, ex_y, ex_x+ex_w, ex_y+ex_h],
-                               radius=26,
+                               radius=28,
                                fill=(*acc, _a(hdr_a*0.25)),
-                               outline=(*acc, _a(hdr_a*0.9)),
+                               outline=(*acc, _a(hdr_a*0.95)),
                                width=2)
-        draw.text((ex_x+20, ex_y+10), exam_text,
+        draw.text((ex_x+24, ex_y+11), exam_text,
                   font=exam_fnt, fill=(*acc, hdr_a))
+    else:
+        # Normal topic label (left side)
+        lbl_fnt = _f(24, bold=True, lang="en")
+        lbl     = THEMES.get(topic_key, {}).get("label", "")
+        draw.text((PAD, 20), lbl, font=lbl_fnt, fill=(*acc, hdr_a))
 
     # ── Calculate block layout ─────────────────────────────────────────────
     hook_sz  = 68                                   # bigger title
