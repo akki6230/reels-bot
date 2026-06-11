@@ -875,19 +875,17 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
         draw.rectangle([W//2-div_w//2, div_y, W//2+div_w//2, div_y+2],
                        fill=(*acc, _a(div_a*0.6)))
 
-    # ── Body word-by-word ─────────────────────────────────────────────────
+    # ── Body text — show all at once after hook ───────────────────────────
     body_a = _slide(t, body_start_t, 0.5)
     if body_a > 0:
-        elapsed = max(0, t - body_start_t)
-        n_words = min(len(body_words),
-                      int(elapsed/max(0.25,body_window/max(len(body_words),1)))+1)
-        sls  = _wrap_mixed(" ".join(body_words[:n_words]), d_size, W-PAD*2)
+        sls  = _wrap_mixed(body, d_size, W-PAD*2)
         sh_  = len(sls) * 52
         sy_  = div_y + gap
         _glass(draw, PAD-16, sy_-12, W-PAD+16, sy_+sh_+12,
                fc=(0,0,0), fa=_a(body_a*0.55), sc=acc2, sa=_a(body_a*0.2), r=14)
         for li, sl in enumerate(sls):
-            la_ = _slide(t, body_start_t+li*0.2, 0.35)
+            # Each line fades in quickly — 0.15s per line stagger
+            la_ = _slide(t, body_start_t + li*0.15, 0.3)
             lw_ = _txt_mixed_w(sl, d_size)
             _txt_mixed(draw, (W-lw_)//2, sy_+li*52, sl,
                        d_size, txt, _a(la_))
@@ -969,9 +967,9 @@ class VideoCreator:
             body_start_t = narr_start + hook_speech_dur + 0.3
             body_window  = body_speech_dur
         else:
-            # No narration — use fixed timing spread across reel duration
+            # No narration — hook appears at 0.4s, body at 2.5s (always visible)
             hook_word_interval = 0.35
-            body_start_t       = min(duration * 0.35, 5.5)
+            body_start_t       = 2.5   # show body early so all text is visible
             body_window        = duration * 0.45
 
         log.info(f"  Word timing: hook_interval={hook_word_interval:.2f}s body_start={body_start_t:.1f}s")
