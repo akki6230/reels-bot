@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-11T03:23:50.889005+00:00",
-  "total_runs": 43,
+  "generated_at": "2026-06-11T03:36:21.468239+00:00",
+  "total_runs": 44,
   "posted": 19,
   "failed": 4,
-  "dry_runs": 10,
+  "dry_runs": 11,
   "en_posted": 4,
   "hi_posted": 15,
-  "success_rate": 44.2,
+  "success_rate": 43.2,
   "topic_counts": {
     "earthglitch": 2,
     "sciencewrong": 2,
@@ -18,6 +18,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-11T03:36:21.467969+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "dry_run_ok",
+      "hook": "भारत की सबसे लंबी नदी कौन सी है?",
+      "category": "Geography",
+      "media_id": "",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-11T03:23:50.888715+00:00",
       "topic": "space",
@@ -547,16 +560,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-11T03:23:50.888715+00:00",
-    "topic": "space",
+    "timestamp": "2026-06-11T03:36:21.467969+00:00",
+    "topic": "examfacts",
     "lang": "hi",
     "status": "dry_run_ok",
-    "hook": "अंतरिक्ष के 5 रहस्य 🌌",
-    "category": "",
+    "hook": "भारत की सबसे लंबी नदी कौन सी है?",
+    "category": "Geography",
     "media_id": "",
     "error": "",
-    "image_source": "carousel_pexels",
-    "reel_style": "carousel",
+    "image_source": "pil",
+    "reel_style": "cartoon",
     "duration": 20
   }
 }
