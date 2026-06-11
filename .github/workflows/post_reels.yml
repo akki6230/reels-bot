@@ -71,8 +71,8 @@ jobs:
         id: topic
         run: python src/pick_topic.py
         env:
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
-          INPUT_TOPIC:       ${{ github.event.inputs.topic }}
+          EVENT_NAME:  ${{ github.event_name }}
+          INPUT_TOPIC: ${{ github.event.inputs.topic }}
 
       - name: 🎬 Generate & post reel (attempt 1)
         id: post_attempt_1

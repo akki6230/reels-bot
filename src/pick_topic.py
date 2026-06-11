@@ -1,27 +1,19 @@
 """
-src/pick_topic.py — 3 reels/day, all Hindi, 5 topics rotating by day.
+src/pick_topic.py — 3 reels/day, all Hindi, 7 topics rotating by day.
+GK and ExamFacts appear every day — highly viral for Indian audience.
 """
 
 import os
 from datetime import datetime, timezone
+from config import DAY_ROTATION
 
-DAY_ROTATION = {
-    0: ("psychology",   "mindblowing",  "space"),
-    1: ("mindblowing",  "space",        "sciencewrong"),
-    2: ("space",        "sciencewrong", "earthglitch"),
-    3: ("sciencewrong", "earthglitch",  "psychology"),
-    4: ("earthglitch",  "psychology",   "mindblowing"),
-    5: ("psychology",   "space",        "mindblowing"),
-    6: ("mindblowing",  "earthglitch",  "space"),
-}
+VALID_TOPICS = list(__import__('config').TOPICS.keys())
 
 HOUR_SLOT = {
-    3:  0,    # 9:00 AM IST
-    7:  1,    # 1:00 PM IST
-    13: 2,    # 7:00 PM IST
+    3:  0,   # 9:00 AM IST
+    7:  1,   # 1:00 PM IST
+    13: 2,   # 7:00 PM IST
 }
-
-VALID_TOPICS = ["psychology", "mindblowing", "space", "sciencewrong", "earthglitch"]
 
 
 def set_output(name: str, value: str):
@@ -33,14 +25,16 @@ def set_output(name: str, value: str):
 
 
 def main():
-    event    = os.environ.get("GITHUB_EVENT_NAME", "schedule")
+    event    = os.environ.get("EVENT_NAME", "schedule")
     now_utc  = datetime.now(timezone.utc)
     utc_hour = now_utc.hour
     weekday  = now_utc.weekday()
 
     if event == "workflow_dispatch":
-        topic = os.environ.get("INPUT_TOPIC", "space").strip().lower()
-        topic = topic if topic in VALID_TOPICS else "space"
+        topic = os.environ.get("INPUT_TOPIC", "").strip().lower()
+        if not topic or topic not in VALID_TOPICS:
+            topic = "gk"
+        print(f"[pick_topic] Manual trigger → topic={topic}")
         set_output("topic", topic)
         set_output("lang",  "hi")
         return
@@ -50,7 +44,7 @@ def main():
         closest  = min(HOUR_SLOT.keys(), key=lambda h: abs(h - utc_hour))
         slot_idx = HOUR_SLOT[closest]
 
-    day_topics = DAY_ROTATION.get(weekday, ("psychology", "mindblowing", "space"))
+    day_topics = DAY_ROTATION.get(weekday, ("gk", "mindblowing", "space"))
     topic      = day_topics[slot_idx]
 
     set_output("topic", topic)
