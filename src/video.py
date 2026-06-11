@@ -812,7 +812,7 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
     hdr_a     = _slide(t, 0.2, 0.4)
     brand_fnt = _f(22, lang="en")
     brand_bb  = brand_fnt.getbbox("cosmos.capsule")
-    draw.text((W-brand_bb[2]-PAD, 22), "cosmos.capsule",
+    draw.text((W-brand_bb[2]-PAD, 88), "cosmos.capsule",
               font=brand_fnt, fill=(180,180,180,hdr_a))
 
     exam_type = fact_data.get("exam_type", "") if isinstance(fact_data, dict) else ""
@@ -826,7 +826,7 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
         ex_w      = exam_bb[2] + 48
         ex_h      = 56
         ex_x      = (W - ex_w) // 2
-        ex_y      = 18                    # 18px from top — right at the top
+        ex_y      = 90                    # below iPhone notch/Dynamic Island
         draw.rounded_rectangle([ex_x, ex_y, ex_x+ex_w, ex_y+ex_h],
                                radius=28,
                                fill=(*acc, _a(hdr_a*0.25)),
@@ -838,7 +838,7 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
         # Normal topic label (left side)
         lbl_fnt = _f(24, bold=True, lang="en")
         lbl     = THEMES.get(topic_key, {}).get("label", "")
-        draw.text((PAD, 20), lbl, font=lbl_fnt, fill=(*acc, hdr_a))
+        draw.text((PAD, 88), lbl, font=lbl_fnt, fill=(*acc, hdr_a))
 
     # ── Calculate block layout ─────────────────────────────────────────────
     hook_sz  = 68                                   # bigger title
