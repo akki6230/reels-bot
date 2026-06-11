@@ -1,13 +1,14 @@
 {
-  "generated_at": "2026-06-11T03:51:21.224149+00:00",
-  "total_runs": 45,
-  "posted": 19,
+  "generated_at": "2026-06-11T04:01:50.644918+00:00",
+  "total_runs": 46,
+  "posted": 20,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 15,
-  "success_rate": 42.2,
+  "hi_posted": 16,
+  "success_rate": 43.5,
   "topic_counts": {
+    "examfacts": 1,
     "earthglitch": 2,
     "sciencewrong": 2,
     "space": 4,
@@ -18,6 +19,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-11T04:01:50.644634+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "भारत का पहला राष्ट्रीय उद्यान कौन सा है?",
+      "category": "History",
+      "media_id": "3916896576960883129_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 19
+    },
     {
       "timestamp": "2026-06-11T03:51:21.223902+00:00",
       "topic": "examfacts",
@@ -573,16 +587,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-11T03:51:21.223902+00:00",
+    "timestamp": "2026-06-11T04:01:50.644634+00:00",
     "topic": "examfacts",
     "lang": "hi",
-    "status": "dry_run_ok",
-    "hook": "भारत के संविधान में कुल कितने अनुच्छेद हैं?",
-    "category": "Polity",
-    "media_id": "",
+    "status": "posted",
+    "hook": "भारत का पहला राष्ट्रीय उद्यान कौन सा है?",
+    "category": "History",
+    "media_id": "3916896576960883129_24336816956",
     "error": "",
     "image_source": "pil",
-    "reel_style": "documentary",
-    "duration": 15
+    "reel_style": "cartoon",
+    "duration": 19
   }
 }
