@@ -104,16 +104,19 @@
   "examfacts__hooks": [
     "भारत की सबसे लंबी नदी कौन सी है?",
     "भारत के संविधान में कुल कितने अनुच्छेद हैं?",
-    "भारत का पहला राष्ट्रीय उद्यान कौन सा है?"
+    "भारत का पहला राष्ट्रीय उद्यान कौन सा है?",
+    "ब्लैक होल का event horizon क्या है?"
   ],
   "examfacts__categories": [
     "Geography",
     "Polity",
-    "History"
+    "History",
+    "Physics"
   ],
   "examfacts__fingerprints": [
     "5490ecd14038",
     "4cb8d6db4011",
-    "a9b964359d59"
+    "a9b964359d59",
+    "8d4c82054aa5"
   ]
 }

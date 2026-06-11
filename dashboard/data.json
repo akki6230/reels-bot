@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-11T04:01:50.644918+00:00",
-  "total_runs": 46,
-  "posted": 20,
+  "generated_at": "2026-06-11T08:24:37.230196+00:00",
+  "total_runs": 47,
+  "posted": 21,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 16,
-  "success_rate": 43.5,
+  "hi_posted": 17,
+  "success_rate": 44.7,
   "topic_counts": {
-    "examfacts": 1,
+    "examfacts": 2,
     "earthglitch": 2,
     "sciencewrong": 2,
     "space": 4,
@@ -19,6 +19,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-11T08:24:37.230015+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "ब्लैक होल का event horizon क्या है?",
+      "category": "Physics",
+      "media_id": "3917028783486620838_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-11T04:01:50.644634+00:00",
       "topic": "examfacts",
@@ -587,16 +600,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-11T04:01:50.644634+00:00",
+    "timestamp": "2026-06-11T08:24:37.230015+00:00",
     "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "भारत का पहला राष्ट्रीय उद्यान कौन सा है?",
-    "category": "History",
-    "media_id": "3916896576960883129_24336816956",
+    "hook": "ब्लैक होल का event horizon क्या है?",
+    "category": "Physics",
+    "media_id": "3917028783486620838_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 19
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 20
   }
 }
