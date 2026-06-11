@@ -100,5 +100,14 @@
   "earthglitch__fingerprints": [
     "b266a83fdbf1",
     "3d41f07a54d7"
+  ],
+  "examfacts__hooks": [
+    "भारत की सबसे लंबी नदी कौन सी है?"
+  ],
+  "examfacts__categories": [
+    "Geography"
+  ],
+  "examfacts__fingerprints": [
+    "5490ecd14038"
   ]
 }
