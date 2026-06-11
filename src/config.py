@@ -97,9 +97,10 @@ TOPICS = {
                            "upsc ssc preparation art"],
         "color_scheme": {"bg":(4,4,18),"accent":(80,200,255),"text":(220,240,255)},
         "hashtags_hi": (
-            "#UPSC #SSC #NEET #IIT #परीक्षा #exampreparation "
-            "#gkinhindi #currentaffairs #reelsviral #reelsindia "
-            "#hindireels #trending #foryou #viral #cosmoscapsule"
+            "#UPSC #SSC #NEET #IITpreparation #exampreparation "
+            "#UPSCpreparation #SSCpreparation #NEETpreparation "
+            "#currentaffairs #gkinhindi #reelsindia #hindireels "
+            "#trending #foryou #viral #studymotivation #cosmoscapsule"
         ),
     },
 }

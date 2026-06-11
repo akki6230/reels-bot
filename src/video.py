@@ -86,7 +86,7 @@ VIDEO_TAGS = {
     "sciencewrong": ["#sciencefail","#विज्ञान","#sciencefacts","#funny","#facts","#cosmoscapsule"],
     "earthglitch":  ["#earthglitch","#धरती","#naturalfacts","#amazing","#mystery","#cosmoscapsule"],
     "gk":           ["#सामान्यज्ञान","#GK","#gkinhindi","#ज्ञान","#india","#cosmoscapsule"],
-    "examfacts":    ["#UPSC","#SSC","#NEET","#IIT","#gkinhindi","#cosmoscapsule"],
+    "examfacts":    ["#UPSC","#SSC","#NEET","#IITpreparation","#examprep","#gkinhindi","#cosmoscapsule"],
 }
 
 # ── Font helpers ───────────────────────────────────────────────────────────────
@@ -818,32 +818,32 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
     draw.text((W-brand_bb[2]-PAD, 22), "cosmos.capsule",
               font=brand_fnt, fill=(180,180,180,hdr_a))
 
-    # ── Exam label badge (only for examfacts topic) ────────────────────────
+    # ── Exam label badge (only for examfacts topic) — 100px from top, big ──
     exam_type = fact_data.get("exam_type", "") if isinstance(fact_data, dict) else ""
     if topic_key == "examfacts" and exam_type:
-        exam_fnt  = _f(22, bold=True, lang="en")
+        exam_sz   = 32                              # bigger font
+        exam_fnt  = _f(exam_sz, bold=True, lang="en")
         exam_text = f"📌 {exam_type} में पूछा गया"
         exam_bb   = exam_fnt.getbbox(exam_text)
-        ex_w      = exam_bb[2] + 24
-        ex_h      = 36
+        ex_w      = exam_bb[2] + 40
+        ex_h      = 52
         ex_x      = (W - ex_w) // 2
-        ex_y      = 60
-        # Pill badge
+        ex_y      = 100                             # 100px from top
         draw.rounded_rectangle([ex_x, ex_y, ex_x+ex_w, ex_y+ex_h],
-                               radius=18,
+                               radius=26,
                                fill=(*acc, _a(hdr_a*0.25)),
-                               outline=(*acc, _a(hdr_a*0.8)),
-                               width=1)
-        draw.text((ex_x+12, ex_y+7), exam_text,
+                               outline=(*acc, _a(hdr_a*0.9)),
+                               width=2)
+        draw.text((ex_x+20, ex_y+10), exam_text,
                   font=exam_fnt, fill=(*acc, hdr_a))
 
     # ── Calculate block layout ─────────────────────────────────────────────
-    hook_sz  = 60
+    hook_sz  = 68                                   # bigger title
     h_lines  = _wrap_mixed(hook, hook_sz, W-PAD*2, bold=True)
-    h_total  = len(h_lines) * 76
-    d_size   = 38
+    h_total  = len(h_lines) * 84
+    d_size   = 44                                   # bigger description
     d_lines_full = _wrap_mixed(body, d_size, W-PAD*2)
-    d_total  = len(d_lines_full) * 52
+    d_total  = len(d_lines_full) * 58
     gap      = 28
     block_h  = h_total + gap + 2 + gap + d_total
     start_y  = H//2 - block_h//2
@@ -859,13 +859,11 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
         for line in h_lines:
             lw_ = _txt_mixed_w(line, hook_sz, bold=True)
             lx_ = (W-lw_)//2
-            # Shadow
             _txt_mixed(draw, lx_+2, hy+2, line, hook_sz,
                        (0,0,0), _a(hook_a*0.4), bold=True, shadow=False)
-            # Main text
             _txt_mixed(draw, lx_, hy, line, hook_sz,
                        acc, _a(hook_a), bold=True, shadow=False)
-            hy += 76
+            hy += 84
 
     # ── Divider ────────────────────────────────────────────────────────────
     div_y = start_y + h_total + gap
@@ -879,15 +877,14 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
     body_a = _slide(t, body_start_t, 0.5)
     if body_a > 0:
         sls  = _wrap_mixed(body, d_size, W-PAD*2)
-        sh_  = len(sls) * 52
+        sh_  = len(sls) * 58
         sy_  = div_y + gap
         _glass(draw, PAD-16, sy_-12, W-PAD+16, sy_+sh_+12,
                fc=(0,0,0), fa=_a(body_a*0.55), sc=acc2, sa=_a(body_a*0.2), r=14)
         for li, sl in enumerate(sls):
-            # Each line fades in quickly — 0.15s per line stagger
             la_ = _slide(t, body_start_t + li*0.15, 0.3)
             lw_ = _txt_mixed_w(sl, d_size)
-            _txt_mixed(draw, (W-lw_)//2, sy_+li*52, sl,
+            _txt_mixed(draw, (W-lw_)//2, sy_+li*58, sl,
                        d_size, txt, _a(la_))
 
     # ── Hashtags ──────────────────────────────────────────────────────────

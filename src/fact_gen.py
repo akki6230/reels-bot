@@ -137,17 +137,18 @@ JSON लौटाएं:
 }}""",
 
     "examfacts": """\
-SSC, UPSC, NEET, या IIT JEE की preparation के लिए एक important fact बनाएं।
-किसी भी subject से — History, Geography, Science, Polity, Economy, Biology, Physics।
-Question style में hook, answer body में।
+एक specific competitive exam के लिए एक important question/fact बनाएं।
+इनमें से किसी एक exam को target करें: UPSC, SSC CGL, NEET, IIT JEE।
+exam_type में ONLY वही exam लिखें जिससे यह question directly related हो।
+Question style में hook, clear answer body में।
 
 JSON लौटाएं:
 {{
-  "hook": "अधिकतम 8 शब्द। Question format — जैसे 'भारत का सबसे पुराना बांध कौन सा है?'",
-  "body": "सही Answer बोल्ड करके शुरू करें। फिर 1-2 sentences explanation।",
-  "caption": "Caption जो students share करें। Comment में answer पूछें।",
-  "fact_category": "History / Geography / Science / Polity / Economy / Biology / Physics / Chemistry",
-  "exam_type": "UPSC या SSC या NEET या IIT JEE — जो सबसे relevant हो"
+  "hook": "अधिकतम 8 शब्द। Question format — जैसे 'भारत का सबसे लंबा बांध कौन सा है?'",
+  "body": "Answer पहले लिखें। फिर 1-2 sentences explanation। 100% accurate facts।",
+  "caption": "Caption जो students share और save करें। Comment में guess करने को कहें।",
+  "fact_category": "History / Geography / Polity / Economy / Biology / Physics / Chemistry / Maths",
+  "exam_type": "UPSC या SSC CGL या NEET या IIT JEE — सिर्फ एक exact exam"
 }}""",
 }
 
