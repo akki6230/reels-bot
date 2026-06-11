@@ -120,12 +120,15 @@
     "8d4c82054aa5"
   ],
   "psychology__hooks": [
-    "आपका दिमाग झूठ बोलता है हर दिन"
+    "आपका दिमाग झूठ बोलता है हर दिन",
+    "आपके फैसले 95% अवचेतन मन लेता है"
   ],
   "psychology__categories": [
-    "Memory"
+    "Memory",
+    "Behavior"
   ],
   "psychology__fingerprints": [
-    "ae137ffff6be"
+    "ae137ffff6be",
+    "d0bf6a124a79"
   ]
 }
