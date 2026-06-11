@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-11T03:36:21.468239+00:00",
-  "total_runs": 44,
+  "generated_at": "2026-06-11T03:51:21.224149+00:00",
+  "total_runs": 45,
   "posted": 19,
   "failed": 4,
-  "dry_runs": 11,
+  "dry_runs": 12,
   "en_posted": 4,
   "hi_posted": 15,
-  "success_rate": 43.2,
+  "success_rate": 42.2,
   "topic_counts": {
     "earthglitch": 2,
     "sciencewrong": 2,
@@ -18,6 +18,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-11T03:51:21.223902+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "dry_run_ok",
+      "hook": "भारत के संविधान में कुल कितने अनुच्छेद हैं?",
+      "category": "Polity",
+      "media_id": "",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "documentary",
+      "duration": 15
+    },
     {
       "timestamp": "2026-06-11T03:36:21.467969+00:00",
       "topic": "examfacts",
@@ -560,16 +573,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-11T03:36:21.467969+00:00",
+    "timestamp": "2026-06-11T03:51:21.223902+00:00",
     "topic": "examfacts",
     "lang": "hi",
     "status": "dry_run_ok",
-    "hook": "भारत की सबसे लंबी नदी कौन सी है?",
-    "category": "Geography",
+    "hook": "भारत के संविधान में कुल कितने अनुच्छेद हैं?",
+    "category": "Polity",
     "media_id": "",
     "error": "",
     "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 20
+    "reel_style": "documentary",
+    "duration": 15
   }
 }
