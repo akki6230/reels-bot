@@ -769,133 +769,194 @@ def _cartoon_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur
 def _single_carousel_frame(bg_photo, hook, body, body_words,
                             topic_key, lang, follow_text, tags,
                             t, dur,
-                            body_start_t=5.0,
+                            body_start_t=2.5,
                             body_window=8.0,
                             fact_data=None) -> np.ndarray:
-    th   = THEMES.get(topic_key, THEMES["space"])
-    acc  = th["acc"]; acc2=th["acc2"]; acc3=th["acc3"]; txt=th["txt"]
+    th       = THEMES.get(topic_key, THEMES["space"])
+    acc      = th["acc"]
+    acc2     = th["acc2"]
+    acc3     = th["acc3"]
+    txt      = th["txt"]
     progress = t / dur
 
-    # ── Full-bleed background + Ken Burns ─────────────────────────────────
+    # ── Background: photo + gradient overlay ──────────────────────────────
+    # Ken Burns
     scale = 1.0 + 0.04 * progress
     nw, nh = int(W*scale), int(H*scale)
-    bg = bg_photo.resize((nw, nh), Image.LANCZOS)
-    lf = (nw-W)//2; tp = (nh-H)//2
-    bg = bg.crop((lf, tp, lf+W, tp+H)).convert("RGB")
-    bg = ImageEnhance.Color(bg).enhance(0.80)
-    bg = ImageEnhance.Brightness(bg).enhance(0.55)
+    try:
+        bg = bg_photo.resize((nw, nh), Image.LANCZOS)
+        lf = (nw-W)//2; tp = (nh-H)//2
+        bg = bg.crop((lf, tp, lf+W, tp+H)).convert("RGB")
+        # Darken for text readability
+        bg = ImageEnhance.Color(bg).enhance(0.75)
+        bg = ImageEnhance.Brightness(bg).enhance(0.50)
+    except Exception:
+        bg = Image.new("RGB", (W,H), th["bg1"])
+
     frame = bg.convert("RGBA")
 
-    # Dark center overlay for text contrast
+    # Gradient overlay — darker in middle for text
     overlay = Image.new("RGBA", (W,H), (0,0,0,0))
     od = ImageDraw.Draw(overlay)
     for y in range(H):
         fy    = y / H
-        dist  = abs(fy - 0.52)
-        alpha = _a(170 * max(0, 1 - dist*2.0))
+        dist  = abs(fy - 0.55)
+        alpha = _a(175 * max(0, 1 - dist*1.8))
         od.rectangle([0,y,W,y+1], fill=(0,0,0,alpha))
     frame = Image.alpha_composite(frame, overlay)
     draw  = ImageDraw.Draw(frame)
     _vignette(draw)
 
-    # ── Top accent bar + progress ──────────────────────────────────────────
+    # ── Progress bar (thin, top) ───────────────────────────────────────────
     bar_a = _slide(t, 0.2, 0.3)
-    draw.rectangle([0, 0, W, 5], fill=(*acc, bar_a))
+    draw.rectangle([0, 0, W, 6], fill=(*acc, bar_a))
     pb_w = int(W * progress)
-    draw.rectangle([0, 5, W, 9], fill=(*acc, _a(bar_a*0.2)))
+    draw.rectangle([0, 6, W, 10], fill=(*acc, _a(bar_a*0.2)))
     if pb_w > 0:
-        draw.rectangle([0, 5, pb_w, 9], fill=(*acc, bar_a))
-    if 6 < pb_w < W-6:
-        draw.ellipse([pb_w-5, 3, pb_w+5, 11], fill=(*acc3, bar_a))
+        draw.rectangle([0, 6, pb_w, 10], fill=(*acc, bar_a))
 
-    # ── Topic label + brand ────────────────────────────────────────────────
+    # ── Header (below iPhone notch ~80px safe zone) ────────────────────────
     hdr_a     = _slide(t, 0.2, 0.4)
+    SAFE_TOP  = 80   # below Dynamic Island / notch
     brand_fnt = _f(22, lang="en")
     brand_bb  = brand_fnt.getbbox("cosmos.capsule")
-    draw.text((W-brand_bb[2]-PAD, 88), "cosmos.capsule",
-              font=brand_fnt, fill=(180,180,180,hdr_a))
+    brand_x   = W - brand_bb[2] - PAD
 
     exam_type = fact_data.get("exam_type", "") if isinstance(fact_data, dict) else ""
 
     if topic_key == "examfacts" and exam_type:
-        # ── Exam badge at very top (replaces topic label) ──────────────────
-        exam_sz   = 34
-        exam_fnt  = _f(exam_sz, bold=True, lang="hi")
-        exam_text = f"📌 {exam_type} में पूछा गया"
-        exam_bb   = exam_fnt.getbbox(exam_text)
-        ex_w      = exam_bb[2] + 48
-        ex_h      = 56
-        ex_x      = (W - ex_w) // 2
-        ex_y      = 90                    # below iPhone notch/Dynamic Island
-        draw.rounded_rectangle([ex_x, ex_y, ex_x+ex_w, ex_y+ex_h],
-                               radius=28,
-                               fill=(*acc, _a(hdr_a*0.25)),
-                               outline=(*acc, _a(hdr_a*0.95)),
-                               width=2)
-        draw.text((ex_x+24, ex_y+11), exam_text,
-                  font=exam_fnt, fill=(*acc, hdr_a))
+        # ── Exam badge centered, just below notch ─────────────────────────
+        exam_fnt  = _f(30, bold=True, lang="hi")
+        exam_text = f"📌  {exam_type}  में पूछा गया"
+        # Measure width properly
+        hi_f = _f(30, bold=True, lang="hi")
+        en_f = _f(30, bold=True, lang="en")
+        ex_tw = sum(
+            (en_f if _is_latin(w) else hi_f).getbbox(w+" ")[2]
+            for w in exam_text.split()
+        )
+        ex_w  = ex_tw + 60
+        ex_h  = 54
+        ex_x  = (W - ex_w) // 2
+        ex_y  = SAFE_TOP + 10
+
+        # Pill with border
+        draw.rounded_rectangle(
+            [ex_x, ex_y, ex_x+ex_w, ex_y+ex_h],
+            radius=27,
+            fill=(*acc, _a(hdr_a*0.22)),
+            outline=(*acc, _a(hdr_a)),
+            width=2
+        )
+        # Text centered inside pill
+        txt_x = ex_x + (ex_w - ex_tw) // 2
+        txt_y = ex_y + (ex_h - 34) // 2
+        _txt_mixed(draw, txt_x, txt_y, exam_text, 30,
+                   acc, hdr_a, bold=True, shadow=True)
+
+        # Brand top-right
+        draw.text((brand_x, SAFE_TOP+16), "cosmos.capsule",
+                  font=brand_fnt, fill=(180,180,180,hdr_a))
     else:
-        # Normal topic label (left side)
+        # Normal: topic label left + brand right
         lbl_fnt = _f(24, bold=True, lang="en")
         lbl     = THEMES.get(topic_key, {}).get("label", "")
-        draw.text((PAD, 88), lbl, font=lbl_fnt, fill=(*acc, hdr_a))
+        draw.text((PAD, SAFE_TOP+16), lbl,
+                  font=lbl_fnt, fill=(*acc, hdr_a))
+        draw.text((brand_x, SAFE_TOP+16), "cosmos.capsule",
+                  font=brand_fnt, fill=(180,180,180,hdr_a))
 
-    # ── Calculate block layout ─────────────────────────────────────────────
-    hook_sz  = 68                                   # bigger title
-    h_lines  = _wrap_mixed(hook, hook_sz, W-PAD*2, bold=True)
-    h_total  = len(h_lines) * 84
-    d_size   = 44                                   # bigger description
-    d_lines_full = _wrap_mixed(body, d_size, W-PAD*2)
-    d_total  = len(d_lines_full) * 58
-    gap      = 28
-    block_h  = h_total + gap + 2 + gap + d_total
-    start_y  = H//2 - block_h//2
+    # ── Text block layout — centered vertically ────────────────────────────
+    hook_sz       = 66
+    h_lines       = _wrap_mixed(hook, hook_sz, W-PAD*2, bold=True)
+    h_line_h      = 82
+    h_total       = len(h_lines) * h_line_h
+
+    d_size        = 42
+    d_lines_full  = _wrap_mixed(body, d_size, W-PAD*2)
+    d_line_h      = 56
+    d_total       = len(d_lines_full) * d_line_h
+
+    gap           = 30
+    block_h       = h_total + gap + 4 + gap + d_total
+
+    # Center in the middle 60% of screen
+    center_y      = H // 2
+    start_y       = center_y - block_h // 2
 
     # ── Hook card ─────────────────────────────────────────────────────────
     hook_a = _slide(t, 0.4, 0.5)
     if hook_a > 0:
-        _glass(draw, PAD-20, start_y-18, W-PAD+20, start_y+h_total+18,
-               fc=(0,0,0), fa=_a(hook_a*0.65), sc=acc, sa=_a(hook_a*0.3), r=18)
-        draw.rounded_rectangle([PAD-20, start_y-18, PAD-17, start_y+h_total+18],
-                               radius=2, fill=(*acc, _a(hook_a*0.9)))
+        # Glass card
+        draw.rounded_rectangle(
+            [PAD-22, start_y-16, W-PAD+22, start_y+h_total+16],
+            radius=18,
+            fill=(0, 0, 0, _a(hook_a*0.65)),
+            outline=(*acc, _a(hook_a*0.4)),
+            width=1
+        )
+        # Left accent stripe
+        draw.rounded_rectangle(
+            [PAD-22, start_y-16, PAD-18, start_y+h_total+16],
+            radius=2,
+            fill=(*acc, _a(hook_a*0.9))
+        )
         hy = start_y
         for line in h_lines:
             lw_ = _txt_mixed_w(line, hook_sz, bold=True)
-            lx_ = (W-lw_)//2
+            lx_ = (W - lw_) // 2
+            # Glow/shadow
             _txt_mixed(draw, lx_+2, hy+2, line, hook_sz,
-                       (0,0,0), _a(hook_a*0.4), bold=True, shadow=False)
+                       (0,0,0), _a(hook_a*0.45), bold=True, shadow=False)
+            # Main
             _txt_mixed(draw, lx_, hy, line, hook_sz,
                        acc, _a(hook_a), bold=True, shadow=False)
-            hy += 84
+            hy += h_line_h
 
     # ── Divider ────────────────────────────────────────────────────────────
     div_y = start_y + h_total + gap
-    div_a = _slide(t, 0.8, 0.3)
-    div_w = int((W-PAD*4) * _eo(min(1, max(0,(t-0.8)/0.5))))
+    div_a = _slide(t, 0.7, 0.3)
+    div_w = int((W-PAD*4) * _eo(min(1, max(0,(t-0.7)/0.4))))
     if div_w > 0:
-        draw.rectangle([W//2-div_w//2, div_y, W//2+div_w//2, div_y+2],
-                       fill=(*acc, _a(div_a*0.6)))
+        draw.rectangle(
+            [W//2-div_w//2, div_y, W//2+div_w//2, div_y+2],
+            fill=(*acc, _a(div_a*0.6))
+        )
 
-    # ── Body text — show all at once after hook ───────────────────────────
+    # ── Body — all lines, quick stagger ───────────────────────────────────
     body_a = _slide(t, body_start_t, 0.5)
     if body_a > 0:
         sls  = _wrap_mixed(body, d_size, W-PAD*2)
-        sh_  = len(sls) * 58
+        sh_  = len(sls) * d_line_h
         sy_  = div_y + gap
-        _glass(draw, PAD-16, sy_-12, W-PAD+16, sy_+sh_+12,
-               fc=(0,0,0), fa=_a(body_a*0.55), sc=acc2, sa=_a(body_a*0.2), r=14)
+
+        # Glass card
+        draw.rounded_rectangle(
+            [PAD-18, sy_-14, W-PAD+18, sy_+sh_+14],
+            radius=14,
+            fill=(0, 0, 0, _a(body_a*0.60)),
+            outline=(*acc2, _a(body_a*0.25)),
+            width=1
+        )
         for li, sl in enumerate(sls):
-            la_ = _slide(t, body_start_t + li*0.15, 0.3)
-            lw_ = _txt_mixed_w(sl, d_size)
-            _txt_mixed(draw, (W-lw_)//2, sy_+li*58, sl,
+            la_  = _slide(t, body_start_t + li*0.15, 0.3)
+            lw_  = _txt_mixed_w(sl, d_size)
+            lx_  = (W - lw_) // 2
+            _txt_mixed(draw, lx_, sy_+li*d_line_h, sl,
                        d_size, txt, _a(la_))
 
-    # ── Hashtags ──────────────────────────────────────────────────────────
-    tag_a = _slide(t, dur*0.72, 0.4)
+    # ── Hashtag strip ─────────────────────────────────────────────────────
+    tag_a = _slide(t, dur*0.75, 0.4)
     if tag_a > 0 and tags:
-        tag_sz  = 22; tag_top = H-195
-        _glass(draw, PAD-16, tag_top-8, W-PAD+16, tag_top+58,
-               fc=(0,0,0), fa=55, sc=acc, sa=22, r=12)
+        tag_sz  = 22
+        tag_top = H - 185
+        draw.rounded_rectangle(
+            [PAD-16, tag_top-8, W-PAD+16, tag_top+58],
+            radius=12,
+            fill=(0, 0, 0, _a(tag_a*0.55)),
+            outline=(*acc, _a(tag_a*0.25)),
+            width=1
+        )
         for ri, row in enumerate(["  ".join(tags[:3]), "  ".join(tags[3:6])]):
             if not row: continue
             lw_ = _txt_mixed_w(row, tag_sz)
@@ -904,16 +965,16 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
 
     # ── Bottom CTA ────────────────────────────────────────────────────────
     cta_a = _slide(t, dur*0.82, 0.5)
-    draw.rectangle([0, H-72, W, H], fill=(0,0,0,200))
-    draw.rectangle([0, H-72, W, H-70], fill=(*acc, _a(cta_a*0.5)))
+    draw.rectangle([0, H-70, W, H], fill=(0,0,0,200))
+    draw.rectangle([0, H-70, W, H-68], fill=(*acc, _a(cta_a*0.5)))
     if cta_a > 0:
         cta_fnt = _f(28, bold=True, lang="hi")
         cta_bb  = cta_fnt.getbbox(follow_text)
         pulse   = 0.85 + 0.15*math.sin(t*4)
         cx_     = (W-cta_bb[2])//2
-        draw.text((cx_+2, H-52), follow_text, font=cta_fnt,
+        draw.text((cx_+2, H-50), follow_text, font=cta_fnt,
                   fill=(0,0,0,_a(cta_a*0.4)))
-        draw.text((cx_, H-52), follow_text, font=cta_fnt,
+        draw.text((cx_, H-50), follow_text, font=cta_fnt,
                   fill=(*acc, _a(cta_a*pulse)))
 
     return np.array(frame.convert("RGB"))
