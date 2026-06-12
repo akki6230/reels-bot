@@ -1,13 +1,14 @@
 {
-  "generated_at": "2026-06-12T08:11:22.331918+00:00",
-  "total_runs": 50,
-  "posted": 24,
+  "generated_at": "2026-06-12T11:14:33.291799+00:00",
+  "total_runs": 51,
+  "posted": 25,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 20,
-  "success_rate": 48.0,
+  "hi_posted": 21,
+  "success_rate": 49.0,
   "topic_counts": {
+    "mindblowing": 1,
     "gk": 1,
     "psychology": 2,
     "examfacts": 2,
@@ -21,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-12T11:14:33.291528+00:00",
+      "topic": "mindblowing",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "5 अविश्वसनीय रहस्य जो विज्ञान ने हाल ही में खोले 🔬",
+      "category": "",
+      "media_id": "3917839263769660872_24336816956",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-12T08:11:22.331709+00:00",
       "topic": "gk",
@@ -641,16 +655,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-12T08:11:22.331709+00:00",
-    "topic": "gk",
+    "timestamp": "2026-06-12T11:14:33.291528+00:00",
+    "topic": "mindblowing",
     "lang": "hi",
     "status": "posted",
-    "hook": "भारत का सबसे बड़ा बांध चीन में है?",
-    "category": "Geography",
-    "media_id": "3917746892379802343_24336816956",
+    "hook": "5 अविश्वसनीय रहस्य जो विज्ञान ने हाल ही में खोले 🔬",
+    "category": "",
+    "media_id": "3917839263769660872_24336816956",
     "error": "",
-    "image_source": "pexels",
-    "reel_style": "documentary",
-    "duration": 17
+    "image_source": "carousel_pexels",
+    "reel_style": "carousel",
+    "duration": 20
   }
 }
