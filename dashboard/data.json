@@ -1,13 +1,14 @@
 {
-  "generated_at": "2026-06-11T17:10:25.247223+00:00",
-  "total_runs": 49,
-  "posted": 23,
+  "generated_at": "2026-06-12T08:11:22.331918+00:00",
+  "total_runs": 50,
+  "posted": 24,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 19,
-  "success_rate": 46.9,
+  "hi_posted": 20,
+  "success_rate": 48.0,
   "topic_counts": {
+    "gk": 1,
     "psychology": 2,
     "examfacts": 2,
     "earthglitch": 2,
@@ -20,6 +21,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-12T08:11:22.331709+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "भारत का सबसे बड़ा बांध चीन में है?",
+      "category": "Geography",
+      "media_id": "3917746892379802343_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "documentary",
+      "duration": 17
+    },
     {
       "timestamp": "2026-06-11T17:10:25.246925+00:00",
       "topic": "psychology",
@@ -627,16 +641,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-11T17:10:25.246925+00:00",
-    "topic": "psychology",
+    "timestamp": "2026-06-12T08:11:22.331709+00:00",
+    "topic": "gk",
     "lang": "hi",
     "status": "posted",
-    "hook": "आपके फैसले 95% अवचेतन मन लेता है",
-    "category": "Behavior",
-    "media_id": "3917293382043496547_24336816956",
+    "hook": "भारत का सबसे बड़ा बांध चीन में है?",
+    "category": "Geography",
+    "media_id": "3917746892379802343_24336816956",
     "error": "",
     "image_source": "pexels",
-    "reel_style": "cartoon",
+    "reel_style": "documentary",
     "duration": 17
   }
 }
