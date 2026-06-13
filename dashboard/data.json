@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-12T16:34:51.528344+00:00",
-  "total_runs": 52,
-  "posted": 26,
+  "generated_at": "2026-06-13T07:14:43.764919+00:00",
+  "total_runs": 53,
+  "posted": 27,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 22,
-  "success_rate": 50.0,
+  "hi_posted": 23,
+  "success_rate": 50.9,
   "topic_counts": {
+    "examfacts": 3,
     "mindblowing": 2,
     "gk": 1,
     "psychology": 2,
-    "examfacts": 2,
     "earthglitch": 2,
     "sciencewrong": 2,
     "space": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-13T07:14:43.764627+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "भारत की GDP में सबसे बड़ा योगदान कौन सा sector देता है?",
+      "category": "Economy",
+      "media_id": "3918443165366053679_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "cartoon",
+      "duration": 17
+    },
     {
       "timestamp": "2026-06-12T16:34:51.528074+00:00",
       "topic": "mindblowing",
@@ -668,16 +681,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-12T16:34:51.528074+00:00",
-    "topic": "mindblowing",
+    "timestamp": "2026-06-13T07:14:43.764627+00:00",
+    "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "आपके शरीर में एक अंग है जो कभी सो नहीं सकता",
-    "category": "Biology",
-    "media_id": "3918000289024765073_24336816956",
+    "hook": "भारत की GDP में सबसे बड़ा योगदान कौन सा sector देता है?",
+    "category": "Economy",
+    "media_id": "3918443165366053679_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "documentary",
-    "duration": 20
+    "image_source": "pexels",
+    "reel_style": "cartoon",
+    "duration": 17
   }
 }
