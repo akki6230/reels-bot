@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-13T10:16:32.907869+00:00",
-  "total_runs": 54,
-  "posted": 28,
+  "generated_at": "2026-06-13T15:18:37.415731+00:00",
+  "total_runs": 55,
+  "posted": 29,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 24,
-  "success_rate": 51.9,
+  "hi_posted": 25,
+  "success_rate": 52.7,
   "topic_counts": {
+    "space": 5,
     "examfacts": 4,
     "mindblowing": 2,
     "gk": 1,
     "psychology": 2,
     "earthglitch": 2,
     "sciencewrong": 2,
-    "space": 4,
     "worldnews": 1,
     "sports": 2,
     "science": 5,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-13T15:18:37.415490+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "अंतरिक्ष के 5 रहस्य 🌌",
+      "category": "",
+      "media_id": "3918686895235679693_24336816956",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 17
+    },
     {
       "timestamp": "2026-06-13T10:16:32.907543+00:00",
       "topic": "examfacts",
@@ -694,16 +707,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-13T10:16:32.907543+00:00",
-    "topic": "examfacts",
+    "timestamp": "2026-06-13T15:18:37.415490+00:00",
+    "topic": "space",
     "lang": "hi",
     "status": "posted",
-    "hook": "NEET में हर बार आता है यह protein का सवाल?",
-    "category": "Biology",
-    "media_id": "3918534665919758053_24336816956",
+    "hook": "अंतरिक्ष के 5 रहस्य 🌌",
+    "category": "",
+    "media_id": "3918686895235679693_24336816956",
     "error": "",
-    "image_source": "pexels",
-    "reel_style": "kinetic",
-    "duration": 19
+    "image_source": "carousel_pexels",
+    "reel_style": "carousel",
+    "duration": 17
   }
 }
