@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-13T15:18:37.415731+00:00",
-  "total_runs": 55,
-  "posted": 29,
+  "generated_at": "2026-06-14T08:01:52.339846+00:00",
+  "total_runs": 56,
+  "posted": 30,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 25,
-  "success_rate": 52.7,
+  "hi_posted": 26,
+  "success_rate": 53.6,
   "topic_counts": {
+    "gk": 2,
     "space": 5,
     "examfacts": 4,
     "mindblowing": 2,
-    "gk": 1,
     "psychology": 2,
     "earthglitch": 2,
     "sciencewrong": 2,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-14T08:01:52.339570+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "5 रोचक सामान्य ज्ञान तथ्य 📚",
+      "category": "",
+      "media_id": "3919191874683145213_24336816956",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 19
+    },
     {
       "timestamp": "2026-06-13T15:18:37.415490+00:00",
       "topic": "space",
@@ -707,16 +720,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-13T15:18:37.415490+00:00",
-    "topic": "space",
+    "timestamp": "2026-06-14T08:01:52.339570+00:00",
+    "topic": "gk",
     "lang": "hi",
     "status": "posted",
-    "hook": "अंतरिक्ष के 5 रहस्य 🌌",
+    "hook": "5 रोचक सामान्य ज्ञान तथ्य 📚",
     "category": "",
-    "media_id": "3918686895235679693_24336816956",
+    "media_id": "3919191874683145213_24336816956",
     "error": "",
     "image_source": "carousel_pexels",
     "reel_style": "carousel",
-    "duration": 17
+    "duration": 19
   }
 }
