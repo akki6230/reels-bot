@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-14T08:01:52.339846+00:00",
-  "total_runs": 56,
-  "posted": 30,
+  "generated_at": "2026-06-14T10:40:24.030534+00:00",
+  "total_runs": 57,
+  "posted": 31,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 26,
-  "success_rate": 53.6,
+  "hi_posted": 27,
+  "success_rate": 54.4,
   "topic_counts": {
-    "gk": 2,
+    "gk": 3,
     "space": 5,
     "examfacts": 4,
     "mindblowing": 2,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-14T10:40:24.030363+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "दुनिया का सबसे पुराना विश्वविद्यालय भारत में है!",
+      "category": "India",
+      "media_id": "3919271470268822151_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 17
+    },
     {
       "timestamp": "2026-06-14T08:01:52.339570+00:00",
       "topic": "gk",
@@ -720,16 +733,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-14T08:01:52.339570+00:00",
+    "timestamp": "2026-06-14T10:40:24.030363+00:00",
     "topic": "gk",
     "lang": "hi",
     "status": "posted",
-    "hook": "5 रोचक सामान्य ज्ञान तथ्य 📚",
-    "category": "",
-    "media_id": "3919191874683145213_24336816956",
+    "hook": "दुनिया का सबसे पुराना विश्वविद्यालय भारत में है!",
+    "category": "India",
+    "media_id": "3919271470268822151_24336816956",
     "error": "",
-    "image_source": "carousel_pexels",
-    "reel_style": "carousel",
-    "duration": 19
+    "image_source": "pil",
+    "reel_style": "cartoon",
+    "duration": 17
   }
 }
