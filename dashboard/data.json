@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-14T10:40:24.030534+00:00",
-  "total_runs": 57,
-  "posted": 31,
+  "generated_at": "2026-06-14T15:30:13.773403+00:00",
+  "total_runs": 58,
+  "posted": 32,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 27,
-  "success_rate": 54.4,
+  "hi_posted": 28,
+  "success_rate": 55.2,
   "topic_counts": {
+    "earthglitch": 3,
     "gk": 3,
     "space": 5,
     "examfacts": 4,
     "mindblowing": 2,
     "psychology": 2,
-    "earthglitch": 2,
     "sciencewrong": 2,
     "worldnews": 1,
     "sports": 2,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-14T15:30:13.773134+00:00",
+      "topic": "earthglitch",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "क्या आप जानते हैं डेथ वैली का सच?",
+      "category": "Earth Mysteries",
+      "media_id": "3919417344118691215_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "kinetic",
+      "duration": 18
+    },
     {
       "timestamp": "2026-06-14T10:40:24.030363+00:00",
       "topic": "gk",
@@ -733,16 +746,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-14T10:40:24.030363+00:00",
-    "topic": "gk",
+    "timestamp": "2026-06-14T15:30:13.773134+00:00",
+    "topic": "earthglitch",
     "lang": "hi",
     "status": "posted",
-    "hook": "दुनिया का सबसे पुराना विश्वविद्यालय भारत में है!",
-    "category": "India",
-    "media_id": "3919271470268822151_24336816956",
+    "hook": "क्या आप जानते हैं डेथ वैली का सच?",
+    "category": "Earth Mysteries",
+    "media_id": "3919417344118691215_24336816956",
     "error": "",
     "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 17
+    "reel_style": "kinetic",
+    "duration": 18
   }
 }
