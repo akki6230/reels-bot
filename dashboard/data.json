@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-14T15:30:13.773403+00:00",
-  "total_runs": 58,
-  "posted": 32,
+  "generated_at": "2026-06-15T09:44:27.512083+00:00",
+  "total_runs": 59,
+  "posted": 33,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 28,
-  "success_rate": 55.2,
+  "hi_posted": 29,
+  "success_rate": 55.9,
   "topic_counts": {
+    "gk": 4,
     "earthglitch": 3,
-    "gk": 3,
     "space": 5,
     "examfacts": 4,
     "mindblowing": 2,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-15T09:44:27.511790+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "5 रोचक सामान्य ज्ञान तथ्य 📚",
+      "category": "",
+      "media_id": "3919968271877640273_24336816956",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 16
+    },
     {
       "timestamp": "2026-06-14T15:30:13.773134+00:00",
       "topic": "earthglitch",
@@ -746,16 +759,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-14T15:30:13.773134+00:00",
-    "topic": "earthglitch",
+    "timestamp": "2026-06-15T09:44:27.511790+00:00",
+    "topic": "gk",
     "lang": "hi",
     "status": "posted",
-    "hook": "क्या आप जानते हैं डेथ वैली का सच?",
-    "category": "Earth Mysteries",
-    "media_id": "3919417344118691215_24336816956",
+    "hook": "5 रोचक सामान्य ज्ञान तथ्य 📚",
+    "category": "",
+    "media_id": "3919968271877640273_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "kinetic",
-    "duration": 18
+    "image_source": "carousel_pexels",
+    "reel_style": "carousel",
+    "duration": 16
   }
 }
