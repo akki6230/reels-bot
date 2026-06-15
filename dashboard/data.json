@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-15T13:34:22.056595+00:00",
-  "total_runs": 60,
-  "posted": 34,
+  "generated_at": "2026-06-15T18:12:41.856046+00:00",
+  "total_runs": 61,
+  "posted": 35,
   "failed": 4,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 30,
-  "success_rate": 56.7,
+  "hi_posted": 31,
+  "success_rate": 57.4,
   "topic_counts": {
-    "space": 6,
+    "space": 7,
     "gk": 4,
     "earthglitch": 3,
     "examfacts": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-15T18:12:41.855719+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "अंतरिक्ष इतना बड़ा है कि संख्या नहीं है",
+      "category": "Galaxies",
+      "media_id": "3920223859914161949_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "cartoon",
+      "duration": 19
+    },
     {
       "timestamp": "2026-06-15T13:34:22.056297+00:00",
       "topic": "space",
@@ -772,16 +785,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-15T13:34:22.056297+00:00",
+    "timestamp": "2026-06-15T18:12:41.855719+00:00",
     "topic": "space",
     "lang": "hi",
     "status": "posted",
-    "hook": "एक न्यूट्रॉन तारा इतना घना है कि",
-    "category": "Stars",
-    "media_id": "3920083776670095217_24336816956",
+    "hook": "अंतरिक्ष इतना बड़ा है कि संख्या नहीं है",
+    "category": "Galaxies",
+    "media_id": "3920223859914161949_24336816956",
     "error": "",
     "image_source": "pexels",
     "reel_style": "cartoon",
-    "duration": 18
+    "duration": 19
   }
 }
