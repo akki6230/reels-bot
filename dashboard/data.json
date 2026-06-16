@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-15T18:12:41.856046+00:00",
-  "total_runs": 61,
+  "generated_at": "2026-06-16T09:10:18.750470+00:00",
+  "total_runs": 62,
   "posted": 35,
-  "failed": 4,
+  "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
   "hi_posted": 31,
-  "success_rate": 57.4,
+  "success_rate": 56.5,
   "topic_counts": {
     "space": 7,
     "gk": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-16T09:10:18.750200+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "failed",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "Unterminated string starting at: line 47 column 17 (char 2217)",
+      "image_source": "",
+      "reel_style": "listicle",
+      "duration": 15
+    },
     {
       "timestamp": "2026-06-15T18:12:41.855719+00:00",
       "topic": "space",
@@ -785,16 +798,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-15T18:12:41.855719+00:00",
-    "topic": "space",
+    "timestamp": "2026-06-16T09:10:18.750200+00:00",
+    "topic": "examfacts",
     "lang": "hi",
-    "status": "posted",
-    "hook": "अंतरिक्ष इतना बड़ा है कि संख्या नहीं है",
-    "category": "Galaxies",
-    "media_id": "3920223859914161949_24336816956",
-    "error": "",
-    "image_source": "pexels",
-    "reel_style": "cartoon",
-    "duration": 19
+    "status": "failed",
+    "hook": "",
+    "category": "",
+    "media_id": "",
+    "error": "Unterminated string starting at: line 47 column 17 (char 2217)",
+    "image_source": "",
+    "reel_style": "listicle",
+    "duration": 15
   }
 }
