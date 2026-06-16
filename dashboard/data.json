@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-16T12:30:09.015357+00:00",
-  "total_runs": 63,
-  "posted": 36,
+  "generated_at": "2026-06-16T18:20:26.600576+00:00",
+  "total_runs": 64,
+  "posted": 37,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 32,
-  "success_rate": 57.1,
+  "hi_posted": 33,
+  "success_rate": 57.8,
   "topic_counts": {
-    "sciencewrong": 3,
+    "sciencewrong": 4,
     "space": 7,
     "gk": 4,
     "earthglitch": 3,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-16T18:20:26.600290+00:00",
+      "topic": "sciencewrong",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "वैज्ञानिकों ने चूहों को स्पेस में भेजा, वापस नहीं आए",
+      "category": "Science Disasters",
+      "media_id": "3920952559810948266_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 17
+    },
     {
       "timestamp": "2026-06-16T12:30:09.015111+00:00",
       "topic": "sciencewrong",
@@ -811,16 +824,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-16T12:30:09.015111+00:00",
+    "timestamp": "2026-06-16T18:20:26.600290+00:00",
     "topic": "sciencewrong",
     "lang": "hi",
     "status": "posted",
-    "hook": "वैज्ञानिकों ने साबित किया था पृथ्वी समतल है",
-    "category": "Wrong Theories",
-    "media_id": "3920776270688959271_24336816956",
+    "hook": "वैज्ञानिकों ने चूहों को स्पेस में भेजा, वापस नहीं आए",
+    "category": "Science Disasters",
+    "media_id": "3920952559810948266_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "documentary",
-    "duration": 19
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 17
   }
 }
