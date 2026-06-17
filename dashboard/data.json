@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-17T08:43:56.842565+00:00",
-  "total_runs": 65,
-  "posted": 38,
+  "generated_at": "2026-06-17T12:06:18.884084+00:00",
+  "total_runs": 66,
+  "posted": 39,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 34,
-  "success_rate": 58.5,
+  "hi_posted": 35,
+  "success_rate": 59.1,
   "topic_counts": {
+    "earthglitch": 4,
     "examfacts": 5,
     "sciencewrong": 4,
     "space": 7,
     "gk": 4,
-    "earthglitch": 3,
     "mindblowing": 2,
     "psychology": 2,
     "worldnews": 1,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-17T12:06:18.883816+00:00",
+      "topic": "earthglitch",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "धरती की 5 अजीब घटनाएं 🌍",
+      "category": "",
+      "media_id": "3921489213036508769_24336816956",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 19
+    },
     {
       "timestamp": "2026-06-17T08:43:56.842283+00:00",
       "topic": "examfacts",
@@ -837,16 +850,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-17T08:43:56.842283+00:00",
-    "topic": "examfacts",
+    "timestamp": "2026-06-17T12:06:18.883816+00:00",
+    "topic": "earthglitch",
     "lang": "hi",
     "status": "posted",
-    "hook": "SSC CGL में हर बार पूछा जाता है यह chemistry concept?",
-    "category": "Chemistry",
-    "media_id": "3921387175621672871_24336816956",
+    "hook": "धरती की 5 अजीब घटनाएं 🌍",
+    "category": "",
+    "media_id": "3921489213036508769_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "kinetic",
-    "duration": 16
+    "image_source": "carousel_pexels",
+    "reel_style": "carousel",
+    "duration": 19
   }
 }
