@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-16T18:20:26.600576+00:00",
-  "total_runs": 64,
-  "posted": 37,
+  "generated_at": "2026-06-17T08:43:56.842565+00:00",
+  "total_runs": 65,
+  "posted": 38,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 33,
-  "success_rate": 57.8,
+  "hi_posted": 34,
+  "success_rate": 58.5,
   "topic_counts": {
+    "examfacts": 5,
     "sciencewrong": 4,
     "space": 7,
     "gk": 4,
     "earthglitch": 3,
-    "examfacts": 4,
     "mindblowing": 2,
     "psychology": 2,
     "worldnews": 1,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-17T08:43:56.842283+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "SSC CGL में हर बार पूछा जाता है यह chemistry concept?",
+      "category": "Chemistry",
+      "media_id": "3921387175621672871_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "kinetic",
+      "duration": 16
+    },
     {
       "timestamp": "2026-06-16T18:20:26.600290+00:00",
       "topic": "sciencewrong",
@@ -824,16 +837,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-16T18:20:26.600290+00:00",
-    "topic": "sciencewrong",
+    "timestamp": "2026-06-17T08:43:56.842283+00:00",
+    "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "वैज्ञानिकों ने चूहों को स्पेस में भेजा, वापस नहीं आए",
-    "category": "Science Disasters",
-    "media_id": "3920952559810948266_24336816956",
+    "hook": "SSC CGL में हर बार पूछा जाता है यह chemistry concept?",
+    "category": "Chemistry",
+    "media_id": "3921387175621672871_24336816956",
     "error": "",
-    "image_source": "pexels",
+    "image_source": "pil",
     "reel_style": "kinetic",
-    "duration": 17
+    "duration": 16
   }
 }
