@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-18T11:37:35.072051+00:00",
-  "total_runs": 69,
-  "posted": 42,
+  "generated_at": "2026-06-18T16:51:39.320706+00:00",
+  "total_runs": 70,
+  "posted": 43,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 38,
-  "success_rate": 60.9,
+  "hi_posted": 39,
+  "success_rate": 61.4,
   "topic_counts": {
-    "psychology": 3,
+    "psychology": 4,
     "examfacts": 6,
     "earthglitch": 5,
     "sciencewrong": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-18T16:51:39.320418+00:00",
+      "topic": "psychology",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "आप जो याद रखते हो वो 80% गलत है",
+      "category": "Memory",
+      "media_id": "3922357410109521010_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "kinetic",
+      "duration": 18
+    },
     {
       "timestamp": "2026-06-18T11:37:35.071722+00:00",
       "topic": "psychology",
@@ -889,16 +902,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-18T11:37:35.071722+00:00",
+    "timestamp": "2026-06-18T16:51:39.320418+00:00",
     "topic": "psychology",
     "lang": "hi",
     "status": "posted",
-    "hook": "5 मनोविज्ञान के रहस्य 🧠",
-    "category": "",
-    "media_id": "3922199509594135089_24336816956",
+    "hook": "आप जो याद रखते हो वो 80% गलत है",
+    "category": "Memory",
+    "media_id": "3922357410109521010_24336816956",
     "error": "",
-    "image_source": "carousel_pexels",
-    "reel_style": "carousel",
+    "image_source": "pil",
+    "reel_style": "kinetic",
     "duration": 18
   }
 }
