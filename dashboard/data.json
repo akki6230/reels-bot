@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-17T16:49:56.019406+00:00",
-  "total_runs": 67,
-  "posted": 40,
+  "generated_at": "2026-06-18T08:26:56.150490+00:00",
+  "total_runs": 68,
+  "posted": 41,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 36,
-  "success_rate": 59.7,
+  "hi_posted": 37,
+  "success_rate": 60.3,
   "topic_counts": {
+    "examfacts": 6,
     "earthglitch": 5,
-    "examfacts": 5,
     "sciencewrong": 4,
     "space": 7,
     "gk": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-18T08:26:56.150199+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "JEE में हर बार आता है यह integration का trap?",
+      "category": "Maths",
+      "media_id": "3922103383270474643_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 16
+    },
     {
       "timestamp": "2026-06-17T16:49:56.019228+00:00",
       "topic": "earthglitch",
@@ -863,16 +876,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-17T16:49:56.019228+00:00",
-    "topic": "earthglitch",
+    "timestamp": "2026-06-18T08:26:56.150199+00:00",
+    "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "धरती पर बिजली आसमान से नीचे नहीं आती?",
-    "category": "Weather Anomalies",
-    "media_id": "3921631738802198091_24336816956",
+    "hook": "JEE में हर बार आता है यह integration का trap?",
+    "category": "Maths",
+    "media_id": "3922103383270474643_24336816956",
     "error": "",
-    "image_source": "pexels",
-    "reel_style": "kinetic",
+    "image_source": "pil",
+    "reel_style": "cartoon",
     "duration": 16
   }
 }
