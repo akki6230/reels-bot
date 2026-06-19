@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-18T16:51:39.320706+00:00",
-  "total_runs": 70,
-  "posted": 43,
+  "generated_at": "2026-06-19T08:47:26.995857+00:00",
+  "total_runs": 71,
+  "posted": 44,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 39,
-  "success_rate": 61.4,
+  "hi_posted": 40,
+  "success_rate": 62.0,
   "topic_counts": {
+    "gk": 5,
     "psychology": 4,
     "examfacts": 6,
     "earthglitch": 5,
     "sciencewrong": 4,
     "space": 7,
-    "gk": 4,
     "mindblowing": 2,
     "worldnews": 1,
     "sports": 2,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-19T08:47:26.995557+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "चंद्रमा हर साल पृथ्वी से 3.8 सेमी दूर जा रहा है",
+      "category": "Science",
+      "media_id": "3922838505544392000_24336816956",
+      "error": "",
+      "image_source": "pollinations",
+      "reel_style": "cartoon",
+      "duration": 16
+    },
     {
       "timestamp": "2026-06-18T16:51:39.320418+00:00",
       "topic": "psychology",
@@ -902,16 +915,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-18T16:51:39.320418+00:00",
-    "topic": "psychology",
+    "timestamp": "2026-06-19T08:47:26.995557+00:00",
+    "topic": "gk",
     "lang": "hi",
     "status": "posted",
-    "hook": "आप जो याद रखते हो वो 80% गलत है",
-    "category": "Memory",
-    "media_id": "3922357410109521010_24336816956",
+    "hook": "चंद्रमा हर साल पृथ्वी से 3.8 सेमी दूर जा रहा है",
+    "category": "Science",
+    "media_id": "3922838505544392000_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "kinetic",
-    "duration": 18
+    "image_source": "pollinations",
+    "reel_style": "cartoon",
+    "duration": 16
   }
 }
