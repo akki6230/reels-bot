@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-19T08:47:26.995857+00:00",
-  "total_runs": 71,
-  "posted": 44,
+  "generated_at": "2026-06-19T11:52:38.611375+00:00",
+  "total_runs": 72,
+  "posted": 45,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 40,
-  "success_rate": 62.0,
+  "hi_posted": 41,
+  "success_rate": 62.5,
   "topic_counts": {
+    "mindblowing": 3,
     "gk": 5,
     "psychology": 4,
     "examfacts": 6,
     "earthglitch": 5,
     "sciencewrong": 4,
     "space": 7,
-    "mindblowing": 2,
     "worldnews": 1,
     "sports": 2,
     "science": 5,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-19T11:52:38.611086+00:00",
+      "topic": "mindblowing",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "आपकी आंखें हर 3 सेकंड में उल्टा दिखती हैं",
+      "category": "Physics",
+      "media_id": "3922931668141345936_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-19T08:47:26.995557+00:00",
       "topic": "gk",
@@ -915,16 +928,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-19T08:47:26.995557+00:00",
-    "topic": "gk",
+    "timestamp": "2026-06-19T11:52:38.611086+00:00",
+    "topic": "mindblowing",
     "lang": "hi",
     "status": "posted",
-    "hook": "चंद्रमा हर साल पृथ्वी से 3.8 सेमी दूर जा रहा है",
-    "category": "Science",
-    "media_id": "3922838505544392000_24336816956",
+    "hook": "आपकी आंखें हर 3 सेकंड में उल्टा दिखती हैं",
+    "category": "Physics",
+    "media_id": "3922931668141345936_24336816956",
     "error": "",
-    "image_source": "pollinations",
-    "reel_style": "cartoon",
-    "duration": 16
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 20
   }
 }
