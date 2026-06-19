@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-19T11:52:38.611375+00:00",
-  "total_runs": 72,
-  "posted": 45,
+  "generated_at": "2026-06-19T16:21:37.077763+00:00",
+  "total_runs": 73,
+  "posted": 46,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 41,
-  "success_rate": 62.5,
+  "hi_posted": 42,
+  "success_rate": 63.0,
   "topic_counts": {
-    "mindblowing": 3,
+    "mindblowing": 4,
     "gk": 5,
     "psychology": 4,
     "examfacts": 6,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-19T16:21:37.077469+00:00",
+      "topic": "mindblowing",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "एक इंसान के शरीर में सोना है, पर आप गरीब हैं",
+      "category": "Biology",
+      "media_id": "3923067065249023233_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "documentary",
+      "duration": 18
+    },
     {
       "timestamp": "2026-06-19T11:52:38.611086+00:00",
       "topic": "mindblowing",
@@ -928,16 +941,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-19T11:52:38.611086+00:00",
+    "timestamp": "2026-06-19T16:21:37.077469+00:00",
     "topic": "mindblowing",
     "lang": "hi",
     "status": "posted",
-    "hook": "आपकी आंखें हर 3 सेकंड में उल्टा दिखती हैं",
-    "category": "Physics",
-    "media_id": "3922931668141345936_24336816956",
+    "hook": "एक इंसान के शरीर में सोना है, पर आप गरीब हैं",
+    "category": "Biology",
+    "media_id": "3923067065249023233_24336816956",
     "error": "",
     "image_source": "pexels",
-    "reel_style": "kinetic",
-    "duration": 20
+    "reel_style": "documentary",
+    "duration": 18
   }
 }
