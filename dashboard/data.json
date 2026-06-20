@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-19T16:21:37.077763+00:00",
-  "total_runs": 73,
-  "posted": 46,
+  "generated_at": "2026-06-20T07:16:32.346767+00:00",
+  "total_runs": 74,
+  "posted": 47,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 42,
-  "success_rate": 63.0,
+  "hi_posted": 43,
+  "success_rate": 63.5,
   "topic_counts": {
+    "examfacts": 7,
     "mindblowing": 4,
     "gk": 5,
     "psychology": 4,
-    "examfacts": 6,
     "earthglitch": 5,
     "sciencewrong": 4,
     "space": 7,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-20T07:16:32.346216+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "वह कौन सी metal है जो पारा में तैरती है?",
+      "category": "Chemistry",
+      "media_id": "3923517502989029941_24336816956",
+      "error": "",
+      "image_source": "pollinations",
+      "reel_style": "documentary",
+      "duration": 18
+    },
     {
       "timestamp": "2026-06-19T16:21:37.077469+00:00",
       "topic": "mindblowing",
@@ -941,15 +954,15 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-19T16:21:37.077469+00:00",
-    "topic": "mindblowing",
+    "timestamp": "2026-06-20T07:16:32.346216+00:00",
+    "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "एक इंसान के शरीर में सोना है, पर आप गरीब हैं",
-    "category": "Biology",
-    "media_id": "3923067065249023233_24336816956",
+    "hook": "वह कौन सी metal है जो पारा में तैरती है?",
+    "category": "Chemistry",
+    "media_id": "3923517502989029941_24336816956",
     "error": "",
-    "image_source": "pexels",
+    "image_source": "pollinations",
     "reel_style": "documentary",
     "duration": 18
   }
