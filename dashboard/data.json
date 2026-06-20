@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-20T07:16:32.346767+00:00",
-  "total_runs": 74,
-  "posted": 47,
+  "generated_at": "2026-06-20T10:20:50.544002+00:00",
+  "total_runs": 75,
+  "posted": 48,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 43,
-  "success_rate": 63.5,
+  "hi_posted": 44,
+  "success_rate": 64.0,
   "topic_counts": {
-    "examfacts": 7,
+    "examfacts": 8,
     "mindblowing": 4,
     "gk": 5,
     "psychology": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-20T10:20:50.543661+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "UPSC में बार-बार आता है: भारत का constitutional head कौन?",
+      "category": "Polity",
+      "media_id": "3923610280448322378_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "documentary",
+      "duration": 16
+    },
     {
       "timestamp": "2026-06-20T07:16:32.346216+00:00",
       "topic": "examfacts",
@@ -954,16 +967,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-20T07:16:32.346216+00:00",
+    "timestamp": "2026-06-20T10:20:50.543661+00:00",
     "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "वह कौन सी metal है जो पारा में तैरती है?",
-    "category": "Chemistry",
-    "media_id": "3923517502989029941_24336816956",
+    "hook": "UPSC में बार-बार आता है: भारत का constitutional head कौन?",
+    "category": "Polity",
+    "media_id": "3923610280448322378_24336816956",
     "error": "",
-    "image_source": "pollinations",
+    "image_source": "pil",
     "reel_style": "documentary",
-    "duration": 18
+    "duration": 16
   }
 }
