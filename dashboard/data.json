@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-21T08:17:29.269925+00:00",
-  "total_runs": 77,
-  "posted": 50,
+  "generated_at": "2026-06-21T10:56:42.121720+00:00",
+  "total_runs": 78,
+  "posted": 51,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 46,
-  "success_rate": 64.9,
+  "hi_posted": 47,
+  "success_rate": 65.4,
   "topic_counts": {
-    "gk": 6,
+    "gk": 7,
     "space": 8,
     "examfacts": 8,
     "mindblowing": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-21T10:56:42.121424+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "भारत की आबादी अब चीन को पीछे छोड़ गई!",
+      "category": "India",
+      "media_id": "3924353067854627895_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 18
+    },
     {
       "timestamp": "2026-06-21T08:17:29.269573+00:00",
       "topic": "gk",
@@ -993,16 +1006,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-21T08:17:29.269573+00:00",
+    "timestamp": "2026-06-21T10:56:42.121424+00:00",
     "topic": "gk",
     "lang": "hi",
     "status": "posted",
-    "hook": "भारत का राष्ट्रगान केवल 52 सेकंड में खत्म हो जाता है",
-    "category": "Culture",
-    "media_id": "3924273002877922871_24336816956",
+    "hook": "भारत की आबादी अब चीन को पीछे छोड़ गई!",
+    "category": "India",
+    "media_id": "3924353067854627895_24336816956",
     "error": "",
     "image_source": "pexels",
     "reel_style": "kinetic",
-    "duration": 16
+    "duration": 18
   }
 }
