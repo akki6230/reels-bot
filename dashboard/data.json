@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-21T10:56:42.121720+00:00",
-  "total_runs": 78,
-  "posted": 51,
+  "generated_at": "2026-06-21T15:29:58.238244+00:00",
+  "total_runs": 79,
+  "posted": 52,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 47,
-  "success_rate": 65.4,
+  "hi_posted": 48,
+  "success_rate": 65.8,
   "topic_counts": {
+    "earthglitch": 6,
     "gk": 7,
     "space": 8,
     "examfacts": 8,
     "mindblowing": 4,
     "psychology": 4,
-    "earthglitch": 5,
     "sciencewrong": 4,
     "worldnews": 1,
     "sports": 2,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-21T15:29:58.237960+00:00",
+      "topic": "earthglitch",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "धरती पर समय रुक जाता है एक जगह?",
+      "category": "Earth Mysteries",
+      "media_id": "3924490646109357808_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 18
+    },
     {
       "timestamp": "2026-06-21T10:56:42.121424+00:00",
       "topic": "gk",
@@ -1006,16 +1019,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-21T10:56:42.121424+00:00",
-    "topic": "gk",
+    "timestamp": "2026-06-21T15:29:58.237960+00:00",
+    "topic": "earthglitch",
     "lang": "hi",
     "status": "posted",
-    "hook": "भारत की आबादी अब चीन को पीछे छोड़ गई!",
-    "category": "India",
-    "media_id": "3924353067854627895_24336816956",
+    "hook": "धरती पर समय रुक जाता है एक जगह?",
+    "category": "Earth Mysteries",
+    "media_id": "3924490646109357808_24336816956",
     "error": "",
-    "image_source": "pexels",
-    "reel_style": "kinetic",
+    "image_source": "pil",
+    "reel_style": "cartoon",
     "duration": 18
   }
 }
