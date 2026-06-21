@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-20T15:25:43.312653+00:00",
-  "total_runs": 76,
-  "posted": 49,
+  "generated_at": "2026-06-21T08:17:29.269925+00:00",
+  "total_runs": 77,
+  "posted": 50,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 45,
-  "success_rate": 64.5,
+  "hi_posted": 46,
+  "success_rate": 64.9,
   "topic_counts": {
+    "gk": 6,
     "space": 8,
     "examfacts": 8,
     "mindblowing": 4,
-    "gk": 5,
     "psychology": 4,
     "earthglitch": 5,
     "sciencewrong": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-21T08:17:29.269573+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "भारत का राष्ट्रगान केवल 52 सेकंड में खत्म हो जाता है",
+      "category": "Culture",
+      "media_id": "3924273002877922871_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 16
+    },
     {
       "timestamp": "2026-06-20T15:25:43.312323+00:00",
       "topic": "space",
@@ -980,16 +993,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-20T15:25:43.312323+00:00",
-    "topic": "space",
+    "timestamp": "2026-06-21T08:17:29.269573+00:00",
+    "topic": "gk",
     "lang": "hi",
     "status": "posted",
-    "hook": "एक आकाशगंगा हर सेकंड मर रही है",
-    "category": "Galaxies",
-    "media_id": "3923763697846134401_24336816956",
+    "hook": "भारत का राष्ट्रगान केवल 52 सेकंड में खत्म हो जाता है",
+    "category": "Culture",
+    "media_id": "3924273002877922871_24336816956",
     "error": "",
-    "image_source": "pollinations",
-    "reel_style": "cartoon",
-    "duration": 18
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 16
   }
 }
