@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-21T15:29:58.238244+00:00",
-  "total_runs": 79,
-  "posted": 52,
+  "generated_at": "2026-06-22T09:29:01.442843+00:00",
+  "total_runs": 80,
+  "posted": 53,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 48,
-  "success_rate": 65.8,
+  "hi_posted": 49,
+  "success_rate": 66.2,
   "topic_counts": {
+    "gk": 8,
     "earthglitch": 6,
-    "gk": 7,
     "space": 8,
     "examfacts": 8,
     "mindblowing": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-22T09:29:01.442542+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "5 रोचक सामान्य ज्ञान तथ्य 📚",
+      "category": "",
+      "media_id": "3925033913374824053_24336816956",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-21T15:29:58.237960+00:00",
       "topic": "earthglitch",
@@ -1019,16 +1032,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-21T15:29:58.237960+00:00",
-    "topic": "earthglitch",
+    "timestamp": "2026-06-22T09:29:01.442542+00:00",
+    "topic": "gk",
     "lang": "hi",
     "status": "posted",
-    "hook": "धरती पर समय रुक जाता है एक जगह?",
-    "category": "Earth Mysteries",
-    "media_id": "3924490646109357808_24336816956",
+    "hook": "5 रोचक सामान्य ज्ञान तथ्य 📚",
+    "category": "",
+    "media_id": "3925033913374824053_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 18
+    "image_source": "carousel_pexels",
+    "reel_style": "carousel",
+    "duration": 20
   }
 }
