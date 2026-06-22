@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-22T13:15:47.576715+00:00",
-  "total_runs": 81,
-  "posted": 54,
+  "generated_at": "2026-06-22T18:07:38.056596+00:00",
+  "total_runs": 82,
+  "posted": 55,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 50,
-  "success_rate": 66.7,
+  "hi_posted": 51,
+  "success_rate": 67.1,
   "topic_counts": {
-    "space": 9,
+    "space": 10,
     "gk": 8,
     "earthglitch": 6,
     "examfacts": 8,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-22T18:07:38.056293+00:00",
+      "topic": "space",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "एक तारे ने 9 अरब साल पहले विस्फोट किया",
+      "category": "Gravitational Waves / Black Holes",
+      "media_id": "3925294735516768043_24336816956",
+      "error": "",
+      "image_source": "pollinations",
+      "reel_style": "cartoon",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-22T13:15:47.576420+00:00",
       "topic": "space",
@@ -1045,16 +1058,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-22T13:15:47.576420+00:00",
+    "timestamp": "2026-06-22T18:07:38.056293+00:00",
     "topic": "space",
     "lang": "hi",
     "status": "posted",
-    "hook": "प्रकाश को भी 46 अरब साल लगेंगे",
-    "category": "Galaxies",
-    "media_id": "3925147851804606135_24336816956",
+    "hook": "एक तारे ने 9 अरब साल पहले विस्फोट किया",
+    "category": "Gravitational Waves / Black Holes",
+    "media_id": "3925294735516768043_24336816956",
     "error": "",
-    "image_source": "pexels",
-    "reel_style": "kinetic",
-    "duration": 19
+    "image_source": "pollinations",
+    "reel_style": "cartoon",
+    "duration": 20
   }
 }
