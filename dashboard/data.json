@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-23T10:50:24.813233+00:00",
-  "total_runs": 84,
-  "posted": 57,
+  "generated_at": "2026-06-23T16:13:40.349752+00:00",
+  "total_runs": 85,
+  "posted": 58,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 53,
-  "success_rate": 67.9,
+  "hi_posted": 54,
+  "success_rate": 68.2,
   "topic_counts": {
+    "sciencewrong": 5,
     "examfacts": 10,
     "space": 10,
     "gk": 8,
     "earthglitch": 6,
     "mindblowing": 4,
     "psychology": 4,
-    "sciencewrong": 4,
     "worldnews": 1,
     "sports": 2,
     "science": 5,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-23T16:13:40.349450+00:00",
+      "topic": "sciencewrong",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "वैज्ञानिकों ने plants को संगीत सुनाया, वो मरने लगे",
+      "category": "Failed Experiments",
+      "media_id": "3925962174726539167_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-23T10:50:24.812958+00:00",
       "topic": "examfacts",
@@ -1084,16 +1097,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-23T10:50:24.812958+00:00",
-    "topic": "examfacts",
+    "timestamp": "2026-06-23T16:13:40.349450+00:00",
+    "topic": "sciencewrong",
     "lang": "hi",
     "status": "posted",
-    "hook": "वह कौन सा hormone है जो नींद को control करता है?",
-    "category": "Biology",
-    "media_id": "3925799482262819912_24336816956",
+    "hook": "वैज्ञानिकों ने plants को संगीत सुनाया, वो मरने लगे",
+    "category": "Failed Experiments",
+    "media_id": "3925962174726539167_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 16
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 20
   }
 }
