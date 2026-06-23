@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-23T07:07:28.674935+00:00",
-  "total_runs": 83,
-  "posted": 56,
+  "generated_at": "2026-06-23T10:50:24.813233+00:00",
+  "total_runs": 84,
+  "posted": 57,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 52,
-  "success_rate": 67.5,
+  "hi_posted": 53,
+  "success_rate": 67.9,
   "topic_counts": {
-    "examfacts": 9,
+    "examfacts": 10,
     "space": 10,
     "gk": 8,
     "earthglitch": 6,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-23T10:50:24.812958+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "वह कौन सा hormone है जो नींद को control करता है?",
+      "category": "Biology",
+      "media_id": "3925799482262819912_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 16
+    },
     {
       "timestamp": "2026-06-23T07:07:28.674677+00:00",
       "topic": "examfacts",
@@ -1071,16 +1084,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-23T07:07:28.674677+00:00",
+    "timestamp": "2026-06-23T10:50:24.812958+00:00",
     "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "IIT JEE में trap: सही moment of inertia formula कौन सा?",
-    "category": "Physics",
-    "media_id": "3925687254155195069_24336816956",
+    "hook": "वह कौन सा hormone है जो नींद को control करता है?",
+    "category": "Biology",
+    "media_id": "3925799482262819912_24336816956",
     "error": "",
-    "image_source": "pollinations",
-    "reel_style": "kinetic",
-    "duration": 17
+    "image_source": "pil",
+    "reel_style": "cartoon",
+    "duration": 16
   }
 }
