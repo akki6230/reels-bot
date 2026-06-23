@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-22T18:07:38.056596+00:00",
-  "total_runs": 82,
-  "posted": 55,
+  "generated_at": "2026-06-23T07:07:28.674935+00:00",
+  "total_runs": 83,
+  "posted": 56,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 51,
-  "success_rate": 67.1,
+  "hi_posted": 52,
+  "success_rate": 67.5,
   "topic_counts": {
+    "examfacts": 9,
     "space": 10,
     "gk": 8,
     "earthglitch": 6,
-    "examfacts": 8,
     "mindblowing": 4,
     "psychology": 4,
     "sciencewrong": 4,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-23T07:07:28.674677+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "IIT JEE में trap: सही moment of inertia formula कौन सा?",
+      "category": "Physics",
+      "media_id": "3925687254155195069_24336816956",
+      "error": "",
+      "image_source": "pollinations",
+      "reel_style": "kinetic",
+      "duration": 17
+    },
     {
       "timestamp": "2026-06-22T18:07:38.056293+00:00",
       "topic": "space",
@@ -1058,16 +1071,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-22T18:07:38.056293+00:00",
-    "topic": "space",
+    "timestamp": "2026-06-23T07:07:28.674677+00:00",
+    "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "एक तारे ने 9 अरब साल पहले विस्फोट किया",
-    "category": "Gravitational Waves / Black Holes",
-    "media_id": "3925294735516768043_24336816956",
+    "hook": "IIT JEE में trap: सही moment of inertia formula कौन सा?",
+    "category": "Physics",
+    "media_id": "3925687254155195069_24336816956",
     "error": "",
     "image_source": "pollinations",
-    "reel_style": "cartoon",
-    "duration": 20
+    "reel_style": "kinetic",
+    "duration": 17
   }
 }
