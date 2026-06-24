@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-23T16:13:40.349752+00:00",
-  "total_runs": 85,
-  "posted": 58,
+  "generated_at": "2026-06-24T07:02:43.657366+00:00",
+  "total_runs": 86,
+  "posted": 59,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 54,
-  "success_rate": 68.2,
+  "hi_posted": 55,
+  "success_rate": 68.6,
   "topic_counts": {
+    "examfacts": 11,
     "sciencewrong": 5,
-    "examfacts": 10,
     "space": 10,
     "gk": 8,
     "earthglitch": 6,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-24T07:02:43.657082+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "UPSC में कितनी बार आया: Indus Waters Treaty कब साइन हुई?",
+      "category": "Polity",
+      "media_id": "3926409628244762176_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 15
+    },
     {
       "timestamp": "2026-06-23T16:13:40.349450+00:00",
       "topic": "sciencewrong",
@@ -1097,16 +1110,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-23T16:13:40.349450+00:00",
-    "topic": "sciencewrong",
+    "timestamp": "2026-06-24T07:02:43.657082+00:00",
+    "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "वैज्ञानिकों ने plants को संगीत सुनाया, वो मरने लगे",
-    "category": "Failed Experiments",
-    "media_id": "3925962174726539167_24336816956",
+    "hook": "UPSC में कितनी बार आया: Indus Waters Treaty कब साइन हुई?",
+    "category": "Polity",
+    "media_id": "3926409628244762176_24336816956",
     "error": "",
     "image_source": "pexels",
     "reel_style": "kinetic",
-    "duration": 20
+    "duration": 15
   }
 }
