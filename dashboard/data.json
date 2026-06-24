@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-24T10:36:27.568244+00:00",
-  "total_runs": 87,
-  "posted": 60,
+  "generated_at": "2026-06-24T15:43:48.111044+00:00",
+  "total_runs": 88,
+  "posted": 61,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 56,
-  "success_rate": 69.0,
+  "hi_posted": 57,
+  "success_rate": 69.3,
   "topic_counts": {
+    "earthglitch": 7,
     "examfacts": 12,
     "sciencewrong": 5,
     "space": 10,
     "gk": 8,
-    "earthglitch": 6,
     "mindblowing": 4,
     "psychology": 4,
     "worldnews": 1,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-24T15:43:48.110743+00:00",
+      "topic": "earthglitch",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "धरती की 5 अजीब घटनाएं 🌍",
+      "category": "",
+      "media_id": "3926672100261150388_24336816956",
+      "error": "",
+      "image_source": "carousel_pexels",
+      "reel_style": "carousel",
+      "duration": 19
+    },
     {
       "timestamp": "2026-06-24T10:36:27.567962+00:00",
       "topic": "examfacts",
@@ -1123,16 +1136,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-24T10:36:27.567962+00:00",
-    "topic": "examfacts",
+    "timestamp": "2026-06-24T15:43:48.110743+00:00",
+    "topic": "earthglitch",
     "lang": "hi",
     "status": "posted",
-    "hook": "SSC CGL में trap: Fermi's Golden Rule किसके लिए है?",
-    "category": "Physics",
-    "media_id": "3926517205062349460_24336816956",
+    "hook": "धरती की 5 अजीब घटनाएं 🌍",
+    "category": "",
+    "media_id": "3926672100261150388_24336816956",
     "error": "",
-    "image_source": "pollinations",
-    "reel_style": "kinetic",
-    "duration": 18
+    "image_source": "carousel_pexels",
+    "reel_style": "carousel",
+    "duration": 19
   }
 }
