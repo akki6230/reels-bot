@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-24T07:02:43.657366+00:00",
-  "total_runs": 86,
-  "posted": 59,
+  "generated_at": "2026-06-24T10:36:27.568244+00:00",
+  "total_runs": 87,
+  "posted": 60,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 55,
-  "success_rate": 68.6,
+  "hi_posted": 56,
+  "success_rate": 69.0,
   "topic_counts": {
-    "examfacts": 11,
+    "examfacts": 12,
     "sciencewrong": 5,
     "space": 10,
     "gk": 8,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-24T10:36:27.567962+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "SSC CGL में trap: Fermi's Golden Rule किसके लिए है?",
+      "category": "Physics",
+      "media_id": "3926517205062349460_24336816956",
+      "error": "",
+      "image_source": "pollinations",
+      "reel_style": "kinetic",
+      "duration": 18
+    },
     {
       "timestamp": "2026-06-24T07:02:43.657082+00:00",
       "topic": "examfacts",
@@ -1110,16 +1123,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-24T07:02:43.657082+00:00",
+    "timestamp": "2026-06-24T10:36:27.567962+00:00",
     "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "UPSC में कितनी बार आया: Indus Waters Treaty कब साइन हुई?",
-    "category": "Polity",
-    "media_id": "3926409628244762176_24336816956",
+    "hook": "SSC CGL में trap: Fermi's Golden Rule किसके लिए है?",
+    "category": "Physics",
+    "media_id": "3926517205062349460_24336816956",
     "error": "",
-    "image_source": "pexels",
+    "image_source": "pollinations",
     "reel_style": "kinetic",
-    "duration": 15
+    "duration": 18
   }
 }
