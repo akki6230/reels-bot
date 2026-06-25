@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-24T15:43:48.111044+00:00",
-  "total_runs": 88,
-  "posted": 61,
+  "generated_at": "2026-06-25T07:03:44.941829+00:00",
+  "total_runs": 89,
+  "posted": 62,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 57,
-  "success_rate": 69.3,
+  "hi_posted": 58,
+  "success_rate": 69.7,
   "topic_counts": {
+    "examfacts": 13,
     "earthglitch": 7,
-    "examfacts": 12,
     "sciencewrong": 5,
     "space": 10,
     "gk": 8,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-25T07:03:44.941512+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "NEET में trap: mitochondria का DNA किसका होता है?",
+      "category": "Biology",
+      "media_id": "3927134917786486925_24336816956",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "cartoon",
+      "duration": 20
+    },
     {
       "timestamp": "2026-06-24T15:43:48.110743+00:00",
       "topic": "earthglitch",
@@ -1136,16 +1149,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-24T15:43:48.110743+00:00",
-    "topic": "earthglitch",
+    "timestamp": "2026-06-25T07:03:44.941512+00:00",
+    "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "धरती की 5 अजीब घटनाएं 🌍",
-    "category": "",
-    "media_id": "3926672100261150388_24336816956",
+    "hook": "NEET में trap: mitochondria का DNA किसका होता है?",
+    "category": "Biology",
+    "media_id": "3927134917786486925_24336816956",
     "error": "",
-    "image_source": "carousel_pexels",
-    "reel_style": "carousel",
-    "duration": 19
+    "image_source": "pil",
+    "reel_style": "cartoon",
+    "duration": 20
   }
 }
