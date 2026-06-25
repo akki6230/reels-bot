@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-25T10:29:14.189087+00:00",
-  "total_runs": 90,
-  "posted": 63,
+  "generated_at": "2026-06-25T16:05:18.766354+00:00",
+  "total_runs": 91,
+  "posted": 64,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 59,
-  "success_rate": 70.0,
+  "hi_posted": 60,
+  "success_rate": 70.3,
   "topic_counts": {
+    "psychology": 5,
     "examfacts": 14,
     "earthglitch": 7,
     "sciencewrong": 5,
     "space": 10,
     "gk": 8,
     "mindblowing": 4,
-    "psychology": 4,
     "worldnews": 1,
     "sports": 2,
     "science": 5,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-25T16:05:18.766033+00:00",
+      "topic": "psychology",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "आपका दर्द वास्तव में दिमाग का भ्रम है",
+      "category": "Social Psychology",
+      "media_id": "3927407509546164587_24336816956",
+      "error": "",
+      "image_source": "pollinations",
+      "reel_style": "cartoon",
+      "duration": 15
+    },
     {
       "timestamp": "2026-06-25T10:29:14.188822+00:00",
       "topic": "examfacts",
@@ -1162,16 +1175,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-25T10:29:14.188822+00:00",
-    "topic": "examfacts",
+    "timestamp": "2026-06-25T16:05:18.766033+00:00",
+    "topic": "psychology",
     "lang": "hi",
     "status": "posted",
-    "hook": "SSC CGL में क्यों हर बार fail होते हो इस अर्थशास्त्र में?",
-    "category": "Economy",
-    "media_id": "3927238291785579464_24336816956",
+    "hook": "आपका दर्द वास्तव में दिमाग का भ्रम है",
+    "category": "Social Psychology",
+    "media_id": "3927407509546164587_24336816956",
     "error": "",
-    "image_source": "pexels",
-    "reel_style": "kinetic",
-    "duration": 19
+    "image_source": "pollinations",
+    "reel_style": "cartoon",
+    "duration": 15
   }
 }
