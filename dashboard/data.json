@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-25T07:03:44.941829+00:00",
-  "total_runs": 89,
-  "posted": 62,
+  "generated_at": "2026-06-25T10:29:14.189087+00:00",
+  "total_runs": 90,
+  "posted": 63,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
-  "hi_posted": 58,
-  "success_rate": 69.7,
+  "hi_posted": 59,
+  "success_rate": 70.0,
   "topic_counts": {
-    "examfacts": 13,
+    "examfacts": 14,
     "earthglitch": 7,
     "sciencewrong": 5,
     "space": 10,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-25T10:29:14.188822+00:00",
+      "topic": "examfacts",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "SSC CGL में क्यों हर बार fail होते हो इस अर्थशास्त्र में?",
+      "category": "Economy",
+      "media_id": "3927238291785579464_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "kinetic",
+      "duration": 19
+    },
     {
       "timestamp": "2026-06-25T07:03:44.941512+00:00",
       "topic": "examfacts",
@@ -1149,16 +1162,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-25T07:03:44.941512+00:00",
+    "timestamp": "2026-06-25T10:29:14.188822+00:00",
     "topic": "examfacts",
     "lang": "hi",
     "status": "posted",
-    "hook": "NEET में trap: mitochondria का DNA किसका होता है?",
-    "category": "Biology",
-    "media_id": "3927134917786486925_24336816956",
+    "hook": "SSC CGL में क्यों हर बार fail होते हो इस अर्थशास्त्र में?",
+    "category": "Economy",
+    "media_id": "3927238291785579464_24336816956",
     "error": "",
-    "image_source": "pil",
-    "reel_style": "cartoon",
-    "duration": 20
+    "image_source": "pexels",
+    "reel_style": "kinetic",
+    "duration": 19
   }
 }
