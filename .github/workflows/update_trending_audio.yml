@@ -34,7 +34,7 @@ jobs:
 
       - name: 🎵 Parse issue and update poster.py
         id: apply
-        run: python scripts/apply_audio_update.py
+        run: python src/apply_audio_update.py
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
 

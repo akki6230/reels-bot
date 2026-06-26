@@ -1,6 +1,6 @@
 """
-scripts/apply_audio_update.py — Parses a "🎵 Update trending audio" issue
-body and rewrites the TRENDING_AUDIO dict in src/poster.py accordingly.
+src/apply_audio_update.py — Parses a "🎵 Update trending audio" issue
+body and rewrites the TRENDING_AUDIO dict in poster.py accordingly.
 
 Triggered by .github/workflows/update_trending_audio.yml whenever an issue
 labeled "audio-update" is opened. Designed to fail loudly (non-zero exit,
