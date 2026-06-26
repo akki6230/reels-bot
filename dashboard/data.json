@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-25T16:05:18.766354+00:00",
-  "total_runs": 91,
+  "generated_at": "2026-06-26T07:08:42.505671+00:00",
+  "total_runs": 92,
   "posted": 64,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
   "hi_posted": 60,
-  "success_rate": 70.3,
+  "success_rate": 69.6,
   "topic_counts": {
     "psychology": 5,
     "examfacts": 14,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-26T07:08:42.505447+00:00",
+      "topic": "i",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-06-25T16:05:18.766033+00:00",
       "topic": "psychology",
@@ -1175,16 +1188,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-25T16:05:18.766033+00:00",
-    "topic": "psychology",
+    "timestamp": "2026-06-26T07:08:42.505447+00:00",
+    "topic": "i",
     "lang": "hi",
-    "status": "posted",
-    "hook": "आपका दर्द वास्तव में दिमाग का भ्रम है",
-    "category": "Social Psychology",
-    "media_id": "3927407509546164587_24336816956",
+    "status": "failure",
+    "hook": "",
+    "category": "",
+    "media_id": "",
     "error": "",
-    "image_source": "pollinations",
-    "reel_style": "cartoon",
-    "duration": 15
+    "image_source": "",
+    "reel_style": "",
+    "duration": 0
   }
 }
