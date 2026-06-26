@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-26T07:08:42.505671+00:00",
-  "total_runs": 92,
+  "generated_at": "2026-06-26T10:37:44.166959+00:00",
+  "total_runs": 93,
   "posted": 64,
   "failed": 5,
   "dry_runs": 12,
   "en_posted": 4,
   "hi_posted": 60,
-  "success_rate": 69.6,
+  "success_rate": 68.8,
   "topic_counts": {
     "psychology": 5,
     "examfacts": 14,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-26T10:37:44.166722+00:00",
+      "topic": "i",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-06-26T07:08:42.505447+00:00",
       "topic": "i",
@@ -1188,7 +1201,7 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-26T07:08:42.505447+00:00",
+    "timestamp": "2026-06-26T10:37:44.166722+00:00",
     "topic": "i",
     "lang": "hi",
     "status": "failure",
