@@ -30,7 +30,7 @@ body:
     attributes:
       label: psychology
       description: Calm/ambient mood
-      placeholder: 37875166522082301
+      placeholder: "37875166522082301"
     validations:
       required: false
 
@@ -39,7 +39,7 @@ body:
     attributes:
       label: mindblowing
       description: Energetic/dramatic mood
-      placeholder: 37875166522082301
+      placeholder: "37875166522082301"
     validations:
       required: false
 
@@ -48,7 +48,7 @@ body:
     attributes:
       label: gk
       description: Calm/ambient mood
-      placeholder: 37875166522082301
+      placeholder: "37875166522082301"
     validations:
       required: false
 
