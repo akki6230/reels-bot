@@ -1,300 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-<meta http-equiv="Pragma" content="no-cache"/>
-<meta http-equiv="Expires" content="0"/>
-<title>Cosmos Capsule — Bot Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>cosmos.capsule — daily console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0a0b0f;--surface:#111318;--surface2:#1a1d26;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --text:#e8eaf0;--muted:#7a7f94;
-  --accent:#4f8ef7;--green:#34d399;--amber:#fbbf24;--red:#f87171;--purple:#a78bfa;
-  --green-dim:#0d2b1f;--amber-dim:#2d2008;--red-dim:#2b1010;--accent-dim:#1e2d4a;
-  --r:12px;--rs:8px;
-}
-body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.hi{font-family:'Noto Sans Devanagari','Space Grotesk',sans-serif}
-.wrap{max-width:1100px;margin:0 auto;padding:0 24px 80px}
-header{padding:36px 0 28px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border);margin-bottom:32px;gap:16px;flex-wrap:wrap}
-header h1{font-size:22px;font-weight:700;color:#fff;letter-spacing:-.5px}
-header h1 span{color:var(--accent)}
-header p{font-size:13px;color:var(--muted);margin-top:4px}
-.live{display:inline-flex;align-items:center;gap:7px;background:var(--green-dim);border:1px solid rgba(52,211,153,.2);border-radius:999px;padding:6px 14px;font-size:12px;font-weight:500;color:var(--green)}
-.dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
-.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
-.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--bar,var(--accent));opacity:.7}
-.metric-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.metric-value{font-size:32px;font-weight:700;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
-.metric-sub{font-size:11px;color:var(--muted);margin-top:4px}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
-@media(max-width:640px){.two-col{grid-template-columns:1fr}}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
-.card-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
-.card-body{padding:18px}
-.lang-pills{display:flex;gap:8px;margin-bottom:20px}
-.pill{padding:5px 14px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--border2);color:var(--muted);cursor:default}
-.pill.en{background:var(--accent-dim);color:var(--accent);border-color:rgba(79,142,247,.3)}
-.pill.hi{background:var(--purple-dim,#1e1535);color:var(--purple);border-color:rgba(167,139,250,.3)}
-.topic-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
-.topic-row:last-child{border-bottom:none}
-.topic-emoji{font-size:17px;width:26px;text-align:center}
-.topic-name{font-size:13px;font-weight:500;min-width:130px}
-.bar-wrap{flex:1;height:5px;background:var(--surface2);border-radius:999px;overflow:hidden}
-.bar{height:100%;border-radius:999px;transition:width 1s ease}
-.topic-count{font-size:11px;color:var(--muted);min-width:26px;text-align:right;font-family:'JetBrains Mono',monospace}
-.log-item{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
-.log-item:last-child{border-bottom:none}
-.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.log-dot.posted{background:var(--green)}.log-dot.failed{background:var(--red)}.log-dot.dry{background:var(--accent)}.log-dot.started{background:var(--amber)}
-.log-body{flex:1;min-width:0}
-.log-hook{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.log-meta{font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.log-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:72px;text-align:right;padding-top:2px}
-.badge{display:inline-block;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:600;text-transform:uppercase}
-.badge.posted{background:var(--green-dim);color:var(--green)}
-.badge.failed{background:var(--red-dim);color:var(--red)}
-.badge.dry{background:var(--accent-dim);color:var(--accent)}
-.lang-badge{display:inline-block;padding:1px 6px;border-radius:999px;font-size:10px;font-weight:600}
-.lang-badge.en{background:var(--accent-dim);color:var(--accent)}
-.lang-badge.hi{background:#1e1535;color:var(--purple)}
-.chart-wrap{height:110px;position:relative}
-canvas{width:100%!important;height:110px!important}
-.schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.sched-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface2);border-radius:var(--rs);font-size:12px}
-.sched-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:52px}
-.sched-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-footer{border-top:1px solid var(--border);padding:18px 0;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-footer a{color:var(--accent);text-decoration:none}
-.loading{text-align:center;padding:40px;color:var(--muted);font-size:13px}
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:10px}
-@keyframes spin{to{transform:rotate(360deg)}}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #0B0B12;
+    color: #F0EDE6;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+  }
+  .numeric { font-family: 'Oswald', 'Arial Narrow', sans-serif; }
+  .clock, .streak-num, .ring-num, .ring-unit, .rundown-date, .block-time {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  /* ---- masthead ---- */
+  .masthead { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .brand { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; color: #F0EDE6; }
+  .brand span { color: #6B6A72; font-weight: 400; }
+  .clock { font-size: 13px; color: #6B6A72; letter-spacing: 0.04em; }
+  .sub { font-size: 12.5px; color: #6B6A72; margin-bottom: 26px; letter-spacing: 0.01em; }
+
+  /* ---- hero: streak + ring ---- */
+  .hero {
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(180deg, #14141F 0%, #0F0F18 100%);
+    border: 1px solid #1E1E2A;
+    border-radius: 18px;
+    padding: 22px 22px 22px 26px;
+    margin-bottom: 22px;
+  }
+  .streak-num { font-size: 56px; font-weight: 600; line-height: 1; color: #FFB428; }
+  .streak-label { font-size: 12px; color: #8A8990; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 4px; }
+  .ring-box { position: relative; width: 86px; height: 86px; flex-shrink: 0; }
+  .ring-box svg { transform: rotate(-90deg); }
+  .ring-track { fill: none; stroke: #1E1E2A; stroke-width: 7; }
+  .ring-fill { fill: none; stroke-width: 7; stroke-linecap: round; transition: stroke-dasharray 1s linear; }
+  .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .ring-num { font-size: 19px; font-weight: 600; line-height: 1; }
+  .ring-unit { font-size: 9px; color: #6B6A72; letter-spacing: 0.05em; margin-top: 2px; }
+
+  /* ---- rundown ---- */
+  .rundown-head { display: flex; align-items: baseline; justify-content: space-between; margin: 30px 0 12px; }
+  .rundown-title { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8990; }
+  .rundown-date { font-size: 12px; color: #4D4C53; }
+
+  .block {
+    position: relative;
+    display: flex;
+    gap: 14px;
+    padding: 16px 16px 16px 0;
+    border-top: 1px solid #1A1A24;
+  }
+  .block:first-of-type { border-top: none; }
+  .rail { width: 3px; border-radius: 2px; flex-shrink: 0; align-self: stretch; min-height: 100%; }
+  .block-body { flex: 1; min-width: 0; }
+  .block-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 3px; }
+  .block-eyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+  .block-time { font-size: 12px; color: #6B6A72; flex-shrink: 0; }
+  .block-title { font-size: 15.5px; font-weight: 500; color: #F0EDE6; margin-bottom: 5px; line-height: 1.35; }
+  .block-desc { font-size: 13px; color: #9290998; color: #9A99A0; line-height: 1.55; margin-bottom: 12px; }
+  .block-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .chk {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: #15151F; border: 1px solid #24232F;
+    border-radius: 9px; padding: 8px 13px;
+    font-size: 13px; color: #C9C8D0; cursor: pointer;
+    user-select: none; transition: background 0.15s, border-color 0.15s;
+  }
+  .chk:hover { border-color: #34333F; }
+  .chk.done { background: rgba(80,200,255,0.07); border-color: rgba(80,200,255,0.35); color: #50C8FF; }
+  .chk .box {
+    width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid #44434F;
+    flex-shrink: 0; position: relative;
+  }
+  .chk.done .box { background: #50C8FF; border-color: #50C8FF; }
+  .chk.done .box::after {
+    content: ''; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px;
+    border: solid #0B0B12; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+
+  .linkbtn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; color: #6B6A72; text-decoration: none;
+    padding: 8px 4px; border-radius: 9px;
+  }
+  .linkbtn:hover { color: #9A99A0; }
+
+  /* ---- audio shelf ---- */
+  .shelf {
+    margin-top: 28px;
+    border: 1px solid #1E1E2A;
+    border-radius: 14px;
+    padding: 16px 18px;
+  }
+  .shelf-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .shelf-title { font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; color: #8A8990; }
+  .shelf-age { font-size: 11px; color: #4D4C53; }
+  .audio-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0; font-size: 13px;
+  }
+  .audio-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .audio-topic { color: #8A8990; width: 76px; flex-shrink: 0; font-size: 12px; }
+  .audio-input {
+    flex: 1; background: transparent; border: none; border-bottom: 1px solid #24232F;
+    color: #F0EDE6; font-size: 13px; padding: 4px 2px; outline: none;
+    font-family: inherit;
+  }
+  .audio-input::placeholder { color: #4D4C53; }
+  .audio-input:focus { border-bottom-color: #50C8FF; }
+  .shelf-note { font-size: 11.5px; color: #4D4C53; margin-top: 10px; line-height: 1.5; }
+
+  /* ---- footer wordmark ---- */
+  .foot { text-align: center; margin-top: 32px; font-size: 11px; color: #34333D; letter-spacing: 0.04em; }
 </style>
 </head>
 <body>
 <div class="wrap">
-<header>
-  <div>
-    <h1>🚀 Cosmos<span>Capsule</span> Dashboard</h1>
-    <p>5 viral topics · हिंदी only · 3 reels/day · GitHub Actions</p>
+
+  <div class="masthead">
+    <div class="brand">cosmos.capsule <span>console</span></div>
+    <div class="clock" id="clock">--:--</div>
   </div>
-  <div class="live"><span class="dot"></span>Automated</div>
-</header>
+  <div class="sub" id="datestr">loading…</div>
 
-<div class="metrics" id="metrics"><div class="loading"><div class="spinner"></div><br>Loading…</div></div>
-
-<div class="two-col">
-  <div class="card">
-    <div class="card-hdr"><span class="card-title">Posts by topic</span></div>
-    <div class="card-body" id="topic-bars"><div class="loading" style="padding:10px">—</div></div>
-  </div>
-  <div class="card">
-    <div class="card-hdr"><span class="card-title">Daily activity (14 days)</span></div>
-    <div class="card-body" style="padding:14px"><div class="chart-wrap"><canvas id="chart"></canvas></div></div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-hdr">
-    <span class="card-title" id="schedule-title">Today's Schedule (IST)</span>
-    <span style="font-size:11px;color:var(--muted)">IST</span>
-  </div>
-  <div class="card-body">
-    <div class="schedule-grid" id="schedule-grid"></div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-hdr">
-    <span class="card-title">Recent runs</span>
-    <span id="last-updated" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">—</span>
-  </div>
-  <div class="card-body" id="log-feed"><div class="loading" style="padding:10px">—</div></div>
-</div>
-
-<footer>
-  <span>cosmos.capsule · Powered by <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a> + <a href="https://anthropic.com" target="_blank">Claude AI</a></span>
-  <span><a href="data.json" target="_blank">raw JSON</a></span>
-</footer>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script>
-const TOPICS={
-  psychology:   {emoji:"🧠",name:"Psychology Facts",   nameHi:"मनोविज्ञान तथ्य",     color:"#a78bfa"},
-  mindblowing:  {emoji:"🤯",name:"Mind-Blowing Facts", nameHi:"दिमाग हिला देने वाले", color:"#f87171"},
-  space:        {emoji:"🚀",name:"Space & Universe",   nameHi:"अंतरिक्ष और ब्रह्मांड", color:"#4f8ef7"},
-  sciencewrong: {emoji:"⚗️",name:"Science Gone Wrong", nameHi:"विज्ञान जब गलत हो गया",color:"#34d399"},
-  earthglitch:  {emoji:"🌍",name:"Earth Glitches",     nameHi:"धरती की अजीब घटनाएं",  color:"#fbbf24"},
-};
-
-// 3 reels/day all Hindi — topics rotate by day
-const DAY_ROTATION={
-  0:["psychology",  "mindblowing", "space"],
-  1:["mindblowing", "space",       "sciencewrong"],
-  2:["space",       "sciencewrong","earthglitch"],
-  3:["sciencewrong","earthglitch", "psychology"],
-  4:["earthglitch", "psychology",  "mindblowing"],
-  5:["psychology",  "space",       "mindblowing"],
-  6:["mindblowing", "earthglitch", "space"],
-};
-const today=new Date().getDay();
-const weekday=today===0?6:today-1;
-const todayTopics=DAY_ROTATION[weekday]||["psychology","mindblowing","space"];
-
-const SCHEDULE=[
-  {time:"09:00 AM",topic:todayTopics[0],lang:"hi",note:"Morning peak"},
-  {time:"01:00 PM",topic:todayTopics[1],lang:"hi",note:"Afternoon"},
-  {time:"07:00 PM",topic:todayTopics[2],lang:"hi",note:"Prime time ⭐"},
-];
-
-function relTime(iso){
-  const m=Math.floor((Date.now()-new Date(iso))/60000);
-  if(m<1)return"just now";
-  if(m<60)return`${m}m ago`;
-  const h=Math.floor(m/60);
-  if(h<24)return`${h}h ago`;
-  return`${Math.floor(h/24)}d ago`;
-}
-
-function renderMetrics(d){
-  document.getElementById("metrics").innerHTML=`
-    <div class="metric" style="--bar:#34d399">
-      <div class="metric-label">Total posted</div>
-      <div class="metric-value">${d.posted}</div>
-      <div class="metric-sub">${d.total_runs} total runs</div>
+  <div class="hero">
+    <div>
+      <div class="streak-num" id="streakNum">0</div>
+      <div class="streak-label">day streak</div>
     </div>
-    <div class="metric" style="--bar:#4f8ef7">
-      <div class="metric-label">English reels</div>
-      <div class="metric-value">${d.en_posted||0}</div>
-      <div class="metric-sub">EN posts</div>
-    </div>
-    <div class="metric" style="--bar:#a78bfa">
-      <div class="metric-label">Hindi reels</div>
-      <div class="metric-value">${d.hi_posted||0}</div>
-      <div class="metric-sub" style="font-family:'Noto Sans Devanagari',sans-serif">हिंदी पोस्ट</div>
-    </div>
-    <div class="metric" style="--bar:#fbbf24">
-      <div class="metric-label">Success rate</div>
-      <div class="metric-value">${d.success_rate}<span style="font-size:16px;color:var(--muted)">%</span></div>
-      <div class="metric-sub">${d.failed} failed</div>
-    </div>
-  `;
-}
-
-function renderTopics(d){
-  const counts=d.topic_counts||{};
-  const max=Math.max(...Object.values(counts),1);
-  document.getElementById("topic-bars").innerHTML=Object.entries(TOPICS).map(([k,m])=>{
-    const n=counts[k]||0;
-    const pct=Math.round(n/max*100);
-    return`<div class="topic-row">
-      <span class="topic-emoji">${m.emoji}</span>
-      <span class="topic-name">${m.name}</span>
-      <div class="bar-wrap"><div class="bar" style="width:${pct}%;background:${m.color}"></div></div>
-      <span class="topic-count">${n}</span>
-    </div>`;
-  }).join("");
-}
-
-function renderSchedule(){
-  const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-  const dayName=days[weekday]||"Today";
-  document.getElementById("schedule-title").textContent=`Today's Schedule — ${dayName} (IST)`;
-  document.getElementById("schedule-grid").innerHTML=SCHEDULE.map(s=>{
-    const m=TOPICS[s.topic];
-    const dotColor=m?m.color:"#888";
-    const label=s.lang==="hi"
-      ? `<span style="font-family:'Noto Sans Devanagari',sans-serif">${m?m.nameHi:s.topic}</span>`
-      : (m?m.name:s.topic);
-    return`<div class="sched-item">
-      <span class="sched-time">${s.time}</span>
-      <span class="sched-dot" style="background:${dotColor}"></span>
-      <span style="flex:1">${m?m.emoji:""} ${label}<span style="font-size:10px;color:var(--color-text-secondary,#7a7f94);margin-left:6px">${s.note||""}</span></span>
-      <span class="lang-badge ${s.lang}">${s.lang.toUpperCase()}</span>
-    </div>`;
-  }).join("");
-}
-
-function renderLog(d){
-  const el=document.getElementById("log-feed");
-  if(!d.recent_runs?.length){el.innerHTML='<p style="color:var(--muted);font-size:13px">No runs yet.</p>';return;}
-  el.innerHTML=d.recent_runs.map(r=>{
-    const m=TOPICS[r.topic]||{emoji:"🤖",name:r.topic};
-    const s=r.status||"unknown";
-    const dc=s==="posted"?"posted":s==="failed"?"failed":s.startsWith("dry")?"dry":"started";
-    const langBadge=r.lang?`<span class="lang-badge ${r.lang}">${r.lang.toUpperCase()}</span>`:"";
-    const hook=r.hook||"(no hook)";
-    const hookClass=r.lang==="hi"?"log-hook hi":"log-hook";
-    return`<div class="log-item">
-      <div class="log-dot ${dc}"></div>
-      <div class="log-body">
-        <div class="${hookClass}">${hook}</div>
-        <div class="log-meta">
-          <span>${m.emoji} ${r.lang==="hi"?(m.nameHi||m.name):m.name}</span>
-          ${langBadge}
-          <span class="badge ${dc}">${s.replace("_ok","")}</span>
-          ${r.error?`<span style="color:var(--red);font-size:11px">${r.error.slice(0,50)}</span>`:""}
-        </div>
+    <div class="ring-box">
+      <svg width="86" height="86" viewBox="0 0 86 86">
+        <circle class="ring-track" cx="43" cy="43" r="36"></circle>
+        <circle class="ring-fill" id="ringFill" cx="43" cy="43" r="36"
+                stroke="#50C8FF" stroke-dasharray="0 226"></circle>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-num" id="ringNum">—</div>
+        <div class="ring-unit" id="ringUnit">golden hr</div>
       </div>
-      <div class="log-time" title="${new Date(r.timestamp).toLocaleString()}">${relTime(r.timestamp)}</div>
-    </div>`;
-  }).join("");
-}
+    </div>
+  </div>
 
-function renderChart(d){
-  const ctx=document.getElementById("chart").getContext("2d");
-  const days={};
-  for(let i=13;i>=0;i--){const dt=new Date();dt.setDate(dt.getDate()-i);days[dt.toISOString().slice(0,10)]=0;}
-  (d.recent_runs||[]).forEach(r=>{
-    const day=r.timestamp?.slice(0,10);
-    if(days[day]!==undefined&&r.status==="posted")days[day]++;
-  });
-  const labels=Object.keys(days).map(d=>{
-    const dt=new Date(d);
-    return dt.toLocaleDateString("en-IN",{day:"numeric",month:"short"});
-  });
-  new Chart(ctx,{
-    type:"bar",
-    data:{labels,datasets:[{data:Object.values(days),backgroundColor:"rgba(79,142,247,.45)",borderColor:"#4f8ef7",borderWidth:1.5,borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{ticks:{color:"#7a7f94",font:{size:10}},grid:{color:"rgba(255,255,255,.04)"}},
-        y:{ticks:{color:"#7a7f94",font:{size:10},stepSize:1},grid:{color:"rgba(255,255,255,.05)"},min:0},
-      },
-    },
-  });
-}
+  <div class="rundown-head">
+    <div class="rundown-title">Today's rundown</div>
+    <div class="rundown-date" id="rundownDate">—</div>
+  </div>
 
-async function load(){
-  try{
-    const r=await fetch(`data.json?v=${Date.now()}`,{cache:"no-store"});
-    if(!r.ok)throw new Error(`HTTP ${r.status}`);
-    const d=await r.json();
-    renderMetrics(d);
-    renderTopics(d);
-    renderLog(d);
-    renderChart(d);
-    renderSchedule();
-    document.getElementById("last-updated").textContent="Updated "+relTime(d.generated_at);
-  }catch(e){
-    document.getElementById("metrics").innerHTML=`<div class="loading" style="color:var(--red)">⚠️ Could not load data.json<br><small style="color:var(--muted)">Push a run first or check GitHub Pages is enabled.</small></div>`;
+  <div id="blocks"></div>
+
+  <div class="shelf">
+    <div class="shelf-head">
+      <div class="shelf-title">TRENDING AUDIO — this week's picks</div>
+      <div class="shelf-age" id="audioAge">not set</div>
+    </div>
+    <div id="audioRows"></div>
+    <div class="shelf-note">
+      Open Reels → find 1 calm + 1 energetic trending sound → paste the audio ID here, then copy
+      into <code style="color:#6B6A72">TRENDING_AUDIO</code> in poster.py. Refresh weekly — trending
+      audio has a short shelf life.
+    </div>
+  </div>
+
+  <div class="foot">100K / 6MO — BUILT FOR ONE ACCOUNT, ONE PERSON, ONE STREAK</div>
+</div>
+
+<script>
+(function () {
+  const STORAGE_PERSONAL = false;
+
+  const TOPICS = {
+    examfacts:   { name: 'Exam facts',   color: '#50C8FF' },
+    psychology:  { name: 'Psychology',   color: '#A064FF' },
+    mindblowing: { name: 'Mind-blowing', color: '#FF5032' },
+    gk:          { name: 'Daily GK',     color: '#FFB428' },
+  };
+  const ROTATION = ['examfacts','psychology','gk','examfacts','mindblowing','psychology','gk']; // Mon..Sun
+
+  const POST_HOUR_IST = 19, POST_MIN_IST = 30; // 7:30pm IST daily post time
+
+  function istNow() {
+    const utc = new Date();
+    return new Date(utc.getTime() + (utc.getTimezoneOffset()*60000) + (5.5*3600000));
   }
-}
 
-renderSchedule();
-load();
-setInterval(load,60000);
-setInterval(load,60000);
+  function pad(n){ return n.toString().padStart(2,'0'); }
+
+  function fmtClock(d){ return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' IST'; }
+
+  function fmtDate(d){
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()];
+  }
+
+  function dayKey(d){
+    return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+  }
+
+  async function loadState(){
+    try {
+      const r = await window.storage.get('console-state', STORAGE_PERSONAL);
+      return r ? JSON.parse(r.value) : {};
+    } catch(e){ return {}; }
+  }
+  async function saveState(state){
+    try { await window.storage.set('console-state', JSON.stringify(state), STORAGE_PERSONAL); }
+    catch(e){ console.error('save failed', e); }
+  }
+
+  let state = { days: {}, audio: {} };
+
+  function todaysTopic(d){
+    return ROTATION[d.getDay() === 0 ? 6 : d.getDay()-1];
+  }
+
+  function computeStreak(){
+    // count consecutive days (working backward from yesterday/today) where
+    // the "posted" checkbox was ticked
+    let n = 0;
+    let cursor = istNow();
+    // if today not yet posted, start counting from yesterday so an
+    // in-progress day doesn't break an otherwise real streak
+    let cKey = dayKey(cursor);
+    if (!(state.days[cKey] && state.days[cKey].posted)) {
+      cursor = new Date(cursor.getTime() - 86400000);
+    }
+    while (true) {
+      const k = dayKey(cursor);
+      if (state.days[k] && state.days[k].posted) {
+        n++;
+        cursor = new Date(cursor.getTime() - 86400000);
+      } else break;
+    }
+    return n;
+  }
+
+  function minutesSincePost(now){
+    const postToday = new Date(now);
+    postToday.setHours(POST_HOUR_IST, POST_MIN_IST, 0, 0);
+    let diffMin = (now - postToday) / 60000;
+    if (diffMin < 0) diffMin += 1440; // post was yesterday, hasn't hit today yet
+    return diffMin;
+  }
+
+  function renderRing(now){
+    const mins = minutesSincePost(now);
+    const ringNum = document.getElementById('ringNum');
+    const ringUnit = document.getElementById('ringUnit');
+    const fill = document.getElementById('ringFill');
+    const CIRC = 2 * Math.PI * 36;
+
+    if (mins <= 60) {
+      const remaining = Math.max(0, 60 - mins);
+      const frac = remaining / 60;
+      ringNum.textContent = Math.ceil(remaining);
+      ringUnit.textContent = 'min left';
+      fill.setAttribute('stroke', '#FF5032');
+      fill.setAttribute('stroke-dasharray', (frac*CIRC) + ' ' + CIRC);
+    } else if (mins <= 1440) {
+      ringNum.textContent = '✓';
+      ringUnit.textContent = 'replied?';
+      fill.setAttribute('stroke', '#50C8FF');
+      fill.setAttribute('stroke-dasharray', CIRC + ' ' + CIRC);
+    } else {
+      ringNum.textContent = '—';
+      ringUnit.textContent = 'no post yet';
+      fill.setAttribute('stroke', '#34333D');
+      fill.setAttribute('stroke-dasharray', '0 ' + CIRC);
+    }
+  }
+
+  const BLOCKS = [
+    {
+      id: 'posted', time: '7:30 PM',
+      eyebrow: 'AUTOMATED', eyebrowColor: '#6B6A72',
+      title: "Today's reel posted on schedule",
+      desc: 'Bot generates, renders, and posts the day\u2019s reel automatically at 7:30 PM IST. Confirm it actually went up \u2014 GitHub Actions can fail silently.',
+      action: 'check', label: 'Confirmed it posted',
+      links: [{ href: 'https://github.com', text: 'Open Actions log' }],
+    },
+    {
+      id: 'comments', time: 'within 1 hr',
+      eyebrow: 'YOU \u2014 2 MIN', eyebrowColor: '#FF5032',
+      title: 'Reply to the first 5\u201310 comments',
+      desc: 'The single highest-leverage two minutes of the day. Early replies in the golden hour are what tip the algorithm into pushing the reel further.',
+      action: 'check', label: 'Replied to comments',
+      links: [{ href: 'https://instagram.com', text: 'Open Instagram' }],
+    },
+    {
+      id: 'audio', time: 'weekly',
+      eyebrow: 'YOU \u2014 5 MIN', eyebrowColor: '#A064FF',
+      title: 'Refresh trending audio IDs',
+      desc: 'Only needed once a week. Pick 1\u20132 trending sounds per topic from the Reels tab and log them in the shelf below.',
+      action: 'check', label: 'Audio refreshed this week',
+      links: [],
+    },
+    {
+      id: 'trendjack', time: 'when relevant',
+      eyebrow: 'YOU \u2014 OPTIONAL', eyebrowColor: '#FFB428',
+      title: 'Trend-jack one news moment this week',
+      desc: 'If an exam result, a GK-relevant headline, or a cultural moment breaks, post about it same-day, outside the normal rotation. This is what breaks a faceless page out \u2014 the bot can\u2019t see today\u2019s news.',
+      action: 'check', label: 'Done this week',
+      links: [],
+    },
+  ];
+
+  function blockHTML(b, doneMap, topicColor){
+    const done = !!doneMap[b.id];
+    return `
+      <div class="block">
+        <div class="rail" style="background:${b.eyebrowColor}"></div>
+        <div class="block-body">
+          <div class="block-top">
+            <span class="block-eyebrow" style="color:${b.eyebrowColor}">${b.eyebrow}</span>
+            <span class="block-time">${b.time}</span>
+          </div>
+          <div class="block-title">${b.title}</div>
+          <div class="block-desc">${b.desc}</div>
+          <div class="block-actions">
+            <div class="chk ${done ? 'done':''}" data-id="${b.id}">
+              <span class="box"></span><span>${b.label}</span>
+            </div>
+            ${b.links.map(l => `<a class="linkbtn" href="${l.href}" target="_blank" rel="noopener">${l.text} \u2192</a>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function renderBlocks(now){
+    const k = dayKey(now);
+    const doneMap = (state.days[k] && state.days[k].checks) || {};
+    document.getElementById('blocks').innerHTML =
+      BLOCKS.map(b => blockHTML(b, doneMap)).join('');
+
+    document.querySelectorAll('.chk').forEach(el => {
+      el.addEventListener('click', async () => {
+        const id = el.getAttribute('data-id');
+        const k2 = dayKey(istNow());
+        state.days[k2] = state.days[k2] || { checks: {}, posted: false };
+        state.days[k2].checks[id] = !state.days[k2].checks[id];
+        if (id === 'posted') state.days[k2].posted = state.days[k2].checks[id];
+        await saveState(state);
+        render();
+      });
+    });
+  }
+
+  function renderAudioShelf(){
+    const rows = Object.entries(TOPICS).map(([key, t]) => {
+      const val = (state.audio && state.audio[key]) || '';
+      return `
+        <div class="audio-row">
+          <span class="audio-dot" style="background:${t.color}"></span>
+          <span class="audio-topic">${t.name}</span>
+          <input class="audio-input" data-topic="${key}" placeholder="paste audio ID\u2026" value="${val}">
+        </div>`;
+    }).join('');
+    document.getElementById('audioRows').innerHTML = rows;
+
+    document.querySelectorAll('.audio-input').forEach(inp => {
+      inp.addEventListener('change', async () => {
+        state.audio = state.audio || {};
+        state.audio[inp.dataset.topic] = inp.value.trim();
+        state.audioUpdatedAt = Date.now();
+        await saveState(state);
+        renderAudioAge();
+      });
+    });
+    renderAudioAge();
+  }
+
+  function renderAudioAge(){
+    const el = document.getElementById('audioAge');
+    if (!state.audioUpdatedAt) { el.textContent = 'not set'; return; }
+    const days = Math.floor((Date.now() - state.audioUpdatedAt) / 86400000);
+    if (days === 0) el.textContent = 'updated today';
+    else if (days === 1) el.textContent = 'updated 1 day ago';
+    else el.textContent = 'updated ' + days + ' days ago';
+    el.style.color = days >= 10 ? '#FF5032' : '#4D4C53';
+  }
+
+  function render(){
+    const now = istNow();
+    document.getElementById('clock').textContent = fmtClock(now);
+    document.getElementById('datestr').textContent =
+      "Today's topic — " + (TOPICS[todaysTopic(now)] ? TOPICS[todaysTopic(now)].name : 'GK');
+    document.getElementById('rundownDate').textContent = fmtDate(now);
+    document.getElementById('streakNum').textContent = computeStreak();
+    renderRing(now);
+    renderBlocks(now);
+  }
+
+  (async function init(){
+    state = await loadState();
+    state.days = state.days || {};
+    state.audio = state.audio || {};
+    render();
+    renderAudioShelf();
+    setInterval(render, 30000);
+  })();
+})();
 </script>
 </body>
 </html>

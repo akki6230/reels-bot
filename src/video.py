@@ -1,17 +1,20 @@
 """
-src/video.py — Dual-mode video renderer:
+src/video.py — Single-style growth-focused video renderer.
 
-MODE A: ILLUSTRATED (6-7 out of 10 reels)
-  - 3 AI-generated illustrated scenes from HF
-  - Ken Burns zoom + pan between scenes
-  - Hindi text overlay with smooth animations
-  - Like @epictalesanimation style
+STRATEGY NOTE (100K/6mo plan): we deliberately standardized on ONE visual
+style (_single_carousel_frame: full photo + centered text card) instead
+of randomly rotating kinetic/documentary/cartoon/illustrated styles.
+Format consistency is itself a ranking signal — an account that looks
+recognizably "the same product" every day builds niche authority faster
+than one that visually reinvents itself daily. The other renderers below
+(_kinetic_frame, _documentary_frame, _cartoon_frame, _illustrated_frame)
+are kept only as a manual fallback/experiment path; they're not wired
+into VideoCreator.create_reel's default flow anymore.
 
-MODE B: ANIMATED (3-4 out of 10 reels)
-  - Random: kinetic / documentary / cartoon
-  - Pure Python, no photos needed
-
-Selection: random, weighted 65% illustrated / 35% animated
+The one new structural element vs. the old version: every frame now
+renders an "engage_line" banner (comment/save/share trigger) in place of
+a generic "follow us" CTA, because saves/shares/comments outrank a
+follow-ask in the current ranking signals.
 """
 
 import math, random, logging
@@ -34,7 +37,14 @@ FONTS_DIR = ROOT / "fonts"
 FONTS_DIR.mkdir(exist_ok=True)
 
 # ── Themes ─────────────────────────────────────────────────────────────────────
+# 4 active topics only (see config.py TOPICS — niche-focus strategy)
 THEMES = {
+    "examfacts":    {"acc":(80,200,255),"acc2":(120,220,255),"acc3":(180,235,255),
+                     "txt":(220,240,255),"mut":(140,175,210),
+                     "bg1":(4,4,18),"bg2":(8,10,35),"bg3":(12,16,52),
+                     "particles":False,"p_col":(150,215,255),
+                     "bg_style":"grid","emoji_pool":["🎯","📝","✅","🏆","📌","💯"],
+                     "label":"परीक्षा ज्ञान"},
     "psychology":   {"acc":(160,100,255),"acc2":(200,140,255),"acc3":(220,180,255),
                      "txt":(235,220,255),"mut":(165,135,210),
                      "bg1":(8,4,20),"bg2":(25,10,55),"bg3":(40,15,85),
@@ -47,46 +57,19 @@ THEMES = {
                      "particles":True,"p_col":(255,150,100),
                      "bg_style":"explosion","emoji_pool":["🤯","💥","⚡","🔥","😱","🌪️"],
                      "label":"दिमाग हिला देने वाले तथ्य"},
-    "space":        {"acc":(100,185,255),"acc2":(150,210,255),"acc3":(200,230,255),
-                     "txt":(225,242,255),"mut":(140,170,210),
-                     "bg1":(4,6,22),"bg2":(8,14,45),"bg3":(12,22,68),
-                     "particles":True,"p_col":(200,225,255),
-                     "bg_style":"cosmos","emoji_pool":["🚀","⭐","🌌","🪐","☄️","🌟"],
-                     "label":"अंतरिक्ष और ब्रह्मांड"},
-    "sciencewrong": {"acc":(80,230,120),"acc2":(120,245,160),"acc3":(180,255,200),
-                     "txt":(215,255,225),"mut":(130,200,155),
-                     "bg1":(5,18,5),"bg2":(10,40,15),"bg3":(15,65,22),
-                     "particles":False,"p_col":(150,255,180),
-                     "bg_style":"lab","emoji_pool":["⚗️","💊","🔬","🧪","💣","🤓"],
-                     "label":"विज्ञान जब गलत हो गया"},
-    "earthglitch":  {"acc":(70,215,130),"acc2":(110,235,165),"acc3":(170,250,195),
-                     "txt":(215,255,230),"mut":(130,200,160),
-                     "bg1":(4,14,8),"bg2":(8,32,16),"bg3":(12,52,24),
-                     "particles":False,"p_col":(150,240,185),
-                     "bg_style":"earth","emoji_pool":["🌍","⚡","🌊","🌋","❄️","🌪️"],
-                     "label":"धरती की अजीब घटनाएं"},
     "gk":           {"acc":(255,180,40),"acc2":(255,200,80),"acc3":(255,220,120),
                      "txt":(255,245,220),"mut":(200,175,130),
                      "bg1":(4,8,18),"bg2":(15,18,40),"bg3":(25,28,60),
                      "particles":False,"p_col":(255,200,100),
                      "bg_style":"neural","emoji_pool":["📚","💡","🌍","🏛️","🔭","📖"],
                      "label":"सामान्य ज्ञान"},
-    "examfacts":    {"acc":(80,200,255),"acc2":(120,220,255),"acc3":(180,235,255),
-                     "txt":(220,240,255),"mut":(140,175,210),
-                     "bg1":(4,4,18),"bg2":(8,10,35),"bg3":(12,16,52),
-                     "particles":False,"p_col":(150,215,255),
-                     "bg_style":"grid","emoji_pool":["🎯","📝","✅","🏆","📌","💯"],
-                     "label":"परीक्षा ज्ञान"},
 }
 
 VIDEO_TAGS = {
+    "examfacts":    ["#UPSC","#SSC","#NEET","#IITpreparation","#examprep","#gkinhindi","#cosmoscapsule"],
     "psychology":   ["#मनोविज्ञान","#psychology","#दिमाग","#mindset","#facts","#cosmoscapsule"],
     "mindblowing":  ["#mindblow","#दिमागहिला","#amazingfacts","#रोचकतथ्य","#viral","#cosmoscapsule"],
-    "space":        ["#अंतरिक्ष","#ब्रह्मांड","#spacefacts","#NASA","#ISRO","#cosmoscapsule"],
-    "sciencewrong": ["#sciencefail","#विज्ञान","#sciencefacts","#funny","#facts","#cosmoscapsule"],
-    "earthglitch":  ["#earthglitch","#धरती","#naturalfacts","#amazing","#mystery","#cosmoscapsule"],
     "gk":           ["#सामान्यज्ञान","#GK","#gkinhindi","#ज्ञान","#india","#cosmoscapsule"],
-    "examfacts":    ["#UPSC","#SSC","#NEET","#IITpreparation","#examprep","#gkinhindi","#cosmoscapsule"],
 }
 
 # ── Font helpers ───────────────────────────────────────────────────────────────
@@ -386,7 +369,7 @@ def _illustrated_frame(scenes: list, hook: str, body: str, body_words: list,
     3 scenes, each shown for scene_dur seconds with Ken Burns effect.
     Text overlaid on top.
     """
-    th  = THEMES.get(topic_key, THEMES["space"])
+    th  = THEMES.get(topic_key, THEMES["gk"])
     acc = th["acc"]; acc2=th["acc2"]; txt=th["txt"]
 
     # Which scene are we in?
@@ -581,7 +564,7 @@ def _draw_gradient_bg(img, th, t):
 
 def _kinetic_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur,
                    hook_word_interval=0.35,body_start_t=5.5,body_window=None):
-    th=THEMES.get(topic_key,THEMES["space"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
+    th=THEMES.get(topic_key,THEMES["gk"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
     base=Image.new("RGBA",(W,H)); _draw_gradient_bg(base,th,t)
     draw=ImageDraw.Draw(base); _draw_animated_bg(base,th,t,th["bg_style"])
     rng=random.Random(77)
@@ -644,7 +627,7 @@ def _kinetic_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur
 
 def _documentary_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur,
                        hook_word_interval=0.35,body_start_t=5.5,body_window=None):
-    th=THEMES.get(topic_key,THEMES["space"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
+    th=THEMES.get(topic_key,THEMES["gk"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
     base=Image.new("RGBA",(W,H)); _draw_gradient_bg(base,th,t)
     draw=ImageDraw.Draw(base); _draw_animated_bg(base,th,t,th["bg_style"]); _vignette(draw)
     ty_t,ty_b,BAR=_chrome(draw,th,topic_key,t,dur,tags,follow_text)
@@ -682,7 +665,7 @@ def _documentary_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t
 
 def _cartoon_frame(bg,hook,body,body_words,topic_key,lang,follow_text,tags,t,dur,
                    hook_word_interval=0.35,body_start_t=5.5,body_window=None):
-    th=THEMES.get(topic_key,THEMES["space"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
+    th=THEMES.get(topic_key,THEMES["gk"]); acc=th["acc"]; acc2=th["acc2"]; txt=th["txt"]
     base=Image.new("RGBA",(W,H)); _draw_gradient_bg(base,th,t)
     draw=ImageDraw.Draw(base); _draw_animated_bg(base,th,t,th["bg_style"])
     # Emojis
@@ -772,7 +755,7 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
                             body_start_t=2.5,
                             body_window=8.0,
                             fact_data=None) -> np.ndarray:
-    th       = THEMES.get(topic_key, THEMES["space"])
+    th       = THEMES.get(topic_key, THEMES["gk"])
     acc      = th["acc"]
     acc2     = th["acc2"]
     acc3     = th["acc3"]
@@ -857,12 +840,20 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
         # Brand top-right
         draw.text((brand_x, SAFE_TOP+16), "cosmos.capsule",
                   font=brand_fnt, fill=(180,180,180,hdr_a))
+        # Series label small, top-left (e.g. "परीक्षा वन-लाइनर #12")
+        series_label = (fact_data.get("series_label", "")
+                        if isinstance(fact_data, dict) else "")
+        if series_label:
+            _txt_mixed(draw, PAD, SAFE_TOP+16, series_label, 22,
+                       acc, _a(hdr_a*0.9), bold=True, shadow=True)
     else:
-        # Normal: topic label left + brand right
-        lbl_fnt = _f(24, bold=True, lang="en")
-        lbl     = THEMES.get(topic_key, {}).get("label", "")
-        draw.text((PAD, SAFE_TOP+16), lbl,
-                  font=lbl_fnt, fill=(*acc, hdr_a))
+        # Series label (e.g. "रोज़ का GK #47") left + brand right.
+        # Series identity is the follow-trigger — show it prominently.
+        series_label = (fact_data.get("series_label", "")
+                        if isinstance(fact_data, dict) else "") \
+                        or THEMES.get(topic_key, {}).get("label", "")
+        _txt_mixed(draw, PAD, SAFE_TOP+14, series_label, 26,
+                   acc, hdr_a, bold=True, shadow=True)
         draw.text((brand_x, SAFE_TOP+16), "cosmos.capsule",
                   font=brand_fnt, fill=(180,180,180,hdr_a))
 
@@ -945,37 +936,42 @@ def _single_carousel_frame(bg_photo, hook, body, body_words,
             _txt_mixed(draw, lx_, sy_+li*d_line_h, sl,
                        d_size, txt, _a(la_))
 
-    # ── Hashtag strip ─────────────────────────────────────────────────────
-    tag_a = _slide(t, dur*0.75, 0.4)
-    if tag_a > 0 and tags:
-        tag_sz  = 22
-        tag_top = H - 185
-        draw.rounded_rectangle(
-            [PAD-16, tag_top-8, W-PAD+16, tag_top+58],
-            radius=12,
-            fill=(0, 0, 0, _a(tag_a*0.55)),
-            outline=(*acc, _a(tag_a*0.25)),
-            width=1
-        )
-        for ri, row in enumerate(["  ".join(tags[:3]), "  ".join(tags[3:6])]):
-            if not row: continue
-            lw_ = _txt_mixed_w(row, tag_sz)
-            _txt_mixed(draw, (W-lw_)//2, tag_top+ri*28, row,
-                       tag_sz, acc, _a(tag_a*0.88))
+    # ── (Hashtag strip removed) ────────────────────────────────────────────
+    # Hashtags are delivered via the caption, where they're tappable and do
+    # their actual discovery work. Burning them into the video pixels just
+    # added clutter and crowded the engage banner — net negative, so gone.
 
-    # ── Bottom CTA ────────────────────────────────────────────────────────
-    cta_a = _slide(t, dur*0.82, 0.5)
-    draw.rectangle([0, H-70, W, H], fill=(0,0,0,200))
-    draw.rectangle([0, H-70, W, H-68], fill=(*acc, _a(cta_a*0.5)))
-    if cta_a > 0:
-        cta_fnt = _f(28, bold=True, lang="hi")
-        cta_bb  = cta_fnt.getbbox(follow_text)
-        pulse   = 0.85 + 0.15*math.sin(t*4)
-        cx_     = (W-cta_bb[2])//2
-        draw.text((cx_+2, H-50), follow_text, font=cta_fnt,
-                  fill=(0,0,0,_a(cta_a*0.4)))
-        draw.text((cx_, H-50), follow_text, font=cta_fnt,
-                  fill=(*acc, _a(cta_a*pulse)))
+    # ── Engage banner (comment/save/share trigger) ─────────────────────────
+    # This replaces a generic "follow us" CTA. Research is consistent that
+    # saves/shares/comments outrank follows as ranking signals — so the
+    # highest-value screen real estate (bottom banner, always visible,
+    # pulses for attention) should ask for THE SPECIFIC ACTION that grows
+    # the account, not a passive follow-ask.
+    engage_line = (fact_data.get("engage_line", "") if isinstance(fact_data, dict) else "") or follow_text
+    eng_a = _slide(t, dur*0.82, 0.5)
+    if eng_a > 0:
+        eng_sz    = 27
+        eng_lh    = 36                                   # line height
+        eng_lines = _wrap_mixed(engage_line, eng_sz, W-PAD*2, bold=True)[:2]  # max 2 lines
+        n_lines   = max(1, len(eng_lines))
+        pad_v     = 18                                   # vertical padding inside banner
+        band_h    = n_lines*eng_lh + pad_v*2            # full banner height
+        band_top  = H - band_h                           # banner sits flush to bottom edge
+
+        # Banner background + top accent rule
+        draw.rectangle([0, band_top, W, H], fill=(0,0,0,210))
+        draw.rectangle([0, band_top, W, band_top+2], fill=(*acc, _a(eng_a*0.6)))
+
+        pulse = 0.85 + 0.15*math.sin(t*4)
+        ly    = band_top + pad_v                         # first line top, inside padding
+        for line in eng_lines:
+            lw_ = _txt_mixed_w(line, eng_sz, bold=True)
+            lx_ = (W-lw_)//2
+            _txt_mixed(draw, lx_+2, ly+2, line, eng_sz,
+                       (0,0,0), _a(eng_a*0.4), bold=True, shadow=False)
+            _txt_mixed(draw, lx_, ly, line, eng_sz,
+                       acc, _a(eng_a*pulse), bold=True, shadow=False)
+            ly += eng_lh
 
     return np.array(frame.convert("RGB"))
 
@@ -1000,7 +996,7 @@ class VideoCreator:
         _ensure_hindi_fonts()
 
         import config as cfg
-        topic_key = "space"
+        topic_key = "gk"
         for k,v in cfg.TOPICS.items():
             if v.get("name")==topic.get("name") or v.get("name_hi")==topic.get("name_hi"):
                 topic_key=k; break

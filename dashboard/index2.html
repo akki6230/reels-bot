@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Cosmos Capsule — Bot Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0b0f;--surface:#111318;--surface2:#1a1d26;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#e8eaf0;--muted:#7a7f94;
+  --accent:#4f8ef7;--green:#34d399;--amber:#fbbf24;--red:#f87171;--purple:#a78bfa;
+  --green-dim:#0d2b1f;--amber-dim:#2d2008;--red-dim:#2b1010;--accent-dim:#1e2d4a;
+  --r:12px;--rs:8px;
+}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hi{font-family:'Noto Sans Devanagari','Space Grotesk',sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px 80px}
+header{padding:36px 0 28px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border);margin-bottom:32px;gap:16px;flex-wrap:wrap}
+header h1{font-size:22px;font-weight:700;color:#fff;letter-spacing:-.5px}
+header h1 span{color:var(--accent)}
+header p{font-size:13px;color:var(--muted);margin-top:4px}
+.live{display:inline-flex;align-items:center;gap:7px;background:var(--green-dim);border:1px solid rgba(52,211,153,.2);border-radius:999px;padding:6px 14px;font-size:12px;font-weight:500;color:var(--green)}
+.dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--bar,var(--accent));opacity:.7}
+.metric-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.metric-value{font-size:32px;font-weight:700;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.metric-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.card-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.card-body{padding:18px}
+.lang-pills{display:flex;gap:8px;margin-bottom:20px}
+.pill{padding:5px 14px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--border2);color:var(--muted);cursor:default}
+.pill.en{background:var(--accent-dim);color:var(--accent);border-color:rgba(79,142,247,.3)}
+.pill.hi{background:var(--purple-dim,#1e1535);color:var(--purple);border-color:rgba(167,139,250,.3)}
+.topic-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.topic-row:last-child{border-bottom:none}
+.topic-emoji{font-size:17px;width:26px;text-align:center}
+.topic-name{font-size:13px;font-weight:500;min-width:130px}
+.bar-wrap{flex:1;height:5px;background:var(--surface2);border-radius:999px;overflow:hidden}
+.bar{height:100%;border-radius:999px;transition:width 1s ease}
+.topic-count{font-size:11px;color:var(--muted);min-width:26px;text-align:right;font-family:'JetBrains Mono',monospace}
+.log-item{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
+.log-item:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.log-dot.posted{background:var(--green)}.log-dot.failed{background:var(--red)}.log-dot.dry{background:var(--accent)}.log-dot.started{background:var(--amber)}
+.log-body{flex:1;min-width:0}
+.log-hook{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log-meta{font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.log-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:72px;text-align:right;padding-top:2px}
+.badge{display:inline-block;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:600;text-transform:uppercase}
+.badge.posted{background:var(--green-dim);color:var(--green)}
+.badge.failed{background:var(--red-dim);color:var(--red)}
+.badge.dry{background:var(--accent-dim);color:var(--accent)}
+.lang-badge{display:inline-block;padding:1px 6px;border-radius:999px;font-size:10px;font-weight:600}
+.lang-badge.en{background:var(--accent-dim);color:var(--accent)}
+.lang-badge.hi{background:#1e1535;color:var(--purple)}
+.chart-wrap{height:110px;position:relative}
+canvas{width:100%!important;height:110px!important}
+.schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sched-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface2);border-radius:var(--rs);font-size:12px}
+.sched-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:52px}
+.sched-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+footer{border-top:1px solid var(--border);padding:18px 0;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+footer a{color:var(--accent);text-decoration:none}
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:13px}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>🚀 Cosmos<span>Capsule</span> Dashboard</h1>
+    <p>5 viral topics · हिंदी only · 3 reels/day · GitHub Actions</p>
+  </div>
+  <div class="live"><span class="dot"></span>Automated</div>
+</header>
+
+<div class="metrics" id="metrics"><div class="loading"><div class="spinner"></div><br>Loading…</div></div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-hdr"><span class="card-title">Posts by topic</span></div>
+    <div class="card-body" id="topic-bars"><div class="loading" style="padding:10px">—</div></div>
+  </div>
+  <div class="card">
+    <div class="card-hdr"><span class="card-title">Daily activity (14 days)</span></div>
+    <div class="card-body" style="padding:14px"><div class="chart-wrap"><canvas id="chart"></canvas></div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-hdr">
+    <span class="card-title" id="schedule-title">Today's Schedule (IST)</span>
+    <span style="font-size:11px;color:var(--muted)">IST</span>
+  </div>
+  <div class="card-body">
+    <div class="schedule-grid" id="schedule-grid"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-hdr">
+    <span class="card-title">Recent runs</span>
+    <span id="last-updated" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">—</span>
+  </div>
+  <div class="card-body" id="log-feed"><div class="loading" style="padding:10px">—</div></div>
+</div>
+
+<footer>
+  <span>cosmos.capsule · Powered by <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a> + <a href="https://anthropic.com" target="_blank">Claude AI</a></span>
+  <span><a href="data.json" target="_blank">raw JSON</a></span>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const TOPICS={
+  psychology:   {emoji:"🧠",name:"Psychology Facts",   nameHi:"मनोविज्ञान तथ्य",     color:"#a78bfa"},
+  mindblowing:  {emoji:"🤯",name:"Mind-Blowing Facts", nameHi:"दिमाग हिला देने वाले", color:"#f87171"},
+  space:        {emoji:"🚀",name:"Space & Universe",   nameHi:"अंतरिक्ष और ब्रह्मांड", color:"#4f8ef7"},
+  sciencewrong: {emoji:"⚗️",name:"Science Gone Wrong", nameHi:"विज्ञान जब गलत हो गया",color:"#34d399"},
+  earthglitch:  {emoji:"🌍",name:"Earth Glitches",     nameHi:"धरती की अजीब घटनाएं",  color:"#fbbf24"},
+};
+
+// 3 reels/day all Hindi — topics rotate by day
+const DAY_ROTATION={
+  0:["psychology",  "mindblowing", "space"],
+  1:["mindblowing", "space",       "sciencewrong"],
+  2:["space",       "sciencewrong","earthglitch"],
+  3:["sciencewrong","earthglitch", "psychology"],
+  4:["earthglitch", "psychology",  "mindblowing"],
+  5:["psychology",  "space",       "mindblowing"],
+  6:["mindblowing", "earthglitch", "space"],
+};
+const today=new Date().getDay();
+const weekday=today===0?6:today-1;
+const todayTopics=DAY_ROTATION[weekday]||["psychology","mindblowing","space"];
+
+const SCHEDULE=[
+  {time:"09:00 AM",topic:todayTopics[0],lang:"hi",note:"Morning peak"},
+  {time:"01:00 PM",topic:todayTopics[1],lang:"hi",note:"Afternoon"},
+  {time:"07:00 PM",topic:todayTopics[2],lang:"hi",note:"Prime time ⭐"},
+];
+
+function relTime(iso){
+  const m=Math.floor((Date.now()-new Date(iso))/60000);
+  if(m<1)return"just now";
+  if(m<60)return`${m}m ago`;
+  const h=Math.floor(m/60);
+  if(h<24)return`${h}h ago`;
+  return`${Math.floor(h/24)}d ago`;
+}
+
+function renderMetrics(d){
+  document.getElementById("metrics").innerHTML=`
+    <div class="metric" style="--bar:#34d399">
+      <div class="metric-label">Total posted</div>
+      <div class="metric-value">${d.posted}</div>
+      <div class="metric-sub">${d.total_runs} total runs</div>
+    </div>
+    <div class="metric" style="--bar:#4f8ef7">
+      <div class="metric-label">English reels</div>
+      <div class="metric-value">${d.en_posted||0}</div>
+      <div class="metric-sub">EN posts</div>
+    </div>
+    <div class="metric" style="--bar:#a78bfa">
+      <div class="metric-label">Hindi reels</div>
+      <div class="metric-value">${d.hi_posted||0}</div>
+      <div class="metric-sub" style="font-family:'Noto Sans Devanagari',sans-serif">हिंदी पोस्ट</div>
+    </div>
+    <div class="metric" style="--bar:#fbbf24">
+      <div class="metric-label">Success rate</div>
+      <div class="metric-value">${d.success_rate}<span style="font-size:16px;color:var(--muted)">%</span></div>
+      <div class="metric-sub">${d.failed} failed</div>
+    </div>
+  `;
+}
+
+function renderTopics(d){
+  const counts=d.topic_counts||{};
+  const max=Math.max(...Object.values(counts),1);
+  document.getElementById("topic-bars").innerHTML=Object.entries(TOPICS).map(([k,m])=>{
+    const n=counts[k]||0;
+    const pct=Math.round(n/max*100);
+    return`<div class="topic-row">
+      <span class="topic-emoji">${m.emoji}</span>
+      <span class="topic-name">${m.name}</span>
+      <div class="bar-wrap"><div class="bar" style="width:${pct}%;background:${m.color}"></div></div>
+      <span class="topic-count">${n}</span>
+    </div>`;
+  }).join("");
+}
+
+function renderSchedule(){
+  const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const dayName=days[weekday]||"Today";
+  document.getElementById("schedule-title").textContent=`Today's Schedule — ${dayName} (IST)`;
+  document.getElementById("schedule-grid").innerHTML=SCHEDULE.map(s=>{
+    const m=TOPICS[s.topic];
+    const dotColor=m?m.color:"#888";
+    const label=s.lang==="hi"
+      ? `<span style="font-family:'Noto Sans Devanagari',sans-serif">${m?m.nameHi:s.topic}</span>`
+      : (m?m.name:s.topic);
+    return`<div class="sched-item">
+      <span class="sched-time">${s.time}</span>
+      <span class="sched-dot" style="background:${dotColor}"></span>
+      <span style="flex:1">${m?m.emoji:""} ${label}<span style="font-size:10px;color:var(--color-text-secondary,#7a7f94);margin-left:6px">${s.note||""}</span></span>
+      <span class="lang-badge ${s.lang}">${s.lang.toUpperCase()}</span>
+    </div>`;
+  }).join("");
+}
+
+function renderLog(d){
+  const el=document.getElementById("log-feed");
+  if(!d.recent_runs?.length){el.innerHTML='<p style="color:var(--muted);font-size:13px">No runs yet.</p>';return;}
+  el.innerHTML=d.recent_runs.map(r=>{
+    const m=TOPICS[r.topic]||{emoji:"🤖",name:r.topic};
+    const s=r.status||"unknown";
+    const dc=s==="posted"?"posted":s==="failed"?"failed":s.startsWith("dry")?"dry":"started";
+    const langBadge=r.lang?`<span class="lang-badge ${r.lang}">${r.lang.toUpperCase()}</span>`:"";
+    const hook=r.hook||"(no hook)";
+    const hookClass=r.lang==="hi"?"log-hook hi":"log-hook";
+    return`<div class="log-item">
+      <div class="log-dot ${dc}"></div>
+      <div class="log-body">
+        <div class="${hookClass}">${hook}</div>
+        <div class="log-meta">
+          <span>${m.emoji} ${r.lang==="hi"?(m.nameHi||m.name):m.name}</span>
+          ${langBadge}
+          <span class="badge ${dc}">${s.replace("_ok","")}</span>
+          ${r.error?`<span style="color:var(--red);font-size:11px">${r.error.slice(0,50)}</span>`:""}
+        </div>
+      </div>
+      <div class="log-time" title="${new Date(r.timestamp).toLocaleString()}">${relTime(r.timestamp)}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderChart(d){
+  const ctx=document.getElementById("chart").getContext("2d");
+  const days={};
+  for(let i=13;i>=0;i--){const dt=new Date();dt.setDate(dt.getDate()-i);days[dt.toISOString().slice(0,10)]=0;}
+  (d.recent_runs||[]).forEach(r=>{
+    const day=r.timestamp?.slice(0,10);
+    if(days[day]!==undefined&&r.status==="posted")days[day]++;
+  });
+  const labels=Object.keys(days).map(d=>{
+    const dt=new Date(d);
+    return dt.toLocaleDateString("en-IN",{day:"numeric",month:"short"});
+  });
+  new Chart(ctx,{
+    type:"bar",
+    data:{labels,datasets:[{data:Object.values(days),backgroundColor:"rgba(79,142,247,.45)",borderColor:"#4f8ef7",borderWidth:1.5,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:"#7a7f94",font:{size:10}},grid:{color:"rgba(255,255,255,.04)"}},
+        y:{ticks:{color:"#7a7f94",font:{size:10},stepSize:1},grid:{color:"rgba(255,255,255,.05)"},min:0},
+      },
+    },
+  });
+}
+
+async function load(){
+  try{
+    const r=await fetch(`data.json?v=${Date.now()}`,{cache:"no-store"});
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    const d=await r.json();
+    renderMetrics(d);
+    renderTopics(d);
+    renderLog(d);
+    renderChart(d);
+    renderSchedule();
+    document.getElementById("last-updated").textContent="Updated "+relTime(d.generated_at);
+  }catch(e){
+    document.getElementById("metrics").innerHTML=`<div class="loading" style="color:var(--red)">⚠️ Could not load data.json<br><small style="color:var(--muted)">Push a run first or check GitHub Pages is enabled.</small></div>`;
+  }
+}
+
+renderSchedule();
+load();
+setInterval(load,60000);
+setInterval(load,60000);
+</script>
+</body>
+</html>

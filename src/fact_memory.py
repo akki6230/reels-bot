@@ -75,6 +75,20 @@ class FactMemory:
 
         return False
 
+    def next_episode(self, topic: str) -> int:
+        """
+        Return the next episode number for this topic's series and persist it.
+        Series-based content ("रोज़ का GK #47") is the biggest lever for
+        turning one-off viewers into followers — it gives people a reason to
+        follow ("I want the next one"), not just watch once. The counter
+        survives across runs via the same cached used_facts.json.
+        """
+        key = self._key(topic, "episode")
+        n   = int(self._data.get(key, 0)) + 1
+        self._data[key] = n
+        self._save()
+        return n
+
     def track(self, topic: str, hook: str, body: str,
               category: str = "", image_query: str = ""):
         """Record a used fact to prevent future repetition."""
