@@ -1,0 +1,84 @@
+name: 🎵 Apply trending audio update
+
+# Triggered whenever someone opens an issue using the "Update trending
+# audio" form (.github/ISSUE_TEMPLATE/audio_update.yml), which always
+# carries the "audio-update" label. Parses the issue body, edits
+# TRENDING_AUDIO in src/poster.py, commits, and comments back on the
+# issue with a summary — then closes it. No manual file editing needed:
+# paste IDs into an issue, the repo updates itself.
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  apply-audio-update:
+    if: contains(github.event.issue.labels.*.name, 'audio-update')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 🎵 Parse issue and update poster.py
+        id: apply
+        run: python scripts/apply_audio_update.py
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+
+      - name: 💾 Commit change
+        if: steps.apply.outputs.changed == 'true'
+        run: |
+          git config user.name "Reels Bot"
+          git config user.email "bot@reels.local"
+          git add src/poster.py
+          git commit -m "🎵 Update trending audio (#${{ github.event.issue.number }}) [skip ci]"
+          git push origin main
+
+      - name: 💬 Comment success
+        if: steps.apply.outputs.changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `✅ Updated \`TRENDING_AUDIO\` in \`src/poster.py\`:\n\n${{ steps.apply.outputs.summary }}\n\nThis will be picked up on the next scheduled or manual reel run.`
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: "closed"
+            });
+
+      - name: 💬 Comment no-op
+        if: steps.apply.outputs.changed != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `⚠️ No valid audio IDs were found in this issue, so nothing was changed. Audio IDs must be plain digit strings (e.g. \`37875166522082301\`) — one per line. Reopen a new issue with corrected IDs.`
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: "closed"
+            });

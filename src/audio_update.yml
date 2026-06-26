@@ -1,0 +1,65 @@
+name: 🎵 Update trending audio
+description: Paste trending Instagram audio IDs to update TRENDING_AUDIO in poster.py
+title: "[audio] Weekly trending audio update"
+labels: ["audio-update"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Paste audio IDs you've collected from Instagram's Reels tab (or from the
+        dashboard's audio shelf). Leave a field blank to leave that topic
+        unchanged. Submitting this issue automatically edits `src/poster.py`
+        and commits the change — no manual file editing needed.
+
+        Format: one ID per line if adding more than one per topic.
+        Example: `37875166522082301`
+
+  - type: textarea
+    id: examfacts
+    attributes:
+      label: examfacts
+      description: Calm/ambient mood — UPSC/SSC/NEET/IIT content
+      placeholder: |
+        37875166522082301
+        another_id_here
+    validations:
+      required: false
+
+  - type: textarea
+    id: psychology
+    attributes:
+      label: psychology
+      description: Calm/ambient mood
+      placeholder: 37875166522082301
+    validations:
+      required: false
+
+  - type: textarea
+    id: mindblowing
+    attributes:
+      label: mindblowing
+      description: Energetic/dramatic mood
+      placeholder: 37875166522082301
+    validations:
+      required: false
+
+  - type: textarea
+    id: gk
+    attributes:
+      label: gk
+      description: Calm/ambient mood
+      placeholder: 37875166522082301
+    validations:
+      required: false
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      description: Replace the existing list for each topic you filled in, or add to it?
+      options:
+        - Replace
+        - Add
+      default: 0
+    validations:
+      required: true
