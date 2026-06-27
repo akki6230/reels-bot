@@ -40,16 +40,33 @@ def extract_ids(raw: str) -> list:
     Pull numeric audio IDs out of a field's raw text. Audio IDs are long
     digit strings; anything that isn't purely digits (placeholder text,
     "_No response_", stray words) is ignored rather than guessed at.
+
+    Accepts IDs separated by newlines AND/OR commas on the same line —
+    e.g. both
+        37875166522082301
+        12345678901234567
+    and
+        37875166522082301, 12345678901234567
+    are valid input. (Originally this only split on newlines, which
+    silently dropped every comma-separated line as "non-numeric junk"
+    since the comma+space made the whole line fail the digit-only check.)
     """
     if not raw or raw.strip().lower() in ("_no response_", "none", ""):
         return []
     ids = []
+    # First split on newlines, then split each line on commas, so both
+    # "one per line" and "comma, separated, on one line" work identically.
+    pieces = []
     for line in raw.splitlines():
-        line = line.strip().strip(",")
-        if re.fullmatch(r"\d{6,}", line):
-            ids.append(line)
-        elif line and line.lower() not in ("_no response_",):
-            print(f"::warning::Skipping non-numeric line in audio field: {line!r}")
+        pieces.extend(line.split(","))
+    for piece in pieces:
+        piece = piece.strip()
+        if not piece:
+            continue
+        if re.fullmatch(r"\d{6,}", piece):
+            ids.append(piece)
+        elif piece.lower() not in ("_no response_",):
+            print(f"::warning::Skipping non-numeric value in audio field: {piece!r}")
     return ids
 
 
