@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-27T04:27:31.012748+00:00",
-  "total_runs": 98,
+  "generated_at": "2026-06-27T15:18:11.969681+00:00",
+  "total_runs": 99,
   "posted": 66,
   "failed": 6,
   "dry_runs": 13,
   "en_posted": 4,
   "hi_posted": 62,
-  "success_rate": 67.3,
+  "success_rate": 66.7,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-27T15:18:11.969450+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-06-27T04:27:31.012474+00:00",
       "topic": "mindblowing",
@@ -1266,16 +1279,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-27T04:27:31.012474+00:00",
-    "topic": "mindblowing",
+    "timestamp": "2026-06-27T15:18:11.969450+00:00",
+    "topic": "y",
     "lang": "hi",
-    "status": "posted",
-    "hook": "आपका दिल बिना दिमाग के 20 मिनट धड़कता रहता है",
-    "category": "Biology",
-    "media_id": "3928505908039166385_24336816956",
+    "status": "failure",
+    "hook": "",
+    "category": "",
+    "media_id": "",
     "error": "",
-    "image_source": "pollinations",
-    "reel_style": "carousel_visual",
-    "duration": 11
+    "image_source": "",
+    "reel_style": "",
+    "duration": 0
   }
 }
