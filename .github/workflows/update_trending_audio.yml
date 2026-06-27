@@ -17,7 +17,14 @@ permissions:
 
 jobs:
   apply-audio-update:
-    if: contains(github.event.issue.labels.*.name, 'audio-update')
+    # Gate on the issue TITLE rather than its label. The issue-form's
+    # `labels:` field doesn't reliably auto-attach (a known GitHub quirk —
+    # it silently no-ops if a label with that exact name doesn't already
+    # exist in the repo's Labels list), which caused this job to be
+    # skipped entirely. The title prefix is always present since it's a
+    # required field baked into the template, so checking it is the
+    # robust signal instead.
+    if: startsWith(github.event.issue.title, '[audio]')
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
