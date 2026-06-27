@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-27T03:52:08.544838+00:00",
-  "total_runs": 95,
+  "generated_at": "2026-06-27T04:08:29.995858+00:00",
+  "total_runs": 96,
   "posted": 64,
-  "failed": 5,
+  "failed": 6,
   "dry_runs": 13,
   "en_posted": 4,
   "hi_posted": 60,
-  "success_rate": 67.4,
+  "success_rate": 66.7,
   "topic_counts": {
     "psychology": 5,
     "examfacts": 14,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-27T04:08:29.995551+00:00",
+      "topic": "psychology",
+      "lang": "hi",
+      "status": "failed",
+      "hook": "आप अभी जो सुन रहे हैं वो असल में नहीं है",
+      "category": "Perception",
+      "media_id": "",
+      "error": "InstagramPoster.post_reel() got an unexpected keyword argument 'first_comment'",
+      "image_source": "pil",
+      "reel_style": "carousel_visual",
+      "duration": 11
+    },
     {
       "timestamp": "2026-06-27T03:52:08.544522+00:00",
       "topic": "gk",
@@ -1227,16 +1240,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-27T03:52:08.544522+00:00",
-    "topic": "gk",
+    "timestamp": "2026-06-27T04:08:29.995551+00:00",
+    "topic": "psychology",
     "lang": "hi",
-    "status": "dry_run_ok",
-    "hook": "तारों की रोशनी हजारों साल पुरानी है",
-    "category": "Science",
+    "status": "failed",
+    "hook": "आप अभी जो सुन रहे हैं वो असल में नहीं है",
+    "category": "Perception",
     "media_id": "",
-    "error": "",
+    "error": "InstagramPoster.post_reel() got an unexpected keyword argument 'first_comment'",
     "image_source": "pil",
     "reel_style": "carousel_visual",
-    "duration": 12
+    "duration": 11
   }
 }
