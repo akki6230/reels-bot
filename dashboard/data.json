@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-26T15:40:59.808231+00:00",
-  "total_runs": 94,
+  "generated_at": "2026-06-27T03:52:08.544838+00:00",
+  "total_runs": 95,
   "posted": 64,
   "failed": 5,
-  "dry_runs": 12,
+  "dry_runs": 13,
   "en_posted": 4,
   "hi_posted": 60,
-  "success_rate": 68.1,
+  "success_rate": 67.4,
   "topic_counts": {
     "psychology": 5,
     "examfacts": 14,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-27T03:52:08.544522+00:00",
+      "topic": "gk",
+      "lang": "hi",
+      "status": "dry_run_ok",
+      "hook": "तारों की रोशनी हजारों साल पुरानी है",
+      "category": "Science",
+      "media_id": "",
+      "error": "",
+      "image_source": "pil",
+      "reel_style": "carousel_visual",
+      "duration": 12
+    },
     {
       "timestamp": "2026-06-26T15:40:59.807942+00:00",
       "topic": "n",
@@ -1214,16 +1227,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-26T15:40:59.807942+00:00",
-    "topic": "n",
+    "timestamp": "2026-06-27T03:52:08.544522+00:00",
+    "topic": "gk",
     "lang": "hi",
-    "status": "failure",
-    "hook": "",
-    "category": "",
+    "status": "dry_run_ok",
+    "hook": "तारों की रोशनी हजारों साल पुरानी है",
+    "category": "Science",
     "media_id": "",
     "error": "",
-    "image_source": "",
-    "reel_style": "",
-    "duration": 0
+    "image_source": "pil",
+    "reel_style": "carousel_visual",
+    "duration": 12
   }
 }
