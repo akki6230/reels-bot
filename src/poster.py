@@ -51,10 +51,10 @@ SESSION_ENV = os.environ.get("IG_SESSION_DATA", "").strip()
 # If a topic's list is empty, post_reel() below automatically falls back to
 # the generated/Freesound background music — nothing breaks either way.
 TRENDING_AUDIO = {
-    "examfacts":   [],   # add real trending audio IDs here (see note above)
-    "psychology":  [],
-    "mindblowing": [],
-    "gk":          [],
+    "examfacts": ["36312999321678028", "26595002846841454"],
+    "psychology": ["36312999321678028", "945355724495601", "26595002846841454"],
+    "mindblowing": ["37875166522082301", "645214053257804"],
+    "gk": ["36109372152009884", "945355724495601"],
 }
 
 
