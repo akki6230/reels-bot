@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-27T04:08:29.995858+00:00",
-  "total_runs": 96,
-  "posted": 64,
+  "generated_at": "2026-06-27T04:12:50.763915+00:00",
+  "total_runs": 97,
+  "posted": 65,
   "failed": 6,
   "dry_runs": 13,
   "en_posted": 4,
-  "hi_posted": 60,
-  "success_rate": 66.7,
+  "hi_posted": 61,
+  "success_rate": 67.0,
   "topic_counts": {
-    "psychology": 5,
+    "psychology": 6,
     "examfacts": 14,
     "earthglitch": 7,
     "sciencewrong": 5,
@@ -22,6 +22,19 @@
     "geography": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-06-27T04:12:50.763615+00:00",
+      "topic": "psychology",
+      "lang": "hi",
+      "status": "posted",
+      "hook": "आपका दिमाग बीते समय को गलत तरीके से edit करता है",
+      "category": "Memory",
+      "media_id": "3928498462419777569_24336816956",
+      "error": "",
+      "image_source": "pexels",
+      "reel_style": "carousel_visual",
+      "duration": 12
+    },
     {
       "timestamp": "2026-06-27T04:08:29.995551+00:00",
       "topic": "psychology",
@@ -1240,16 +1253,16 @@
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-27T04:08:29.995551+00:00",
+    "timestamp": "2026-06-27T04:12:50.763615+00:00",
     "topic": "psychology",
     "lang": "hi",
-    "status": "failed",
-    "hook": "आप अभी जो सुन रहे हैं वो असल में नहीं है",
-    "category": "Perception",
-    "media_id": "",
-    "error": "InstagramPoster.post_reel() got an unexpected keyword argument 'first_comment'",
-    "image_source": "pil",
+    "status": "posted",
+    "hook": "आपका दिमाग बीते समय को गलत तरीके से edit करता है",
+    "category": "Memory",
+    "media_id": "3928498462419777569_24336816956",
+    "error": "",
+    "image_source": "pexels",
     "reel_style": "carousel_visual",
-    "duration": 11
+    "duration": 12
   }
 }
