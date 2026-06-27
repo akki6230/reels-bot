@@ -1,8 +1,15 @@
 """
 src/poster.py — Posts Instagram Reels using instagrapi with:
 - Pre-saved session (no fresh login from GitHub Actions)
-- Trending Instagram audio IDs per topic
-- Rotating audio selection to keep content fresh
+- Trending Instagram audio IDs per topic (fill in real IDs — see below)
+- Auto first-comment to seed early engagement signal
+
+NOTE ON COMMENT REPLIES: we deliberately do NOT auto-reply to viewer
+comments here. Generic auto-replies to real people read as bot-like and
+risk triggering the exact AI-content suppression we're trying to avoid.
+Per the growth plan, replying to the first 5-10 comments is a manual,
+~2-minute task — do it within the first hour of posting, it's the
+single highest-leverage 2 minutes of your day for this account.
 """
 
 import os
@@ -25,17 +32,29 @@ IG_PASSWORD = os.environ["INSTAGRAM_PASSWORD"]
 SESSION_ENV = os.environ.get("IG_SESSION_DATA", "").strip()
 
 # ── Trending Instagram Audio IDs ───────────────────────────────────────────────
-# These are real Instagram audio track IDs that are trending/popular
-# Format: {"audio_id": "track_name"} — Instagram uses these internally
-# Audio plays INSTEAD of your generated music when set
-# Update these periodically with new trending tracks
-# Find IDs by: saving a reel with trending audio → inspect the media object
-
+# IMPORTANT — these lists start EMPTY on purpose. Instagram audio IDs are not
+# something that can be reliably invented; they have to be real, currently-
+# trending track IDs. Research is consistent that using trending audio gives
+# a real reach boost, so this is worth doing, just not worth faking.
+#
+# HOW TO FILL THIS IN (~5 min, once a week):
+#   1. Open Instagram → Reels tab → find 2-3 trending Hindi/instrumental
+#      audios that fit each topic's mood (calm for psychology/gk/examfacts,
+#      energetic for mindblowing).
+#   2. Tap the audio name → "Save audio" → note the audio ID from the URL,
+#      OR use an already-posted reel of yours: inspect the media object via
+#      instagrapi (self.cl.media_info(media_pk).clips_metadata) to read back
+#      the original_audio_info.audio_id of any reel that used trending audio.
+#   3. Paste 2-5 IDs per topic below. Rotate them out every 1-2 weeks —
+#      trending audio has a short shelf life.
+#
+# If a topic's list is empty, post_reel() below automatically falls back to
+# the generated/Freesound background music — nothing breaks either way.
 TRENDING_AUDIO = {
-    "examfacts": ["36312999321678028", "26595002846841454"],
-    "psychology": ["36312999321678028", "945355724495601", "26595002846841454"],
-    "mindblowing": ["37875166522082301", "645214053257804"],
-    "gk": ["36109372152009884", "945355724495601"],
+    "examfacts":   [],   # add real trending audio IDs here (see note above)
+    "psychology":  [],
+    "mindblowing": [],
+    "gk":          [],
 }
 
 
@@ -107,7 +126,8 @@ class InstagramPoster:
         SESSION_FILE.write_text(json.dumps(self.cl.get_settings(), indent=2))
 
     def post_reel(self, video_path: Path, caption: str,
-                  topic_key: str = "space") -> str:
+                  topic_key: str = "space",
+                  first_comment: str = "") -> str:
         delay = random.uniform(5, 12)
         log.info(f"Waiting {delay:.1f}s before posting…")
         time.sleep(delay)
@@ -141,6 +161,20 @@ class InstagramPoster:
 
             self._save_session()
             log.info(f"✅ Reel posted — media ID: {media.id}")
+
+            # Seed early engagement: post a first comment immediately.
+            # Instagram's "phase 1" test window (first ~60 min) weighs early
+            # comments/replies heavily — an automated first comment that
+            # restates the question/answer prompt gives real commenters
+            # something to reply to, instead of the post sitting silent.
+            if first_comment:
+                try:
+                    time.sleep(random.uniform(8, 20))
+                    self.cl.media_comment(media.id, first_comment)
+                    log.info(f"💬 First comment posted: {first_comment[:50]}")
+                except Exception as ce:
+                    log.warning(f"First comment failed (non-fatal): {ce}")
+
             return str(media.id)
 
         except LoginRequired:
