@@ -32,49 +32,10 @@ SESSION_ENV = os.environ.get("IG_SESSION_DATA", "").strip()
 # Find IDs by: saving a reel with trending audio → inspect the media object
 
 TRENDING_AUDIO = {
-    "space": [
-        # Cinematic/ambient tracks popular on educational reels
-        "17846368219941196",   # Interstellar Theme style
-        "1053886985433487",    # Cosmic ambient
-        "688885529321643",     # Space epic
-        "2401431083430577",    # Sci-fi ambient
-        "496789848499879",     # Universe documentary style
-    ],
-    "history": [
-        "1167807943723975",    # Epic orchestral
-        "892346178432156",     # Historical drama
-        "2341567891234567",    # Ancient world
-        "1456789234567890",    # Medieval epic
-        "987654321098765",     # Classical cinematic
-    ],
-    "geography": [
-        "1234567890123456",    # Nature documentary
-        "2345678901234567",    # World travel
-        "3456789012345678",    # Earth from above
-        "4567890123456789",    # Acoustic world
-        "5678901234567890",    # Nature sounds
-    ],
-    "science": [
-        "6789012345678901",    # Discovery channel style
-        "7890123456789012",    # Tech innovation
-        "8901234567890123",    # Future science
-        "9012345678901234",    # Electronic discovery
-        "1234509876543210",    # Lab vibes
-    ],
-    "sports": [
-        "1111222233334444",    # Pump up energy
-        "2222333344445555",    # Sports highlights
-        "3333444455556666",    # Champion
-        "4444555566667777",    # Victory
-        "5555666677778888",    # Game time
-    ],
-    "worldnews": [
-        "6666777788889999",    # Breaking news style
-        "7777888899990000",    # Documentary
-        "8888999900001111",    # Global affairs
-        "9999000011112222",    # Serious news
-        "1010101010101010",    # Current events
-    ],
+    "examfacts": ["36312999321678028", "26595002846841454"],
+    "psychology": ["36312999321678028", "945355724495601", "26595002846841454"],
+    "mindblowing": ["37875166522082301", "645214053257804"],
+    "gk": ["36109372152009884", "945355724495601"],
 }
 
 
