@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-30T16:25:04.455436+00:00",
+  "generated_at": "2026-07-01T16:28:27.779491+00:00",
   "total_runs": 100,
-  "posted": 64,
+  "posted": 63,
   "failed": 6,
   "dry_runs": 13,
   "en_posted": 4,
-  "hi_posted": 60,
-  "success_rate": 64.0,
+  "hi_posted": 59,
+  "success_rate": 63.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -17,10 +17,22 @@
     "gk": 8,
     "worldnews": 1,
     "sports": 2,
-    "science": 5,
-    "history": 1
+    "science": 5
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-01T16:28:27.779392+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-06-30T16:25:04.455196+00:00",
       "topic": "y",
@@ -1281,22 +1293,11 @@
       "category": "Human Body",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_human_body_en_20260607_064644.mp4",
       "media_id": "3914081318256816934_24336816956"
-    },
-    {
-      "timestamp": "2026-06-07T08:01:16.964046+00:00",
-      "topic": "history",
-      "lang": "hi",
-      "status": "posted",
-      "dry_run": false,
-      "hook": "एक राजा ने अपनी पत्नी को जीवित दफन किया",
-      "category": "प्राचीन मिस्र",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_प्राचीन_मिस्र_hi_20260607_080126.mp4",
-      "media_id": "3914121276275345493_24336816956"
     }
   ],
   "current_run": {
-    "timestamp": "2026-06-30T16:25:04.455196+00:00",
-    "topic": "y",
+    "timestamp": "2026-07-01T16:28:27.779392+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
