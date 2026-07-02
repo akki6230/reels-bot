@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-01T16:28:27.779491+00:00",
+  "generated_at": "2026-07-02T16:07:41.554726+00:00",
   "total_runs": 100,
-  "posted": 63,
+  "posted": 62,
   "failed": 6,
   "dry_runs": 13,
-  "en_posted": 4,
+  "en_posted": 3,
   "hi_posted": 59,
-  "success_rate": 63.0,
+  "success_rate": 62.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -17,9 +17,22 @@
     "gk": 8,
     "worldnews": 1,
     "sports": 2,
-    "science": 5
+    "science": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-02T16:07:41.554467+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-01T16:28:27.779392+00:00",
       "topic": "",
@@ -1282,22 +1295,11 @@
       "category": "Biology",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_biology_en_20260607_073921.mp4",
       "media_id": "3914107999499676006_24336816956"
-    },
-    {
-      "timestamp": "2026-06-07T06:46:40.671509+00:00",
-      "topic": "science",
-      "lang": "en",
-      "status": "posted",
-      "dry_run": false,
-      "hook": "Your body replaces itself every seven years",
-      "category": "Human Body",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_human_body_en_20260607_064644.mp4",
-      "media_id": "3914081318256816934_24336816956"
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-01T16:28:27.779392+00:00",
-    "topic": "",
+    "timestamp": "2026-07-02T16:07:41.554467+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
