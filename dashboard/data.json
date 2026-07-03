@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-02T16:07:41.554726+00:00",
+  "generated_at": "2026-07-03T15:54:45.688665+00:00",
   "total_runs": 100,
-  "posted": 62,
+  "posted": 61,
   "failed": 6,
   "dry_runs": 13,
-  "en_posted": 3,
+  "en_posted": 2,
   "hi_posted": 59,
-  "success_rate": 62.0,
+  "success_rate": 61.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -17,9 +17,22 @@
     "gk": 8,
     "worldnews": 1,
     "sports": 2,
-    "science": 4
+    "science": 3
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-03T15:54:45.688425+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-02T16:07:41.554467+00:00",
       "topic": "a",
@@ -1284,22 +1297,11 @@
       "category": "Neuroscience",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_neuroscience_en_20260607_074149.mp4",
       "media_id": "3914109120788289796_24336816956"
-    },
-    {
-      "timestamp": "2026-06-07T07:39:17.099618+00:00",
-      "topic": "science",
-      "lang": "en",
-      "status": "posted",
-      "dry_run": false,
-      "hook": "Octopuses have nine brains and taste with arms",
-      "category": "Biology",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_biology_en_20260607_073921.mp4",
-      "media_id": "3914107999499676006_24336816956"
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-02T16:07:41.554467+00:00",
-    "topic": "a",
+    "timestamp": "2026-07-03T15:54:45.688425+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
