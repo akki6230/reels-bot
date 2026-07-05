@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-04T15:07:51.671984+00:00",
+  "generated_at": "2026-07-05T15:14:15.686461+00:00",
   "total_runs": 100,
   "posted": 60,
   "failed": 6,
-  "dry_runs": 13,
+  "dry_runs": 12,
   "en_posted": 1,
   "hi_posted": 59,
   "success_rate": 60.0,
@@ -20,6 +20,19 @@
     "science": 2
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-05T15:14:15.686346+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-04T15:07:51.671734+00:00",
       "topic": "y",
@@ -1289,21 +1302,11 @@
       "category": "भौतिकी",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_भौतिकी_hi_20260607_080818.mp4",
       "media_id": "3914124802351297808_24336816956"
-    },
-    {
-      "timestamp": "2026-06-06T21:41:19.240199+00:00",
-      "topic": "science",
-      "lang": "hi",
-      "status": "dry_run_ok",
-      "dry_run": true,
-      "hook": "आपका दिमाग खुद को खा सकता है!",
-      "category": "मानव शरीर",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_मानव_शरीर_hi_20260606_214127.mp4"
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-04T15:07:51.671734+00:00",
-    "topic": "y",
+    "timestamp": "2026-07-05T15:14:15.686346+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
