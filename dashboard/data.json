@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-05T15:14:15.686461+00:00",
+  "generated_at": "2026-07-06T16:54:08.087943+00:00",
   "total_runs": 100,
-  "posted": 60,
+  "posted": 59,
   "failed": 6,
   "dry_runs": 12,
   "en_posted": 1,
-  "hi_posted": 59,
-  "success_rate": 60.0,
+  "hi_posted": 58,
+  "success_rate": 59.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -17,9 +17,22 @@
     "gk": 8,
     "worldnews": 1,
     "sports": 2,
-    "science": 2
+    "science": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-06T16:54:08.087658+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-05T15:14:15.686346+00:00",
       "topic": "",
@@ -1291,22 +1304,11 @@
       "category": "तंत्रिका विज्ञान",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_तंत्रिका_विज्ञान_hi_20260607_083503.mp4",
       "media_id": "3914138247805069452_24336816956"
-    },
-    {
-      "timestamp": "2026-06-07T08:08:10.533588+00:00",
-      "topic": "science",
-      "lang": "hi",
-      "status": "posted",
-      "dry_run": false,
-      "hook": "आपकी आंख हर सेकंड 4 लाख बार झपकती है",
-      "category": "भौतिकी",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_भौतिकी_hi_20260607_080818.mp4",
-      "media_id": "3914124802351297808_24336816956"
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-05T15:14:15.686346+00:00",
-    "topic": "",
+    "timestamp": "2026-07-06T16:54:08.087658+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
