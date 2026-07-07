@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-06T16:54:08.087943+00:00",
+  "generated_at": "2026-07-07T16:33:36.779373+00:00",
   "total_runs": 100,
-  "posted": 59,
+  "posted": 58,
   "failed": 6,
   "dry_runs": 12,
   "en_posted": 1,
-  "hi_posted": 58,
-  "success_rate": 59.0,
+  "hi_posted": 57,
+  "success_rate": 58.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -16,10 +16,22 @@
     "space": 10,
     "gk": 8,
     "worldnews": 1,
-    "sports": 2,
-    "science": 1
+    "sports": 2
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-07T16:33:36.779116+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-06T16:54:08.087658+00:00",
       "topic": "a",
@@ -1293,22 +1305,11 @@
       "hook": "NEUTRON STARS ARE ACTUALLY INSANELY DENSE",
       "category": "Stars",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_stars_en_20260607_103722.mp4"
-    },
-    {
-      "timestamp": "2026-06-07T08:34:53.399401+00:00",
-      "topic": "science",
-      "lang": "hi",
-      "status": "posted",
-      "dry_run": false,
-      "hook": "आपकी आंखें हर सेकंड 4 लाख बार झपकती हैं",
-      "category": "तंत्रिका विज्ञान",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_तंत्रिका_विज्ञान_hi_20260607_083503.mp4",
-      "media_id": "3914138247805069452_24336816956"
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-06T16:54:08.087658+00:00",
-    "topic": "a",
+    "timestamp": "2026-07-07T16:33:36.779116+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
