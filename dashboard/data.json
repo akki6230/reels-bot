@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-07T16:33:36.779373+00:00",
+  "generated_at": "2026-07-08T16:04:10.225591+00:00",
   "total_runs": 100,
   "posted": 58,
   "failed": 6,
-  "dry_runs": 12,
+  "dry_runs": 11,
   "en_posted": 1,
   "hi_posted": 57,
   "success_rate": 58.0,
@@ -19,6 +19,19 @@
     "sports": 2
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-08T16:04:10.225490+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-07T16:33:36.779116+00:00",
       "topic": "y",
@@ -1295,21 +1308,11 @@
       "hook": "सूरज हर सेकंड 4 लाख टन जलता है",
       "category": "तारे",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_तारे_hi_20260607_061514.mp4"
-    },
-    {
-      "timestamp": "2026-06-07T10:37:14.854310+00:00",
-      "topic": "space",
-      "lang": "en",
-      "status": "dry_run_ok",
-      "dry_run": true,
-      "hook": "NEUTRON STARS ARE ACTUALLY INSANELY DENSE",
-      "category": "Stars",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_stars_en_20260607_103722.mp4"
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-07T16:33:36.779116+00:00",
-    "topic": "y",
+    "timestamp": "2026-07-08T16:04:10.225490+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
