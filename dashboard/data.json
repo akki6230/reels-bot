@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-09T16:29:52.246378+00:00",
+  "generated_at": "2026-07-10T16:27:31.400016+00:00",
   "total_runs": 100,
-  "posted": 58,
+  "posted": 57,
   "failed": 6,
   "dry_runs": 10,
-  "en_posted": 1,
+  "en_posted": 0,
   "hi_posted": 57,
-  "success_rate": 58.0,
+  "success_rate": 57.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -16,9 +16,22 @@
     "space": 10,
     "gk": 8,
     "worldnews": 1,
-    "sports": 2
+    "sports": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-10T16:27:31.399730+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-09T16:29:52.246122+00:00",
       "topic": "a",
@@ -1300,22 +1313,11 @@
       "category": "Sports News",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_sports_news_hi_20260607_101357.mp4",
       "media_id": "3914187844124468853_24336816956"
-    },
-    {
-      "timestamp": "2026-06-07T09:48:16.592303+00:00",
-      "topic": "sports",
-      "lang": "en",
-      "status": "posted",
-      "dry_run": false,
-      "hook": "AMERICA'S HOCKEY CURSE FINALLY BROKEN AFTER 46 YEARS",
-      "category": "Sports News",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_sports_news_en_20260607_094854.mp4",
-      "media_id": "3914174766116831272_24336816956"
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-09T16:29:52.246122+00:00",
-    "topic": "a",
+    "timestamp": "2026-07-10T16:27:31.399730+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
