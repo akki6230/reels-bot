@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-10T16:27:31.400016+00:00",
+  "generated_at": "2026-07-11T14:55:53.629188+00:00",
   "total_runs": 100,
-  "posted": 57,
+  "posted": 56,
   "failed": 6,
   "dry_runs": 10,
   "en_posted": 0,
-  "hi_posted": 57,
-  "success_rate": 57.0,
+  "hi_posted": 56,
+  "success_rate": 56.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -15,10 +15,22 @@
     "sciencewrong": 5,
     "space": 10,
     "gk": 8,
-    "worldnews": 1,
-    "sports": 1
+    "worldnews": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-11T14:55:53.628934+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-10T16:27:31.399730+00:00",
       "topic": "n",
@@ -1302,22 +1314,11 @@
       "hook": "NASA JUST MADE SUPERSONIC FLIGHT QUIET",
       "category": "Space & Technology",
       "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_space_&_technology_en_20260607_022242.mp4"
-    },
-    {
-      "timestamp": "2026-06-07T10:13:43.891347+00:00",
-      "topic": "sports",
-      "lang": "hi",
-      "status": "posted",
-      "dry_run": false,
-      "hook": "46 साल बाद अमेरिका का सपना सच हुआ!",
-      "category": "Sports News",
-      "video_path": "/home/runner/work/reels-bot/reels-bot/output/videos/reel_sports_news_hi_20260607_101357.mp4",
-      "media_id": "3914187844124468853_24336816956"
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-10T16:27:31.399730+00:00",
-    "topic": "n",
+    "timestamp": "2026-07-11T14:55:53.628934+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
