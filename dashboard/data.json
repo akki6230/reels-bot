@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-12T14:57:39.552731+00:00",
+  "generated_at": "2026-07-13T16:36:35.323211+00:00",
   "total_runs": 100,
-  "posted": 56,
+  "posted": 55,
   "failed": 6,
   "dry_runs": 9,
   "en_posted": 0,
-  "hi_posted": 56,
-  "success_rate": 56.0,
+  "hi_posted": 55,
+  "success_rate": 55.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
@@ -14,10 +14,22 @@
     "earthglitch": 7,
     "sciencewrong": 5,
     "space": 10,
-    "gk": 8,
-    "worldnews": 1
+    "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-13T16:36:35.323029+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-12T14:57:39.552634+00:00",
       "topic": "",
@@ -1304,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "kinetic",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-07T15:17:17.452476+00:00",
-      "topic": "worldnews",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "विश्व में तीन बड़े संकट एक साथ",
-      "category": "World News",
-      "media_id": "3914337396496487752_24336816956",
-      "error": "",
-      "image_source": "pollinations",
-      "reel_style": "cartoon",
-      "duration": 33
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-12T14:57:39.552634+00:00",
-    "topic": "",
+    "timestamp": "2026-07-13T16:36:35.323029+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
