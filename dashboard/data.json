@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-07-13T16:36:35.323211+00:00",
+  "generated_at": "2026-07-14T15:26:01.625627+00:00",
   "total_runs": 100,
-  "posted": 55,
+  "posted": 54,
   "failed": 6,
   "dry_runs": 9,
   "en_posted": 0,
-  "hi_posted": 55,
-  "success_rate": 55.0,
+  "hi_posted": 54,
+  "success_rate": 54.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
     "examfacts": 14,
     "earthglitch": 7,
     "sciencewrong": 5,
-    "space": 10,
+    "space": 9,
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-14T15:26:01.625378+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-13T16:36:35.323029+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "",
       "reel_style": "",
       "duration": 0
-    },
-    {
-      "timestamp": "2026-06-08T04:58:34.836679+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "सूर्य 109 पृथ्वियों को निगल सकता है",
-      "category": "तारे",
-      "media_id": "3914750763476240529_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-13T16:36:35.323029+00:00",
-    "topic": "a",
+    "timestamp": "2026-07-14T15:26:01.625378+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
