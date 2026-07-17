@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T15:40:54.455121+00:00",
+  "generated_at": "2026-07-17T15:16:15.408828+00:00",
   "total_runs": 100,
   "posted": 54,
   "failed": 6,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-17T15:16:15.408608+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-16T15:40:54.454857+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "cartoon",
       "duration": 17
-    },
-    {
-      "timestamp": "2026-06-08T11:43:48.193220+00:00",
-      "topic": "earthglitch",
-      "lang": "hi",
-      "status": "success",
-      "hook": "",
-      "category": "",
-      "media_id": "",
-      "error": "",
-      "image_source": "",
-      "reel_style": "",
-      "duration": 0
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-16T15:40:54.454857+00:00",
-    "topic": "a",
+    "timestamp": "2026-07-17T15:16:15.408608+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
