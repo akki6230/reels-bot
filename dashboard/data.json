@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-07-17T15:16:15.408828+00:00",
+  "generated_at": "2026-07-18T14:55:19.076234+00:00",
   "total_runs": 100,
-  "posted": 54,
+  "posted": 53,
   "failed": 6,
   "dry_runs": 9,
   "en_posted": 0,
-  "hi_posted": 54,
-  "success_rate": 54.0,
+  "hi_posted": 53,
+  "success_rate": 53.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
     "examfacts": 14,
     "earthglitch": 7,
     "sciencewrong": 5,
-    "space": 9,
+    "space": 8,
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-18T14:55:19.075951+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-17T15:16:15.408608+00:00",
       "topic": "n",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "documentary",
       "duration": 17
-    },
-    {
-      "timestamp": "2026-06-08T12:18:37.203355+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "एक तारा जो 10 बिलियन साल पुराना है",
-      "category": "Stars",
-      "media_id": "3914972222324941293_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "cartoon",
-      "duration": 17
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-17T15:16:15.408608+00:00",
-    "topic": "n",
+    "timestamp": "2026-07-18T14:55:19.075951+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
