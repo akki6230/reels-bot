@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-07-18T14:55:19.076234+00:00",
+  "generated_at": "2026-07-19T14:56:56.081826+00:00",
   "total_runs": 100,
-  "posted": 53,
+  "posted": 52,
   "failed": 6,
   "dry_runs": 9,
   "en_posted": 0,
-  "hi_posted": 53,
-  "success_rate": 53.0,
+  "hi_posted": 52,
+  "success_rate": 52.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
     "examfacts": 14,
     "earthglitch": 7,
     "sciencewrong": 5,
-    "space": 8,
+    "space": 7,
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-19T14:56:56.081726+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-18T14:55:19.075951+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "",
       "reel_style": "",
       "duration": 0
-    },
-    {
-      "timestamp": "2026-06-08T17:00:01.132759+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "एक सेकंड में सूरज से 47 लाख किमी दूर",
-      "category": "NASA",
-      "media_id": "3915113855817244849_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "documentary",
-      "duration": 17
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-18T14:55:19.075951+00:00",
-    "topic": "y",
+    "timestamp": "2026-07-19T14:56:56.081726+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
