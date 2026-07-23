@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-22T15:44:09.764540+00:00",
+  "generated_at": "2026-07-23T15:57:40.316068+00:00",
   "total_runs": 100,
   "posted": 52,
   "failed": 6,
-  "dry_runs": 9,
+  "dry_runs": 8,
   "en_posted": 0,
   "hi_posted": 52,
   "success_rate": 52.0,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-23T15:57:40.315827+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-22T15:44:09.764432+00:00",
       "topic": "",
@@ -1303,24 +1316,11 @@
       "image_source": "illustrated_hf",
       "reel_style": "illustrated",
       "duration": 15
-    },
-    {
-      "timestamp": "2026-06-09T03:44:08.368965+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "dry_run_ok",
-      "hook": "एक सेकंड में 3 लाख किमी दूर जाएंगे",
-      "category": "Galaxies",
-      "media_id": "",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-22T15:44:09.764432+00:00",
-    "topic": "",
+    "timestamp": "2026-07-23T15:57:40.315827+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
