@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-23T15:57:40.316068+00:00",
+  "generated_at": "2026-07-24T15:27:36.487670+00:00",
   "total_runs": 100,
   "posted": 52,
-  "failed": 6,
+  "failed": 5,
   "dry_runs": 8,
   "en_posted": 0,
   "hi_posted": 52,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-24T15:27:36.487434+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-23T15:57:40.315827+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "illustrated_hf",
       "reel_style": "illustrated",
       "duration": 21
-    },
-    {
-      "timestamp": "2026-06-09T03:55:54.786959+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "failed",
-      "hook": "एक ग्रह जो पृथ्वी से 10 लाख गुना बड़ा",
-      "category": "Black Holes",
-      "media_id": "",
-      "error": "name 'body_start' is not defined",
-      "image_source": "illustrated_hf",
-      "reel_style": "illustrated",
-      "duration": 15
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-23T15:57:40.315827+00:00",
-    "topic": "a",
+    "timestamp": "2026-07-24T15:27:36.487434+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
