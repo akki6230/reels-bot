@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-24T15:27:36.487670+00:00",
+  "generated_at": "2026-07-25T15:05:28.298806+00:00",
   "total_runs": 100,
   "posted": 52,
   "failed": 5,
-  "dry_runs": 8,
+  "dry_runs": 7,
   "en_posted": 0,
   "hi_posted": 52,
   "success_rate": 52.0,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-25T15:05:28.298608+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-24T15:27:36.487434+00:00",
       "topic": "n",
@@ -1303,24 +1316,11 @@
       "image_source": "",
       "reel_style": "",
       "duration": 0
-    },
-    {
-      "timestamp": "2026-06-09T04:03:10.089696+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "dry_run_ok",
-      "hook": "एक सेकंड में पृथ्वी को निगल जाएगा",
-      "category": "Black Holes",
-      "media_id": "",
-      "error": "",
-      "image_source": "illustrated_hf",
-      "reel_style": "illustrated",
-      "duration": 21
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-24T15:27:36.487434+00:00",
-    "topic": "n",
+    "timestamp": "2026-07-25T15:05:28.298608+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
