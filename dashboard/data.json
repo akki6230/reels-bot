@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T15:05:28.298806+00:00",
+  "generated_at": "2026-07-26T15:06:28.988332+00:00",
   "total_runs": 100,
   "posted": 52,
   "failed": 5,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-26T15:06:28.988230+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-25T15:05:28.298608+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "",
       "reel_style": "",
       "duration": 0
-    },
-    {
-      "timestamp": "2026-06-09T05:35:29.844486+00:00",
-      "topic": "mindblowing",
-      "lang": "hi",
-      "status": "success",
-      "hook": "",
-      "category": "",
-      "media_id": "",
-      "error": "",
-      "image_source": "",
-      "reel_style": "",
-      "duration": 0
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-25T15:05:28.298608+00:00",
-    "topic": "y",
+    "timestamp": "2026-07-26T15:06:28.988230+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
