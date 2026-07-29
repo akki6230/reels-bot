@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-07-28T16:07:06.666895+00:00",
+  "generated_at": "2026-07-29T15:50:07.010417+00:00",
   "total_runs": 100,
-  "posted": 52,
+  "posted": 51,
   "failed": 5,
   "dry_runs": 7,
   "en_posted": 0,
-  "hi_posted": 52,
-  "success_rate": 52.0,
+  "hi_posted": 51,
+  "success_rate": 51.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
     "examfacts": 14,
     "earthglitch": 7,
     "sciencewrong": 5,
-    "space": 7,
+    "space": 6,
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-29T15:50:07.010306+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-28T16:07:06.666661+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-09T10:52:05.985962+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "हमारी पूरी दुनिया एक धूल है।",
-      "category": "Planets",
-      "media_id": "3915653484266099297_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "cartoon",
-      "duration": 24
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-28T16:07:06.666661+00:00",
-    "topic": "y",
+    "timestamp": "2026-07-29T15:50:07.010306+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
