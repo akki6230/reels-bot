@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-29T15:50:07.010417+00:00",
+  "generated_at": "2026-07-30T15:54:01.206751+00:00",
   "total_runs": 100,
   "posted": 51,
   "failed": 5,
-  "dry_runs": 7,
+  "dry_runs": 6,
   "en_posted": 0,
   "hi_posted": 51,
   "success_rate": 51.0,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-07-30T15:54:01.206539+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-29T15:50:07.010306+00:00",
       "topic": "",
@@ -1303,24 +1316,11 @@
       "image_source": "",
       "reel_style": "",
       "duration": 0
-    },
-    {
-      "timestamp": "2026-06-09T10:53:54.256923+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "dry_run_ok",
-      "hook": "अंतरिक्ष के 5 रहस्य 🚀",
-      "category": "",
-      "media_id": "",
-      "error": "",
-      "image_source": "carousel_pexels",
-      "reel_style": "carousel",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-29T15:50:07.010306+00:00",
-    "topic": "",
+    "timestamp": "2026-07-30T15:54:01.206539+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
