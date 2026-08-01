@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-31T16:03:58.152846+00:00",
+  "generated_at": "2026-08-01T15:02:56.996126+00:00",
   "total_runs": 100,
   "posted": 51,
   "failed": 5,
-  "dry_runs": 6,
+  "dry_runs": 5,
   "en_posted": 0,
   "hi_posted": 51,
   "success_rate": 51.0,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-01T15:02:56.995868+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-07-31T16:03:58.152582+00:00",
       "topic": "n",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "documentary",
       "duration": 25
-    },
-    {
-      "timestamp": "2026-06-09T13:43:04.431657+00:00",
-      "topic": "mindblowing",
-      "lang": "hi",
-      "status": "dry_run_ok",
-      "hook": "5 ऐसे तथ्य जो दिमाग हिला दें 🤯",
-      "category": "",
-      "media_id": "",
-      "error": "",
-      "image_source": "carousel_pexels",
-      "reel_style": "carousel",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-07-31T16:03:58.152582+00:00",
-    "topic": "n",
+    "timestamp": "2026-08-01T15:02:56.995868+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
