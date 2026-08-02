@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-01T15:02:56.996126+00:00",
+  "generated_at": "2026-08-02T15:03:07.707869+00:00",
   "total_runs": 100,
-  "posted": 51,
+  "posted": 50,
   "failed": 5,
   "dry_runs": 5,
   "en_posted": 0,
-  "hi_posted": 51,
-  "success_rate": 51.0,
+  "hi_posted": 50,
+  "success_rate": 50.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
     "examfacts": 14,
     "earthglitch": 7,
-    "sciencewrong": 5,
+    "sciencewrong": 4,
     "space": 6,
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-02T15:03:07.707767+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-01T15:02:56.995868+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "cartoon",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-09T16:24:52.994470+00:00",
-      "topic": "sciencewrong",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "वैज्ञानिकों ने सोचा था लोबोटॉमी इलाज है",
-      "category": "Science Disasters",
-      "media_id": "3915820968394819295_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "documentary",
-      "duration": 25
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-01T15:02:56.995868+00:00",
-    "topic": "y",
+    "timestamp": "2026-08-02T15:03:07.707767+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
