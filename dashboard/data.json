@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-02T15:03:07.707869+00:00",
+  "generated_at": "2026-08-03T16:27:48.098235+00:00",
   "total_runs": 100,
   "posted": 50,
-  "failed": 5,
+  "failed": 4,
   "dry_runs": 5,
   "en_posted": 0,
   "hi_posted": 50,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-03T16:27:48.097976+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-02T15:03:07.707767+00:00",
       "topic": "",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "cartoon",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-10T06:02:56.760281+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "failed",
-      "hook": "एक ग्रह जिसे 40 साल लगे पहुंचने में",
-      "category": "NASA",
-      "media_id": "",
-      "error": "name 'render_fn' is not defined",
-      "image_source": "pil",
-      "reel_style": "cartoon",
-      "duration": 19
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-02T15:03:07.707767+00:00",
-    "topic": "",
+    "timestamp": "2026-08-03T16:27:48.097976+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
