@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-04T16:18:03.552496+00:00",
+  "generated_at": "2026-08-05T16:01:59.415986+00:00",
   "total_runs": 100,
   "posted": 50,
-  "failed": 3,
+  "failed": 2,
   "dry_runs": 5,
   "en_posted": 0,
   "hi_posted": 50,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-05T16:01:59.415886+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-04T16:18:03.552224+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "cartoon",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-10T06:42:23.284073+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "failed",
-      "hook": "बृहस्पति का एक तूफान 350 साल से चल रहा है",
-      "category": "Planets",
-      "media_id": "",
-      "error": "_txt_mixed() missing 1 required positional argument: 'a'",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 15
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-04T16:18:03.552224+00:00",
-    "topic": "y",
+    "timestamp": "2026-08-05T16:01:59.415886+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
