@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-05T16:01:59.415986+00:00",
+  "generated_at": "2026-08-07T14:54:51.179922+00:00",
   "total_runs": 100,
   "posted": 50,
   "failed": 2,
-  "dry_runs": 5,
+  "dry_runs": 4,
   "en_posted": 0,
   "hi_posted": 50,
   "success_rate": 50.0,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-07T14:54:51.179638+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-05T16:01:59.415886+00:00",
       "topic": "",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "documentary",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-10T07:25:08.984513+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "dry_run_ok",
-      "hook": "पृथ्वी से 4.37 प्रकाश वर्ष दूर है निकटतम तारा",
-      "category": "ISRO",
-      "media_id": "",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "cartoon",
-      "duration": 19
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-05T16:01:59.415886+00:00",
-    "topic": "",
+    "timestamp": "2026-08-07T14:54:51.179638+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
