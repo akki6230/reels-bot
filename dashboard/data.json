@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-07T14:54:51.179922+00:00",
+  "generated_at": "2026-08-08T14:33:33.488206+00:00",
   "total_runs": 100,
-  "posted": 50,
+  "posted": 49,
   "failed": 2,
   "dry_runs": 4,
   "en_posted": 0,
-  "hi_posted": 50,
-  "success_rate": 50.0,
+  "hi_posted": 49,
+  "success_rate": 49.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
     "examfacts": 14,
     "earthglitch": 7,
-    "sciencewrong": 4,
+    "sciencewrong": 3,
     "space": 6,
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-08T14:33:33.487972+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-07T14:54:51.179638+00:00",
       "topic": "n",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "cartoon",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-10T07:55:19.262032+00:00",
-      "topic": "sciencewrong",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "डॉक्टरों ने कहा था पारा पीना सुरक्षित है",
-      "category": "Wrong Theories",
-      "media_id": "3916289273937180669_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "documentary",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-07T14:54:51.179638+00:00",
-    "topic": "n",
+    "timestamp": "2026-08-08T14:33:33.487972+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
