@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-09T14:35:24.243998+00:00",
+  "generated_at": "2026-08-10T15:00:30.636598+00:00",
   "total_runs": 100,
-  "posted": 48,
+  "posted": 47,
   "failed": 2,
   "dry_runs": 4,
   "en_posted": 0,
-  "hi_posted": 48,
-  "success_rate": 48.0,
+  "hi_posted": 47,
+  "success_rate": 47.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
     "examfacts": 14,
-    "earthglitch": 6,
+    "earthglitch": 5,
     "sciencewrong": 3,
     "space": 6,
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-10T15:00:30.636342+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-09T14:35:24.243906+00:00",
       "topic": "",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-10T16:51:18.245618+00:00",
-      "topic": "earthglitch",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "क्या आप जानते हैं मोनोलेक का रहस्य?",
-      "category": "Geographic Wonders",
-      "media_id": "3916559009577090129_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "cartoon",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-09T14:35:24.243906+00:00",
-    "topic": "",
+    "timestamp": "2026-08-10T15:00:30.636342+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
