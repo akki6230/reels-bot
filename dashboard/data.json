@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-12T14:58:26.220700+00:00",
+  "generated_at": "2026-08-13T15:01:18.864600+00:00",
   "total_runs": 100,
   "posted": 47,
   "failed": 2,
-  "dry_runs": 2,
+  "dry_runs": 1,
   "en_posted": 0,
   "hi_posted": 47,
   "success_rate": 47.0,
@@ -17,6 +17,19 @@
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-13T15:01:18.864397+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-12T14:58:26.220587+00:00",
       "topic": "",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "cartoon",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-11T03:51:21.223902+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "dry_run_ok",
-      "hook": "भारत के संविधान में कुल कितने अनुच्छेद हैं?",
-      "category": "Polity",
-      "media_id": "",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "documentary",
-      "duration": 15
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-12T14:58:26.220587+00:00",
-    "topic": "",
+    "timestamp": "2026-08-13T15:01:18.864397+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
