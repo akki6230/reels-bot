@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-14T14:53:35.549854+00:00",
+  "generated_at": "2026-08-15T14:24:58.130060+00:00",
   "total_runs": 100,
-  "posted": 46,
+  "posted": 45,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 46,
-  "success_rate": 46.0,
+  "hi_posted": 45,
+  "success_rate": 45.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 6,
-    "examfacts": 13,
+    "examfacts": 12,
     "earthglitch": 5,
     "sciencewrong": 3,
     "space": 6,
     "gk": 8
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-15T14:24:58.129822+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-14T14:53:35.549616+00:00",
       "topic": "n",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "cartoon",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-11T08:24:37.230015+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "ब्लैक होल का event horizon क्या है?",
-      "category": "Physics",
-      "media_id": "3917028783486620838_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-14T14:53:35.549616+00:00",
-    "topic": "n",
+    "timestamp": "2026-08-15T14:24:58.129822+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
