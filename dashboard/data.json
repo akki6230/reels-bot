@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-17T14:29:53.985831+00:00",
+  "generated_at": "2026-08-18T14:37:40.642116+00:00",
   "total_runs": 100,
-  "posted": 43,
+  "posted": 42,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 43,
-  "success_rate": 43.0,
+  "hi_posted": 42,
+  "success_rate": 42.0,
   "topic_counts": {
     "mindblowing": 5,
     "psychology": 4,
@@ -14,9 +14,22 @@
     "earthglitch": 5,
     "sciencewrong": 3,
     "space": 6,
-    "gk": 8
+    "gk": 7
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-18T14:37:40.641898+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-17T14:29:53.985600+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-12T08:11:22.331709+00:00",
-      "topic": "gk",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "भारत का सबसे बड़ा बांध चीन में है?",
-      "category": "Geography",
-      "media_id": "3917746892379802343_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "documentary",
-      "duration": 17
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-17T14:29:53.985600+00:00",
-    "topic": "a",
+    "timestamp": "2026-08-18T14:37:40.641898+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
