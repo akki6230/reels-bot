@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-18T14:37:40.642116+00:00",
+  "generated_at": "2026-08-19T14:34:45.670891+00:00",
   "total_runs": 100,
-  "posted": 42,
+  "posted": 41,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 42,
-  "success_rate": 42.0,
+  "hi_posted": 41,
+  "success_rate": 41.0,
   "topic_counts": {
-    "mindblowing": 5,
+    "mindblowing": 4,
     "psychology": 4,
     "examfacts": 12,
     "earthglitch": 5,
@@ -17,6 +17,19 @@
     "gk": 7
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-19T14:34:45.670782+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-18T14:37:40.641898+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "documentary",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-12T11:14:33.291528+00:00",
-      "topic": "mindblowing",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "5 अविश्वसनीय रहस्य जो विज्ञान ने हाल ही में खोले 🔬",
-      "category": "",
-      "media_id": "3917839263769660872_24336816956",
-      "error": "",
-      "image_source": "carousel_pexels",
-      "reel_style": "carousel",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-18T14:37:40.641898+00:00",
-    "topic": "y",
+    "timestamp": "2026-08-19T14:34:45.670782+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
