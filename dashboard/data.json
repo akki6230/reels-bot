@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-20T14:38:14.462744+00:00",
+  "generated_at": "2026-08-21T14:36:55.161685+00:00",
   "total_runs": 100,
-  "posted": 40,
+  "posted": 39,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 40,
-  "success_rate": 40.0,
+  "hi_posted": 39,
+  "success_rate": 39.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
-    "examfacts": 12,
+    "examfacts": 11,
     "earthglitch": 5,
     "sciencewrong": 3,
     "space": 6,
     "gk": 7
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-21T14:36:55.161392+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-20T14:38:14.462459+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "kinetic",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-13T07:14:43.764627+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "भारत की GDP में सबसे बड़ा योगदान कौन सा sector देता है?",
-      "category": "Economy",
-      "media_id": "3918443165366053679_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "cartoon",
-      "duration": 17
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-20T14:38:14.462459+00:00",
-    "topic": "a",
+    "timestamp": "2026-08-21T14:36:55.161392+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
