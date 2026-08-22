@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-21T14:36:55.161685+00:00",
+  "generated_at": "2026-08-22T14:22:44.474855+00:00",
   "total_runs": 100,
-  "posted": 39,
+  "posted": 38,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 39,
-  "success_rate": 39.0,
+  "hi_posted": 38,
+  "success_rate": 38.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
-    "examfacts": 11,
+    "examfacts": 10,
     "earthglitch": 5,
     "sciencewrong": 3,
     "space": 6,
     "gk": 7
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-22T14:22:44.474598+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-21T14:36:55.161392+00:00",
       "topic": "n",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 17
-    },
-    {
-      "timestamp": "2026-06-13T10:16:32.907543+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "NEET में हर बार आता है यह protein का सवाल?",
-      "category": "Biology",
-      "media_id": "3918534665919758053_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 19
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-21T14:36:55.161392+00:00",
-    "topic": "n",
+    "timestamp": "2026-08-22T14:22:44.474598+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
