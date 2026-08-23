@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-22T14:22:44.474855+00:00",
+  "generated_at": "2026-08-23T14:23:49.250859+00:00",
   "total_runs": 100,
-  "posted": 38,
+  "posted": 37,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 38,
-  "success_rate": 38.0,
+  "hi_posted": 37,
+  "success_rate": 37.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
     "examfacts": 10,
     "earthglitch": 5,
     "sciencewrong": 3,
-    "space": 6,
+    "space": 5,
     "gk": 7
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-23T14:23:49.250781+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-22T14:22:44.474598+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-13T15:18:37.415490+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "अंतरिक्ष के 5 रहस्य 🌌",
-      "category": "",
-      "media_id": "3918686895235679693_24336816956",
-      "error": "",
-      "image_source": "carousel_pexels",
-      "reel_style": "carousel",
-      "duration": 17
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-22T14:22:44.474598+00:00",
-    "topic": "y",
+    "timestamp": "2026-08-23T14:23:49.250781+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
