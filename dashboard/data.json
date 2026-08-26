@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-25T14:47:06.205930+00:00",
+  "generated_at": "2026-08-26T14:44:52.146413+00:00",
   "total_runs": 100,
-  "posted": 35,
+  "posted": 34,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 35,
-  "success_rate": 35.0,
+  "hi_posted": 34,
+  "success_rate": 34.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
     "examfacts": 10,
-    "earthglitch": 5,
+    "earthglitch": 4,
     "sciencewrong": 3,
     "space": 5,
     "gk": 5
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-26T14:44:52.146306+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-25T14:47:06.205721+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 16
-    },
-    {
-      "timestamp": "2026-06-14T15:30:13.773134+00:00",
-      "topic": "earthglitch",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "क्या आप जानते हैं डेथ वैली का सच?",
-      "category": "Earth Mysteries",
-      "media_id": "3919417344118691215_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "kinetic",
-      "duration": 18
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-25T14:47:06.205721+00:00",
-    "topic": "y",
+    "timestamp": "2026-08-26T14:44:52.146306+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
