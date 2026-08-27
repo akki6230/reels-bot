@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-26T14:44:52.146413+00:00",
+  "generated_at": "2026-08-27T23:40:14.283324+00:00",
   "total_runs": 100,
-  "posted": 34,
+  "posted": 33,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 34,
-  "success_rate": 34.0,
+  "hi_posted": 33,
+  "success_rate": 33.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
@@ -14,9 +14,22 @@
     "earthglitch": 4,
     "sciencewrong": 3,
     "space": 5,
-    "gk": 5
+    "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-27T23:40:14.283093+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-26T14:44:52.146306+00:00",
       "topic": "",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "cartoon",
       "duration": 18
-    },
-    {
-      "timestamp": "2026-06-15T09:44:27.511790+00:00",
-      "topic": "gk",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "5 रोचक सामान्य ज्ञान तथ्य 📚",
-      "category": "",
-      "media_id": "3919968271877640273_24336816956",
-      "error": "",
-      "image_source": "carousel_pexels",
-      "reel_style": "carousel",
-      "duration": 16
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-26T14:44:52.146306+00:00",
-    "topic": "",
+    "timestamp": "2026-08-27T23:40:14.283093+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
