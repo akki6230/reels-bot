@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-27T23:40:14.283324+00:00",
+  "generated_at": "2026-08-28T23:27:57.810960+00:00",
   "total_runs": 100,
-  "posted": 33,
+  "posted": 32,
   "failed": 2,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 33,
-  "success_rate": 33.0,
+  "hi_posted": 32,
+  "success_rate": 32.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
     "examfacts": 10,
     "earthglitch": 4,
     "sciencewrong": 3,
-    "space": 5,
+    "space": 4,
     "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-28T23:27:57.810730+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-27T23:40:14.283093+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "cartoon",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-15T13:34:22.056297+00:00",
-      "topic": "space",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "एक न्यूट्रॉन तारा इतना घना है कि",
-      "category": "Stars",
-      "media_id": "3920083776670095217_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "cartoon",
-      "duration": 18
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-27T23:40:14.283093+00:00",
-    "topic": "a",
+    "timestamp": "2026-08-28T23:27:57.810730+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
