@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-29T17:33:28.312416+00:00",
+  "generated_at": "2026-08-30T17:58:11.924981+00:00",
   "total_runs": 100,
   "posted": 31,
-  "failed": 2,
+  "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
   "hi_posted": 31,
@@ -17,6 +17,19 @@
     "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-30T17:58:11.924865+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-29T17:33:28.312216+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "documentary",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-16T09:10:18.750200+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "failed",
-      "hook": "",
-      "category": "",
-      "media_id": "",
-      "error": "Unterminated string starting at: line 47 column 17 (char 2217)",
-      "image_source": "",
-      "reel_style": "listicle",
-      "duration": 15
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-29T17:33:28.312216+00:00",
-    "topic": "y",
+    "timestamp": "2026-08-30T17:58:11.924865+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
