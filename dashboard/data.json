@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-30T17:58:11.924981+00:00",
+  "generated_at": "2026-08-31T19:53:01.522458+00:00",
   "total_runs": 100,
-  "posted": 31,
+  "posted": 30,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 31,
-  "success_rate": 31.0,
+  "hi_posted": 30,
+  "success_rate": 30.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
     "examfacts": 10,
     "earthglitch": 4,
-    "sciencewrong": 3,
+    "sciencewrong": 2,
     "space": 3,
     "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-08-31T19:53:01.522264+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-30T17:58:11.924865+00:00",
       "topic": "",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "kinetic",
       "duration": 17
-    },
-    {
-      "timestamp": "2026-06-16T12:30:09.015111+00:00",
-      "topic": "sciencewrong",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "वैज्ञानिकों ने साबित किया था पृथ्वी समतल है",
-      "category": "Wrong Theories",
-      "media_id": "3920776270688959271_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "documentary",
-      "duration": 19
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-30T17:58:11.924865+00:00",
-    "topic": "",
+    "timestamp": "2026-08-31T19:53:01.522264+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
