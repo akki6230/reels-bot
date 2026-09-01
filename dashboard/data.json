@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-08-31T19:53:01.522458+00:00",
+  "generated_at": "2026-09-01T17:41:09.563712+00:00",
   "total_runs": 100,
-  "posted": 30,
+  "posted": 29,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 30,
-  "success_rate": 30.0,
+  "hi_posted": 29,
+  "success_rate": 29.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
     "examfacts": 10,
     "earthglitch": 4,
-    "sciencewrong": 2,
+    "sciencewrong": 1,
     "space": 3,
     "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-01T17:41:09.563505+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-08-31T19:53:01.522264+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "kinetic",
       "duration": 16
-    },
-    {
-      "timestamp": "2026-06-16T18:20:26.600290+00:00",
-      "topic": "sciencewrong",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "वैज्ञानिकों ने चूहों को स्पेस में भेजा, वापस नहीं आए",
-      "category": "Science Disasters",
-      "media_id": "3920952559810948266_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 17
     }
   ],
   "current_run": {
-    "timestamp": "2026-08-31T19:53:01.522264+00:00",
-    "topic": "a",
+    "timestamp": "2026-09-01T17:41:09.563505+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
