@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-09-01T17:41:09.563712+00:00",
+  "generated_at": "2026-09-02T17:43:48.005912+00:00",
   "total_runs": 100,
-  "posted": 29,
+  "posted": 28,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 29,
-  "success_rate": 29.0,
+  "hi_posted": 28,
+  "success_rate": 28.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
-    "examfacts": 10,
+    "examfacts": 9,
     "earthglitch": 4,
     "sciencewrong": 1,
     "space": 3,
     "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-02T17:43:48.005816+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-01T17:41:09.563505+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-17T08:43:56.842283+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "SSC CGL में हर बार पूछा जाता है यह chemistry concept?",
-      "category": "Chemistry",
-      "media_id": "3921387175621672871_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "kinetic",
-      "duration": 16
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-01T17:41:09.563505+00:00",
-    "topic": "y",
+    "timestamp": "2026-09-02T17:43:48.005816+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
