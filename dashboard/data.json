@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-09-03T17:35:58.220277+00:00",
+  "generated_at": "2026-09-04T17:25:16.935801+00:00",
   "total_runs": 100,
-  "posted": 27,
+  "posted": 26,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 27,
-  "success_rate": 27.0,
+  "hi_posted": 26,
+  "success_rate": 26.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
     "examfacts": 9,
-    "earthglitch": 3,
+    "earthglitch": 2,
     "sciencewrong": 1,
     "space": 3,
     "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-04T17:25:16.935597+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-03T17:35:58.219994+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "cartoon",
       "duration": 16
-    },
-    {
-      "timestamp": "2026-06-17T16:49:56.019228+00:00",
-      "topic": "earthglitch",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "धरती पर बिजली आसमान से नीचे नहीं आती?",
-      "category": "Weather Anomalies",
-      "media_id": "3921631738802198091_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 16
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-03T17:35:58.219994+00:00",
-    "topic": "a",
+    "timestamp": "2026-09-04T17:25:16.935597+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
