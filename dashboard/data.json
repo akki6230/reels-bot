@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-09-04T17:25:16.935801+00:00",
+  "generated_at": "2026-09-05T16:35:50.777888+00:00",
   "total_runs": 100,
-  "posted": 26,
+  "posted": 25,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 26,
-  "success_rate": 26.0,
+  "hi_posted": 25,
+  "success_rate": 25.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 4,
-    "examfacts": 9,
+    "examfacts": 8,
     "earthglitch": 2,
     "sciencewrong": 1,
     "space": 3,
     "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-05T16:35:50.777644+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-04T17:25:16.935597+00:00",
       "topic": "n",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 18
-    },
-    {
-      "timestamp": "2026-06-18T08:26:56.150199+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "JEE में हर बार आता है यह integration का trap?",
-      "category": "Maths",
-      "media_id": "3922103383270474643_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "cartoon",
-      "duration": 16
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-04T17:25:16.935597+00:00",
-    "topic": "n",
+    "timestamp": "2026-09-05T16:35:50.777644+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
