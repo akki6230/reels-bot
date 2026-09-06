@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-05T16:35:50.777888+00:00",
+  "generated_at": "2026-09-06T16:44:20.493448+00:00",
   "total_runs": 100,
-  "posted": 25,
+  "posted": 24,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 25,
-  "success_rate": 25.0,
+  "hi_posted": 24,
+  "success_rate": 24.0,
   "topic_counts": {
     "mindblowing": 3,
-    "psychology": 4,
+    "psychology": 3,
     "examfacts": 8,
     "earthglitch": 2,
     "sciencewrong": 1,
@@ -17,6 +17,19 @@
     "gk": 4
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-06T16:44:20.493331+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-05T16:35:50.777644+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "pil",
       "reel_style": "kinetic",
       "duration": 18
-    },
-    {
-      "timestamp": "2026-06-18T11:37:35.071722+00:00",
-      "topic": "psychology",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "5 मनोविज्ञान के रहस्य 🧠",
-      "category": "",
-      "media_id": "3922199509594135089_24336816956",
-      "error": "",
-      "image_source": "carousel_pexels",
-      "reel_style": "carousel",
-      "duration": 18
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-05T16:35:50.777644+00:00",
-    "topic": "y",
+    "timestamp": "2026-09-06T16:44:20.493331+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
