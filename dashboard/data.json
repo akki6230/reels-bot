@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-07T18:38:51.842037+00:00",
+  "generated_at": "2026-09-08T17:48:39.560258+00:00",
   "total_runs": 100,
-  "posted": 23,
+  "posted": 22,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 23,
-  "success_rate": 23.0,
+  "hi_posted": 22,
+  "success_rate": 22.0,
   "topic_counts": {
     "mindblowing": 3,
     "psychology": 2,
@@ -14,9 +14,22 @@
     "earthglitch": 2,
     "sciencewrong": 1,
     "space": 3,
-    "gk": 4
+    "gk": 3
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-08T17:48:39.560003+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-07T18:38:51.841812+00:00",
       "topic": "a",
@@ -1303,24 +1316,11 @@
       "image_source": "pexels",
       "reel_style": "kinetic",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-19T08:47:26.995557+00:00",
-      "topic": "gk",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "चंद्रमा हर साल पृथ्वी से 3.8 सेमी दूर जा रहा है",
-      "category": "Science",
-      "media_id": "3922838505544392000_24336816956",
-      "error": "",
-      "image_source": "pollinations",
-      "reel_style": "cartoon",
-      "duration": 16
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-07T18:38:51.841812+00:00",
-    "topic": "a",
+    "timestamp": "2026-09-08T17:48:39.560003+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
