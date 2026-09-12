@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-09-11T17:36:51.639242+00:00",
+  "generated_at": "2026-09-12T16:49:18.673167+00:00",
   "total_runs": 100,
-  "posted": 19,
+  "posted": 18,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 19,
-  "success_rate": 19.0,
+  "hi_posted": 18,
+  "success_rate": 18.0,
   "topic_counts": {
     "mindblowing": 1,
     "psychology": 2,
-    "examfacts": 7,
+    "examfacts": 6,
     "earthglitch": 2,
     "sciencewrong": 1,
     "space": 3,
     "gk": 3
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-12T16:49:18.672962+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-11T17:36:51.639019+00:00",
       "topic": "n",
@@ -1303,24 +1316,11 @@
       "image_source": "pollinations",
       "reel_style": "cartoon",
       "duration": 18
-    },
-    {
-      "timestamp": "2026-06-20T10:20:50.543661+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "UPSC में बार-बार आता है: भारत का constitutional head कौन?",
-      "category": "Polity",
-      "media_id": "3923610280448322378_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "documentary",
-      "duration": 16
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-11T17:36:51.639019+00:00",
-    "topic": "n",
+    "timestamp": "2026-09-12T16:49:18.672962+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
