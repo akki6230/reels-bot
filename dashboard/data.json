@@ -1,22 +1,35 @@
 {
-  "generated_at": "2026-09-15T18:00:18.442257+00:00",
+  "generated_at": "2026-09-16T18:00:43.271839+00:00",
   "total_runs": 100,
-  "posted": 15,
+  "posted": 14,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 15,
-  "success_rate": 15.0,
+  "hi_posted": 14,
+  "success_rate": 14.0,
   "topic_counts": {
     "mindblowing": 1,
     "psychology": 2,
     "examfacts": 6,
-    "earthglitch": 2,
+    "earthglitch": 1,
     "sciencewrong": 1,
     "space": 2,
     "gk": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-16T18:00:43.271745+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-15T18:00:18.442010+00:00",
       "topic": "y",
@@ -1303,24 +1316,11 @@
       "image_source": "carousel_pexels",
       "reel_style": "carousel",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-21T15:29:58.237960+00:00",
-      "topic": "earthglitch",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "धरती पर समय रुक जाता है एक जगह?",
-      "category": "Earth Mysteries",
-      "media_id": "3924490646109357808_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "cartoon",
-      "duration": 18
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-15T18:00:18.442010+00:00",
-    "topic": "y",
+    "timestamp": "2026-09-16T18:00:43.271745+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
