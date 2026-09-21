@@ -1,20 +1,33 @@
 {
-  "generated_at": "2026-09-20T17:20:08.550695+00:00",
+  "generated_at": "2026-09-21T19:08:29.156296+00:00",
   "total_runs": 100,
-  "posted": 10,
+  "posted": 9,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 10,
-  "success_rate": 10.0,
+  "hi_posted": 9,
+  "success_rate": 9.0,
   "topic_counts": {
     "mindblowing": 1,
     "psychology": 2,
-    "examfacts": 5,
+    "examfacts": 4,
     "earthglitch": 1,
     "sciencewrong": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-21T19:08:29.156065+00:00",
+      "topic": "a",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-20T17:20:08.550600+00:00",
       "topic": "",
@@ -1301,24 +1314,11 @@
       "image_source": "pexels",
       "reel_style": "kinetic",
       "duration": 20
-    },
-    {
-      "timestamp": "2026-06-23T10:50:24.812958+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "वह कौन सा hormone है जो नींद को control करता है?",
-      "category": "Biology",
-      "media_id": "3925799482262819912_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "cartoon",
-      "duration": 16
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-20T17:20:08.550600+00:00",
-    "topic": "",
+    "timestamp": "2026-09-21T19:08:29.156065+00:00",
+    "topic": "a",
     "lang": "hi",
     "status": "failure",
     "hook": "",
