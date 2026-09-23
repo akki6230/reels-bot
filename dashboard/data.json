@@ -1,19 +1,32 @@
 {
-  "generated_at": "2026-09-22T18:02:27.043816+00:00",
+  "generated_at": "2026-09-23T18:17:29.796411+00:00",
   "total_runs": 100,
-  "posted": 8,
+  "posted": 7,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 8,
-  "success_rate": 8.0,
+  "hi_posted": 7,
+  "success_rate": 7.0,
   "topic_counts": {
     "mindblowing": 1,
     "psychology": 2,
-    "examfacts": 4,
+    "examfacts": 3,
     "earthglitch": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-23T18:17:29.796319+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-22T18:02:27.043544+00:00",
       "topic": "y",
@@ -1300,24 +1313,11 @@
       "image_source": "pollinations",
       "reel_style": "kinetic",
       "duration": 18
-    },
-    {
-      "timestamp": "2026-06-24T07:02:43.657082+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "UPSC में कितनी बार आया: Indus Waters Treaty कब साइन हुई?",
-      "category": "Polity",
-      "media_id": "3926409628244762176_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 15
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-22T18:02:27.043544+00:00",
-    "topic": "y",
+    "timestamp": "2026-09-23T18:17:29.796319+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
