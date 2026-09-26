@@ -1,18 +1,31 @@
 {
-  "generated_at": "2026-09-25T18:17:21.507856+00:00",
+  "generated_at": "2026-09-26T17:39:34.183622+00:00",
   "total_runs": 100,
-  "posted": 5,
+  "posted": 4,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 5,
-  "success_rate": 5.0,
+  "hi_posted": 4,
+  "success_rate": 4.0,
   "topic_counts": {
     "mindblowing": 1,
     "psychology": 2,
-    "examfacts": 2
+    "examfacts": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-26T17:39:34.183401+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-25T18:17:21.507630+00:00",
       "topic": "n",
@@ -1299,24 +1312,11 @@
       "image_source": "pexels",
       "reel_style": "kinetic",
       "duration": 19
-    },
-    {
-      "timestamp": "2026-06-25T07:03:44.941512+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "NEET में trap: mitochondria का DNA किसका होता है?",
-      "category": "Biology",
-      "media_id": "3927134917786486925_24336816956",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "cartoon",
-      "duration": 20
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-25T18:17:21.507630+00:00",
-    "topic": "n",
+    "timestamp": "2026-09-26T17:39:34.183401+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
