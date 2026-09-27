@@ -1,18 +1,30 @@
 {
-  "generated_at": "2026-09-26T17:39:34.183622+00:00",
+  "generated_at": "2026-09-27T18:04:18.806031+00:00",
   "total_runs": 100,
-  "posted": 4,
+  "posted": 3,
   "failed": 1,
   "dry_runs": 1,
   "en_posted": 0,
-  "hi_posted": 4,
-  "success_rate": 4.0,
+  "hi_posted": 3,
+  "success_rate": 3.0,
   "topic_counts": {
     "mindblowing": 1,
-    "psychology": 2,
-    "examfacts": 1
+    "psychology": 2
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-27T18:04:18.805944+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-26T17:39:34.183401+00:00",
       "topic": "y",
@@ -1299,24 +1311,11 @@
       "image_source": "pollinations",
       "reel_style": "cartoon",
       "duration": 15
-    },
-    {
-      "timestamp": "2026-06-25T10:29:14.188822+00:00",
-      "topic": "examfacts",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "SSC CGL में क्यों हर बार fail होते हो इस अर्थशास्त्र में?",
-      "category": "Economy",
-      "media_id": "3927238291785579464_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "kinetic",
-      "duration": 19
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-26T17:39:34.183401+00:00",
-    "topic": "y",
+    "timestamp": "2026-09-27T18:04:18.805944+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
