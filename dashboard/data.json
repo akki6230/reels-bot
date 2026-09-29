@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28T20:27:47.821484+00:00",
+  "generated_at": "2026-09-29T19:10:42.607843+00:00",
   "total_runs": 100,
   "posted": 2,
   "failed": 1,
@@ -12,6 +12,19 @@
     "psychology": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-09-29T19:10:42.607600+00:00",
+      "topic": "y",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-09-28T20:27:47.821265+00:00",
       "topic": "a",
@@ -1298,24 +1311,11 @@
       "image_source": "",
       "reel_style": "",
       "duration": 0
-    },
-    {
-      "timestamp": "2026-06-26T07:08:42.505447+00:00",
-      "topic": "i",
-      "lang": "hi",
-      "status": "failure",
-      "hook": "",
-      "category": "",
-      "media_id": "",
-      "error": "",
-      "image_source": "",
-      "reel_style": "",
-      "duration": 0
     }
   ],
   "current_run": {
-    "timestamp": "2026-09-28T20:27:47.821265+00:00",
-    "topic": "a",
+    "timestamp": "2026-09-29T19:10:42.607600+00:00",
+    "topic": "y",
     "lang": "hi",
     "status": "failure",
     "hook": "",
