@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-01T20:13:21.546514+00:00",
+  "generated_at": "2026-10-02T19:02:58.816819+00:00",
   "total_runs": 100,
   "posted": 2,
   "failed": 1,
-  "dry_runs": 1,
+  "dry_runs": 0,
   "en_posted": 0,
   "hi_posted": 2,
   "success_rate": 2.0,
@@ -12,6 +12,19 @@
     "psychology": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-10-02T19:02:58.816615+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-10-01T20:13:21.546430+00:00",
       "topic": "",
@@ -1298,26 +1311,13 @@
       "image_source": "pil",
       "reel_style": "carousel_visual",
       "duration": 11
-    },
-    {
-      "timestamp": "2026-06-27T03:52:08.544522+00:00",
-      "topic": "gk",
-      "lang": "hi",
-      "status": "dry_run_ok",
-      "hook": "तारों की रोशनी हजारों साल पुरानी है",
-      "category": "Science",
-      "media_id": "",
-      "error": "",
-      "image_source": "pil",
-      "reel_style": "carousel_visual",
-      "duration": 12
     }
   ],
   "current_run": {
-    "timestamp": "2026-10-01T20:13:21.546430+00:00",
-    "topic": "",
+    "timestamp": "2026-10-02T19:02:58.816615+00:00",
+    "topic": "n",
     "lang": "hi",
-    "status": "cancelled",
+    "status": "failure",
     "hook": "",
     "category": "",
     "media_id": "",
