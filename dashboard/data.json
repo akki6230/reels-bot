@@ -1,17 +1,29 @@
 {
-  "generated_at": "2026-10-03T17:51:12.531089+00:00",
+  "generated_at": "2026-10-04T18:00:56.902394+00:00",
   "total_runs": 100,
-  "posted": 2,
+  "posted": 1,
   "failed": 0,
   "dry_runs": 0,
   "en_posted": 0,
-  "hi_posted": 2,
-  "success_rate": 2.0,
+  "hi_posted": 1,
+  "success_rate": 1.0,
   "topic_counts": {
-    "mindblowing": 1,
-    "psychology": 1
+    "mindblowing": 1
   },
   "recent_runs": [
+    {
+      "timestamp": "2026-10-04T18:00:56.902312+00:00",
+      "topic": "",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-10-03T17:51:12.530860+00:00",
       "topic": "y",
@@ -1298,24 +1310,11 @@
       "image_source": "pollinations",
       "reel_style": "carousel_visual",
       "duration": 11
-    },
-    {
-      "timestamp": "2026-06-27T04:12:50.763615+00:00",
-      "topic": "psychology",
-      "lang": "hi",
-      "status": "posted",
-      "hook": "आपका दिमाग बीते समय को गलत तरीके से edit करता है",
-      "category": "Memory",
-      "media_id": "3928498462419777569_24336816956",
-      "error": "",
-      "image_source": "pexels",
-      "reel_style": "carousel_visual",
-      "duration": 12
     }
   ],
   "current_run": {
-    "timestamp": "2026-10-03T17:51:12.530860+00:00",
-    "topic": "y",
+    "timestamp": "2026-10-04T18:00:56.902312+00:00",
+    "topic": "",
     "lang": "hi",
     "status": "failure",
     "hook": "",
