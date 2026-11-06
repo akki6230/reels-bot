@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T20:58:40.619275+00:00",
+  "generated_at": "2026-11-06T20:17:43.755627+00:00",
   "total_runs": 100,
   "posted": 0,
   "failed": 0,
@@ -9,6 +9,19 @@
   "success_rate": 0.0,
   "topic_counts": {},
   "recent_runs": [
+    {
+      "timestamp": "2026-11-06T20:17:43.755392+00:00",
+      "topic": "n",
+      "lang": "hi",
+      "status": "failure",
+      "hook": "",
+      "category": "",
+      "media_id": "",
+      "error": "",
+      "image_source": "",
+      "reel_style": "",
+      "duration": 0
+    },
     {
       "timestamp": "2026-11-05T20:58:40.619122+00:00",
       "topic": "a",
@@ -1295,24 +1308,11 @@
       "image_source": "",
       "reel_style": "",
       "duration": 0
-    },
-    {
-      "timestamp": "2026-07-28T16:07:06.666661+00:00",
-      "topic": "y",
-      "lang": "hi",
-      "status": "failure",
-      "hook": "",
-      "category": "",
-      "media_id": "",
-      "error": "",
-      "image_source": "",
-      "reel_style": "",
-      "duration": 0
     }
   ],
   "current_run": {
-    "timestamp": "2026-11-05T20:58:40.619122+00:00",
-    "topic": "a",
+    "timestamp": "2026-11-06T20:17:43.755392+00:00",
+    "topic": "n",
     "lang": "hi",
     "status": "failure",
     "hook": "",
